@@ -1,12 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
-import Root from "./Root";
 import HomePage from "./HomePage";
+import App from "../App";
 
 export const createRouter = (toggleTheme) => {
   return createBrowserRouter([
     {
       path: "/",
-      element: <Root toggleTheme={toggleTheme} />,
+      element: <App toggleTheme={toggleTheme} />,
       children: [
         {
           index: true,
