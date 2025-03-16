@@ -1,10 +1,9 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import GlobalStyle from "./styles/GlobalReset";
 import { ThemeProvider } from "styled-components";
-import { LayoutContainer } from "./styles/layout.style";
+import { RouterProvider } from "react-router-dom";
+import { createRouter } from "./routes/router";
 import { darkTheme, lightTheme } from "./styles/theme";
-
-import Navbar from "./components/Navbar";
 
 function App() {
   const [theme, setTheme] = useState("light");
@@ -13,12 +12,12 @@ function App() {
     setTheme((preTheme) => (preTheme === "light" ? "dark" : "light"));
   }
 
+  const router = useMemo(() => createRouter(toggleTheme), []);
+
   return (
     <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
-      <LayoutContainer>
-        <Navbar onClick={toggleTheme} />
-      </LayoutContainer>
       <GlobalStyle />
+      <RouterProvider router={router} />
     </ThemeProvider>
   );
 }

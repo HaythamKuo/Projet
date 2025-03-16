@@ -18,7 +18,7 @@ function Navbar({ onClick }) {
     <NavContainer>
       <div className="navContent">
         <div className="logo">
-          <Image src="logo.png" alt="pics" w={48} h={48} />
+          <Image src="/logo.png" alt="pics" w={48} h={48} />
           {/* <img src="https://ik.imagekit.io/tokujl07r/logo.png" alt="logo" /> */}
           <span>Haytham</span>
         </div>
