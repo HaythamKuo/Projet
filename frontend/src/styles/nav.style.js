@@ -7,7 +7,7 @@ export const NavContainer = styled.nav`
   height: 5rem;
   padding: 1rem 1rem;
   background-color: ${({ theme }) => theme.colors.backGround};
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: ${({ theme }) => theme.colors.boxShadow};
   position: fixed;
   top: 0;
   left: 0;
@@ -85,4 +85,10 @@ export const MobileNav = styled.div`
   top: -10rem;
   transition: right 0.3s ease-in-out;
   right: ${({ open }) => (open ? "0" : "-100%")};
+`;
+
+export const ContentContainer = styled.main`
+  padding-top: 6rem;
+  width: 100%;
+  //flex: 1;
 `;

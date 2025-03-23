@@ -1,10 +1,10 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { FaAlignJustify, FaXmark } from "react-icons/fa6";
 import Image from "./Image";
 import Switch from "../styles/UI/Switch";
 import NavBtn from "../styles/UI/NavBtn";
 import { MobileNav, NavContainer } from "../styles/nav.style";
-
 function Navbar({ onClick }) {
   const [open, setOpen] = useState(false);
 
@@ -27,7 +27,9 @@ function Navbar({ onClick }) {
           <NavBtn name={"首頁"} />
           <NavBtn name={"關於"} />
           <NavBtn name={"服務"} />
-          <NavBtn name={"登入/註冊"} />
+          <Link to="login">
+            <NavBtn name={"登入/註冊"} />
+          </Link>
           <Switch onClick={onClick} />
         </div>
 

@@ -1,6 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
-import HomePage from "./HomePage";
 import App from "../App";
+import HomePage from "./HomePage";
+import LoginPage from "./LoginPage";
+import RegisterPage from "./RegisterPage";
 
 export const createRouter = (toggleTheme) => {
   return createBrowserRouter([
@@ -11,6 +13,14 @@ export const createRouter = (toggleTheme) => {
         {
           index: true,
           element: <HomePage />,
+        },
+        {
+          path: "login",
+          element: <LoginPage />,
+        },
+        {
+          path: "register",
+          element: <RegisterPage />,
         },
       ],
     },

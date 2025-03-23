@@ -1,4 +1,4 @@
-import { StrictMode, useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 
 import { RouterProvider } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
@@ -17,12 +17,10 @@ function MainWrapper() {
   const router = useMemo(() => createRouter(toggleTheme), []);
 
   return (
-    <StrictMode>
-      <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
-        <GlobalStyle />
-        <RouterProvider router={router} />
-      </ThemeProvider>
-    </StrictMode>
+    <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
+      <GlobalStyle />
+      <RouterProvider router={router} />
+    </ThemeProvider>
   );
 }
 

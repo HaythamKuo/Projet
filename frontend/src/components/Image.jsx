@@ -53,7 +53,7 @@ function Image({ src, className, w, h, alt }) {
       loading="lazy"
       lqip={{ active: true, quality: 20 }}
       urlEndpoint={urlEndpoint}
-      alt={alt || "default image"} // 提供預設的 alt 屬性
+      alt={alt || "default image"}
       width={w}
       height={h}
     />

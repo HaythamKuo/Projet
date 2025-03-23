@@ -15,12 +15,21 @@ function generateMedia(breakpoints) {
 }
 
 export const lightTheme = {
-  colors: { backGround: "#e6e6ff" },
+  colors: {
+    backGround: "#e6e6ff",
+    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+    dark: "#1B1B1D",
+  },
   breakpoints,
   media: generateMedia(breakpoints),
 };
 export const darkTheme = {
-  colors: { backGround: "black" },
+  colors: {
+    backGround: "#1B1B1D",
+    boxShadow:
+      "0 4px 15px rgba(255, 255, 255, 0.3), 0 2px 10px rgba(255, 255, 255, 0.2)",
+    white: "#e6e6ff",
+  },
   breakpoints,
   media: generateMedia(breakpoints),
 };
@@ -29,5 +38,10 @@ export const darkTheme = {
 export const flexContainer = css`
   display: flex;
   justify-content: space-between;
+  align-items: center;
+`;
+export const flexCenter = css`
+  display: flex;
+  justify-content: center;
   align-items: center;
 `;
