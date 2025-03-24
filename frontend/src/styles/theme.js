@@ -19,6 +19,8 @@ export const lightTheme = {
     backGround: "#e6e6ff",
     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
     dark: "#1B1B1D",
+    typeWriter: "#fb5607",
+    cursor: "#ff9e00",
   },
   breakpoints,
   media: generateMedia(breakpoints),
@@ -29,6 +31,8 @@ export const darkTheme = {
     boxShadow:
       "0 4px 15px rgba(255, 255, 255, 0.3), 0 2px 10px rgba(255, 255, 255, 0.2)",
     white: "#e6e6ff",
+    typeWriter: "#ffbd00",
+    cursor: "#ffd166",
   },
   breakpoints,
   media: generateMedia(breakpoints),

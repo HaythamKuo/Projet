@@ -1,4 +1,3 @@
-// AnimatedBackground.js
 import { useEffect, useRef } from "react";
 import styled from "styled-components";
 
@@ -6,6 +5,7 @@ import styled from "styled-components";
 const BackgroundWrapper = styled.div`
   position: relative;
   width: 30%;
+  flex: 3;
   //height: calc(100vh - 6rem); /* 假設 navbar 高度為 5rem */
   height: 20vh; /* 假設 navbar 高度為 5rem */
   overflow: hidden;

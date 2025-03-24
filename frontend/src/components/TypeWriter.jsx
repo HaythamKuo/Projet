@@ -1,47 +1,34 @@
-// import { useState, useEffect } from "react";
-
-// function TypeWriter({ text, delay, infinity }) {
-//   const [currentTxt, setCurrentTxt] = useState("");
-//   const [currentIndex, setCurrentIndex] = useState(0);
-
-//   useEffect(() => {
-//     let timeout;
-
-//     if (currentIndex < text.length) {
-//       timeout = setTimeout(() => {
-//         setCurrentTxt((preTxt) => preTxt + text[currentIndex]);
-//         setCurrentIndex((preIndex) => preIndex + 1);
-//       }, delay);
-//     } else if (infinity) {
-//       setCurrentIndex(0);
-//       setCurrentTxt("");
-//     }
-//     return () => clearTimeout(timeout);
-//   }, [currentIndex, delay, text, infinity]);
-
-//   return <span>{currentTxt}</span>;
-// }
-// export default TypeWriter;
-
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 
-// 使用 styled-components 定義樣式
-const TypeWriterContainer = styled.span`
+export const TypeWriterContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  flex: 2;
+  span {
+    color: ${({ theme }) => theme.colors.dark};
+    font-size: 3.5rem;
+  }
+`;
+
+const MinorContainer = styled.span`
   display: inline-block;
   position: relative;
 `;
 
-const TypeWriterText = styled.span`
+const TypeWriterText = styled.h1`
   display: inline-block;
+  color: ${({ theme }) => theme.colors.typeWriter};
+  font-size: 5rem;
 `;
 
 const Cursor = styled.span`
   display: inline-block;
   width: 2px;
-  height: 1em;
-  background-color: currentColor;
-  margin-left: 2px;
+  height: 3rem;
+  background-color: ${({ theme }) => theme.colors.cursor};
+  margin-left: 5px;
   animation: blink 0.7s infinite;
 
   @keyframes blink {
@@ -99,8 +86,6 @@ const TypeWriter = ({
           setDisplayText(displayText.substring(0, displayText.length - 1));
         }, deletingSpeed);
       } else {
-        // 完成刪除
-        //setIsDelaying(true);
         // 準備輸入下一個句子
         setPhraseIndex((prevIndex) => (prevIndex + 1) % phrases.length);
         setIsTyping(true);
@@ -121,10 +106,10 @@ const TypeWriter = ({
   ]);
 
   return (
-    <TypeWriterContainer>
+    <MinorContainer>
       <TypeWriterText>{displayText}</TypeWriterText>
       {showCursor && <Cursor />}
-    </TypeWriterContainer>
+    </MinorContainer>
   );
 };
 
