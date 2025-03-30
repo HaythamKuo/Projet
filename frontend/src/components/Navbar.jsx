@@ -5,6 +5,7 @@ import Image from "./Image";
 import Switch from "../styles/UI/Switch";
 import NavBtn from "../styles/UI/NavBtn";
 import { MobileNav, NavContainer } from "../styles/nav.style";
+import SplitText from "./reactBit/SplitText";
 function Navbar({ onClick }) {
   const [open, setOpen] = useState(false);
 
@@ -20,7 +21,16 @@ function Navbar({ onClick }) {
         <div className="logo">
           <Image src="/logo.png" alt="pics" w={48} h={48} />
           {/* <img src="https://ik.imagekit.io/tokujl07r/logo.png" alt="logo" /> */}
-          <span>Haytham</span>
+          <SplitText
+            text="Haytham"
+            className="text-2xl font-semibold text-center"
+            delay={150}
+            animationFrom={{ opacity: 0, transform: "translate3d(0,50px,0)" }}
+            animationTo={{ opacity: 1, transform: "translate3d(0,0,0)" }}
+            easing="easeOutCubic"
+            threshold={0.2}
+            rootMargin="-50px"
+          />
         </div>
 
         <div className="navLinks">
