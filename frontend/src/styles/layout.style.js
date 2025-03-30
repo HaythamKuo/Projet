@@ -1,9 +1,15 @@
 import styled from "styled-components";
 //import media from "./media.style";
 
+// px4: "1rem",
+// px8: "2rem",
+// px16: "4rem",
+// px32: "8rem",
+// px64: "16rem",
+
 export const LayoutContainer = styled.div`
   padding: 0 1rem;
-  //  height: 100vh;
+  //height: 100vh;
   margin: 0 auto;
 
   ${(props) => props.theme.media.md} {
@@ -22,9 +28,3 @@ export const LayoutContainer = styled.div`
     padding: 0 16rem;
   }
 `;
-
-// px4: "1rem",
-// px8: "2rem",
-// px16: "4rem",
-// px32: "8rem",
-// px64: "16rem",

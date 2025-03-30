@@ -1,26 +1,19 @@
-import { useState } from "react";
-import GlobalStyle from "./styles/GlobalReset";
-import { ThemeProvider } from "styled-components";
+import { Outlet } from "react-router-dom";
 import { LayoutContainer } from "./styles/layout.style";
-import { darkTheme, lightTheme } from "./styles/theme";
+//import { darkTheme, lightTheme } from "./styles/theme";
+import { ContentContainer } from "./styles/nav.style";
 
 import Navbar from "./components/Navbar";
-import Switch from "./styles/UI/Switch";
+//import Switch from "./styles/UI/Switch";
 
-function App() {
-  const [theme, setTheme] = useState("light");
-
-  function toggleTheme() {
-    setTheme((preTheme) => (preTheme === "light" ? "dark" : "light"));
-  }
-
+function App({ toggleTheme }) {
   return (
-    <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
-      <LayoutContainer>
-        <Navbar onClick={toggleTheme} />
-      </LayoutContainer>
-      <GlobalStyle />
-    </ThemeProvider>
+    <LayoutContainer>
+      <Navbar onClick={toggleTheme} />
+      <ContentContainer>
+        <Outlet />
+      </ContentContainer>
+    </LayoutContainer>
   );
 }
 
