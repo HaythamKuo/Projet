@@ -8,8 +8,13 @@ const breakpoints = {
 };
 
 function generateMedia(breakpoints) {
-  return Object.entries(breakpoints).reduce((acc, [key, value]) => {
-    acc[key] = `@media (min-width: ${value}px)`;
+  // 排序所有斷點
+  const sortedBreakpoints = Object.entries(breakpoints).sort(
+    ([_, a], [__, b]) => b - a
+  ); // 從大到小排序
+
+  return sortedBreakpoints.reduce((acc, [key, value]) => {
+    acc[key] = `@media (max-width: ${value}px)`;
     return acc;
   }, {});
 }

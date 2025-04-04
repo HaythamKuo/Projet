@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const HeaderLayout = styled.header`
   background-color: beige;
   display: flex;
+  flex-direction: row;
   gap: 2rem;
   align-items: center;
   padding: 1rem 1rem;
@@ -14,4 +15,9 @@ export const HeaderLayout = styled.header`
   // 如果您想要bottom邊緣更圓滑，可以調整下方的border-radius
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
+
+  //RWD
+  ${({ theme }) => theme.media.md} {
+    flex-direction: column;
+  }
 `;

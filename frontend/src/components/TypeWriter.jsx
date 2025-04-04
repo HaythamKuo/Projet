@@ -6,9 +6,19 @@ export const TypeWriterContainer = styled.div`
   flex-direction: column;
 
   flex: 2;
+
+  // RWD
+  ${({ theme }) => theme.media.md} {
+    flex-direction: row;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
   span {
     color: ${({ theme }) => theme.colors.dark};
     font-size: 3.5rem;
+
+    //RWD to "I am"
   }
 `;
 
@@ -21,12 +31,40 @@ const TypeWriterText = styled.h1`
   display: inline-block;
   color: ${({ theme }) => theme.colors.typeWriter};
   font-size: 5rem;
+
+  //RWD to typing worlds
+  ${({ theme }) => theme.media.xxl} {
+    font-size: 3.5rem;
+  }
+
+  ${({ theme }) => theme.media.xl} {
+    font-size: 3rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    font-size: 2.5rem;
+  }
+
+  ${({ theme }) => theme.media.md} {
+    font-size: 4rem;
+  }
 `;
 
 const Cursor = styled.span`
   display: inline-block;
   width: 2px;
   height: 3rem;
+
+  //RWD to cursor
+
+  ${({ theme }) => theme.media.xl} {
+    height: 1.5rem;
+  }
+
+  ${({ theme }) => theme.media.md} {
+    height: 2.5rem;
+  }
+
   background-color: ${({ theme }) => theme.colors.cursor};
   margin-left: 5px;
   animation: blink 0.7s infinite;

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { flexContainer } from "./theme";
+import { flexCenter, flexContainer } from "./theme";
 
 export const NavContainer = styled.nav`
   ${flexContainer}
@@ -12,7 +12,7 @@ export const NavContainer = styled.nav`
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
+  z-index: 10;
 
   .navContent {
     ${flexContainer}
@@ -22,8 +22,12 @@ export const NavContainer = styled.nav`
     max-width: 1200px;
     margin: 0 auto;
 
-    ${({ theme }) => theme.media.md} {
+    ${({ theme }) => theme.media.xl} {
       height: 4rem;
+    }
+
+    ${({ theme }) => theme.media.md} {
+      justify-content: space-around;
     }
   }
 
@@ -40,53 +44,49 @@ export const NavContainer = styled.nav`
   }
 
   .navLinks {
-    display: none;
-
-    ${({ theme }) => theme.media.md} {
-      display: flex;
-      gap: 2rem;
-      align-items: center;
-      justify-content: center;
-    }
-
-    ${({ theme }) => theme.media.xl} {
-      gap: 3rem;
-    }
-  }
-
-  .mobile {
-    display: flex;
-    font-size: 2rem;
-    cursor: pointer;
+    /* display: flex;
+    align-items: center;
+    justify-content: center; */
+    ${flexCenter}
+    gap: 2rem;
 
     ${({ theme }) => theme.media.md} {
       display: none;
     }
+    ${({ theme }) => theme.media.xl} {
+      gap: 3rem;
+    }
   }
-
-  .desktop {
+  .mobile {
     display: none;
     ${({ theme }) => theme.media.md} {
       display: flex;
+      font-size: 2rem;
+      cursor: pointer;
+      right: 3rem;
     }
   }
 `;
+
 export const MobileNav = styled.div`
-  width: 100%;
+  position: fixed;
+  top: 5rem;
+  right: 0;
+  width: 70%;
+  max-width: 300px;
   height: 100vh;
+  background-color: ${({ theme }) => theme.colors.backGround};
+  box-shadow: -4px 0 6px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  position: absolute;
-
-  //test
-  top: -10rem;
-  transition: right 0.3s ease-in-out;
-  right: ${({ open }) => (open ? "0" : "-100%")};
+  padding: 2rem 1rem;
+  z-index: 1100;
+  transform: ${({ open }) => (open ? "translateX(0)" : "translateX(100%)")};
+  transition: transform 0.3s ease-in-out;
 `;
 
+//??
 export const ContentContainer = styled.main`
   padding-top: 6rem;
   width: 100%;

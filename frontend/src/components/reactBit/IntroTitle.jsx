@@ -5,6 +5,7 @@ import styled from "styled-components";
 // Styled components
 const TextContainer = styled.p`
   margin-bottom: 2rem;
+  font-size: 6rem;
 `;
 
 const AnimatedSpan = styled(animated.span)`
@@ -16,7 +17,6 @@ const IntroTitle = ({
   text = "",
   delay = 200,
   className = "",
-  customStyles = "",
   animateBy = "words", // 'words' or 'letters'
   direction = "top", // 'top' or 'bottom'
   threshold = 0.1,
@@ -24,7 +24,6 @@ const IntroTitle = ({
   animationFrom,
   animationTo,
   easing = "easeOutCubic",
-  onAnimationComplete,
 }) => {
   const elements = animateBy === "words" ? text.split(" ") : text.split("");
   const [inView, setInView] = useState(false);
@@ -80,12 +79,6 @@ const IntroTitle = ({
               await next(step);
             }
             animatedCount.current += 1;
-            if (
-              animatedCount.current === elements.length &&
-              onAnimationComplete
-            ) {
-              onAnimationComplete();
-            }
           }
         : animationFrom || defaultFrom,
       delay: i * delay,
@@ -94,7 +87,7 @@ const IntroTitle = ({
   );
 
   return (
-    <TextContainer ref={ref} className={className} customStyles={customStyles}>
+    <TextContainer ref={ref} className={className}>
       {springs.map((props, index) => (
         <AnimatedSpan key={index} style={props}>
           {elements[index] === " " ? "\u00A0" : elements[index]}

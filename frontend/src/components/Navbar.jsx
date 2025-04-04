@@ -32,7 +32,6 @@ function Navbar({ onClick }) {
             rootMargin="-50px"
           />
         </div>
-
         <div className="navLinks">
           <NavBtn name={"首頁"} />
           <NavBtn name={"關於"} />
@@ -42,8 +41,8 @@ function Navbar({ onClick }) {
           </Link>
           <Switch onClick={onClick} />
         </div>
-
         {/* phone rwd mode */}
+
         <div className="mobile">
           {open ? (
             <FaXmark onClick={handleOpen} />

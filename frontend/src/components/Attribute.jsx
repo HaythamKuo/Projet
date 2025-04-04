@@ -1,27 +1,41 @@
-import {
-  StarBorderContainer,
-  BorderGradientBottom,
-  BorderGradientTop,
-  InnerContent,
-} from "../styles/attribute.style";
+import styled from "styled-components";
+import { flexCenter } from "../styles/theme";
 
-const Attribute = ({
-  as,
-  className = "",
-  color = "white",
-  speed = "6s",
-  children,
-  ...rest
-}) => {
+const Attributes = ({ title }) => {
   return (
-    <StarBorderContainer as={as} className={className} {...rest}>
-      <BorderGradientBottom color={color} speed={speed} />
-      <BorderGradientTop color={color} speed={speed} />
-      <InnerContent>{children}</InnerContent>
-    </StarBorderContainer>
+    <StyledWrapper>
+      <div className="card">{title}</div>
+    </StyledWrapper>
   );
 };
 
-export default Attribute;
+const StyledWrapper = styled.div`
+  .card {
+    ${flexCenter}
+    width:250px;
+    height: 254px;
+    background: rgba(217, 217, 217, 0.58);
+    border: 1px solid white;
+    box-shadow: 12px 17px 51px rgba(0, 0, 0, 0.22);
+    backdrop-filter: blur(6px);
+    border-radius: 17px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.5s;
+    user-select: none;
+    font-weight: bolder;
+    font-size: 2rem;
+    color: black;
+  }
 
-//娃娃 服務 租借
+  .card:hover {
+    border: 1px solid black;
+    transform: scale(1.05);
+  }
+
+  .card:active {
+    transform: scale(0.95) rotateZ(1.7deg);
+  }
+`;
+
+export default Attributes;

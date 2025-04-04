@@ -1,5 +1,4 @@
 import styled from "styled-components";
-//import media from "./media.style";
 
 // px4: "1rem",
 // px8: "2rem",
@@ -8,23 +7,26 @@ import styled from "styled-components";
 // px64: "16rem",
 
 export const LayoutContainer = styled.div`
-  padding: 0 1rem;
-  //height: 100vh;
+  padding: 0 16rem; // 默认样式（大屏幕）
   margin: 0 auto;
 
-  ${(props) => props.theme.media.md} {
-    padding: 0 2rem;
-  }
-
-  ${(props) => props.theme.media.lg} {
-    padding: 0 4rem;
+  ${(props) => props.theme.media.xxl} {
+    padding: 0 16rem;
+    background-color: gold;
   }
 
   ${(props) => props.theme.media.xl} {
     padding: 0 8rem;
+    background-color: cadetblue;
   }
 
-  ${(props) => props.theme.media.xxl} {
-    padding: 0 16rem;
+  ${(props) => props.theme.media.lg} {
+    padding: 0 4rem;
+    background-color: blue;
+  }
+
+  ${(props) => props.theme.media.md} {
+    padding: 0 2rem;
+    background-color: brown;
   }
 `;
