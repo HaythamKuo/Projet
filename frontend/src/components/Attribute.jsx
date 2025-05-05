@@ -10,6 +10,9 @@ const Attributes = ({ title }) => {
 };
 
 const StyledWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+
   .card {
     ${flexCenter}
     width:250px;

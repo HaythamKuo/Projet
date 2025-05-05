@@ -6,6 +6,7 @@ import styled from "styled-components";
 const TextContainer = styled.p`
   margin-bottom: 2rem;
   font-size: 6rem;
+  text-align: ${(props) => (props.center ? "center" : "")};
 `;
 
 const AnimatedSpan = styled(animated.span)`
@@ -24,6 +25,7 @@ const IntroTitle = ({
   animationFrom,
   animationTo,
   easing = "easeOutCubic",
+  center = false,
 }) => {
   const elements = animateBy === "words" ? text.split(" ") : text.split("");
   const [inView, setInView] = useState(false);
@@ -87,7 +89,7 @@ const IntroTitle = ({
   );
 
   return (
-    <TextContainer ref={ref} className={className}>
+    <TextContainer ref={ref} className={className} center={center}>
       {springs.map((props, index) => (
         <AnimatedSpan key={index} style={props}>
           {elements[index] === " " ? "\u00A0" : elements[index]}

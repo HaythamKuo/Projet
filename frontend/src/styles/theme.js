@@ -27,6 +27,13 @@ export const lightTheme = {
     typeWriter: "#fb5607",
     cursor: "#ff9e00",
   },
+  spotLight: {
+    backGround: "#f5f5f5",
+    border: "#e0e0e0",
+    color: "#333333",
+    spotColor: "rgba(0, 0, 0, 0.05)",
+  },
+
   breakpoints,
   media: generateMedia(breakpoints),
 };
@@ -38,6 +45,12 @@ export const darkTheme = {
     white: "#e6e6ff",
     typeWriter: "#ffbd00",
     cursor: "#ffd166",
+  },
+  spotLight: {
+    backGround: "#111111",
+    border: "#222222",
+    color: "#ffffff",
+    spotColor: "rgba(255, 255, 255, 0.25)",
   },
   breakpoints,
   media: generateMedia(breakpoints),

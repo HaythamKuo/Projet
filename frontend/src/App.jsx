@@ -1,4 +1,5 @@
 import { Outlet } from "react-router-dom";
+import Footer from "./components/Footer";
 import { LayoutContainer } from "./styles/layout.style";
 import { ContentContainer } from "./styles/nav.style";
 
@@ -11,6 +12,7 @@ function App({ toggleTheme }) {
       <ContentContainer>
         <Outlet />
       </ContentContainer>
+      <Footer />
     </LayoutContainer>
   );
 }

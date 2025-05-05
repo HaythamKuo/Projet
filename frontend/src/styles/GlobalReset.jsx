@@ -29,10 +29,8 @@ footer, header, hgroup, menu, nav, section {
 body {
     line-height: 1.5;
    -webkit-font-smoothing: antialiased;
-
-
 background-color: ${({ theme }) => theme.colors.backGround};
-  overflow:hidden; 
+  //overflow:hidden; 
   
 }
 ol, ul {
@@ -56,6 +54,7 @@ table {
 *, *::before, *::after {
   box-sizing: border-box;
   text-decoration: none;
+  
 }
 
 /* 5. Improve media defaults */
