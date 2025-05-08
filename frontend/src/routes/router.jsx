@@ -1,9 +1,10 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Outlet } from "react-router-dom";
 import App from "../App";
 import HomePage from "./HomePage";
 import LoginPage from "./LoginPage";
 import RegisterPage from "./RegisterPage";
 import AllProductsPage from "./AllProductsPage";
+import ProdPage from "../components/ProdPage";
 
 export const createRouter = (toggleTheme) => {
   return createBrowserRouter([
@@ -25,7 +26,11 @@ export const createRouter = (toggleTheme) => {
         },
         {
           path: "products",
-          element: <AllProductsPage />,
+          element: <Outlet />,
+          children: [
+            { index: true, element: <AllProductsPage /> },
+            { path: ":prodID", element: <ProdPage /> },
+          ],
         },
       ],
     },

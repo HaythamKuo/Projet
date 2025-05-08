@@ -101,20 +101,25 @@ export const InfoCartMarkBox = styled.div`
 `;
 
 export const Button = styled.button`
-  background: transparent;
+  background-color: ${({ theme }) => theme.spotLight.color};
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 4px;
   padding: 0.8rem;
   font-size: 14px;
-  font-weight: 400;
+  font-weight: bold;
   text-transform: uppercase;
-  color: #fff;
+  color: ${({ theme }) => theme.card.backGround};
   cursor: pointer;
   width: 100%;
   //flex-grow: 2;
 
+  transition: transform 0.3s ease, box-shadow 0.2s ease;
+
   &:hover {
-    background-color: rgba(255, 255, 255, 0.12);
+    /* 向上移動 2px，可依需求調整距離 */
+    transform: translateY(-3px);
+    /* 如果想要加點陰影效果，可以同時加上 box-shadow */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 `;
 

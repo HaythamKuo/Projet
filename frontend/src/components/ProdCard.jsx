@@ -70,7 +70,7 @@ function ProdCard() {
             <StarRating rating={item.rating} />
           </TextRatingBox>
           <InfoCartMarkBox>
-            <Button>Read more</Button>
+            <Button>更多資訊</Button>
 
             <CartMarkBox>
               <BookMark />
