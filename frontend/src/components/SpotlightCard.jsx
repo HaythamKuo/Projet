@@ -4,8 +4,8 @@ import styled from "styled-components";
 // 透過 styled-components 建立包含 ::before 偽元素的卡片樣式
 const CardSpotlight = styled.div`
   position: relative;
-  flex: 1;
-  height: 350px;
+  flex: 2;
+  height: 550px;
 
   //test
   width: 40%;

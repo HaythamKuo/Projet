@@ -15,7 +15,7 @@ export const TypeWriterContainer = styled.div`
   }
 
   span {
-    color: ${({ theme }) => theme.colors.dark};
+    color: ${({ theme }) => theme.colors.default};
     font-size: 3.5rem;
 
     //RWD to "I am"

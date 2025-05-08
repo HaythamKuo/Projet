@@ -65,3 +65,8 @@ export const ProdDesc = styled.div`
     flex-direction: column;
   }
 `;
+
+export const ImgWrapper = styled.div`
+  flex: 3;
+  min-width: 0;
+`;

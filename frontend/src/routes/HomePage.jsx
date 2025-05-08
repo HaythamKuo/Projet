@@ -5,6 +5,7 @@ import {
   CenterOfHome,
   AttributesContainer,
   ProdDesc,
+  ImgWrapper,
 } from "../styles/homePage.style";
 import TypeWriter, { TypeWriterContainer } from "../components/TypeWriter";
 import Attribute from "../components/Attribute";
@@ -49,11 +50,13 @@ function HomePage() {
           animateBy="words"
           direction="up"
           className="test"
-          center="center"
+          $center="center"
         />
         <ProdDesc>
-          <Image src="/golden-2.jpg" alt="handsome boy" w={850} h={350} />
-
+          <ImgWrapper>
+            {/* <Image src="/golden-2.jpg" alt="handsome boy" w={850} h={350} /> */}
+            <Image src="/golden-2.jpg" alt="handsome boy" h={550} />
+          </ImgWrapper>
           <SpotlightCard
             className="custom-spotlight-card"
             spotlightColor="rgba(0, 229, 255, 0.2)"
@@ -71,8 +74,10 @@ function HomePage() {
         </ProdDesc>
 
         <ProdDesc>
-          <Image src="/husky-1.jpg" alt="handsome boy" w={850} h={350} />
-
+          <ImgWrapper>
+            {/* <Image src="/husky-1.jpg" alt="handsome boy" w={850} h={550} /> */}
+            <Image src="/husky-1.jpg" alt="handsome boy" h={550} />
+          </ImgWrapper>
           <SpotlightCard
             className="custom-spotlight-card"
             spotlightColor="rgba(0, 229, 255, 0.2)"

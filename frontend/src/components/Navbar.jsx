@@ -35,7 +35,7 @@ function Navbar({ onClick }) {
         <div className="navLinks">
           <NavBtn name={"首頁"} />
           <NavBtn name={"關於"} />
-          <NavBtn name={"服務"} />
+          <NavBtn name={"全部產品"} />
           <Link to="login">
             <NavBtn name={"登入/註冊"} />
           </Link>
@@ -53,7 +53,7 @@ function Navbar({ onClick }) {
           <MobileNav open={open}>
             <NavBtn ismobile={true} name={"首頁"} />
             <NavBtn ismobile={true} name={"關於"} />
-            <NavBtn ismobile={true} name={"服務"} />
+            <NavBtn ismobile={true} name={"全部產品"} />
             <NavBtn ismobile={true} name={"登入/註冊"} />
             <Switch onClick={onClick} />
           </MobileNav>

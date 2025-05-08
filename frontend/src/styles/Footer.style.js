@@ -5,6 +5,7 @@ export const FooterContainer = styled.footer`
   width: 100%;
   display: flex;
   justify-content: space-between;
+  color: ${({ theme }) => theme.spotLight.color};
 
   h1 {
     font-size: 1.5rem;
@@ -57,6 +58,8 @@ export const CopyRightContainer = styled.div`
   align-items: center;
   gap: 0.5rem;
   margin-top: 0.5rem;
+  color: ${({ theme }) => theme.spotLight.color};
+
   span {
     font-size: 1.25rem;
   }

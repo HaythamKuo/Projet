@@ -23,7 +23,7 @@ export const lightTheme = {
   colors: {
     backGround: "#e6e6ff",
     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-    dark: "#1B1B1D",
+    default: "#1B1B1D",
     typeWriter: "#fb5607",
     cursor: "#ff9e00",
   },
@@ -32,6 +32,9 @@ export const lightTheme = {
     border: "#e0e0e0",
     color: "#333333",
     spotColor: "rgba(0, 0, 0, 0.05)",
+  },
+  card: {
+    backGround: "#f4f4f4",
   },
 
   breakpoints,
@@ -42,7 +45,7 @@ export const darkTheme = {
     backGround: "#1B1B1D",
     boxShadow:
       "0 4px 15px rgba(255, 255, 255, 0.3), 0 2px 10px rgba(255, 255, 255, 0.2)",
-    white: "#e6e6ff",
+    default: "#e6e6ff",
     typeWriter: "#ffbd00",
     cursor: "#ffd166",
   },
@@ -51,6 +54,9 @@ export const darkTheme = {
     border: "#222222",
     color: "#ffffff",
     spotColor: "rgba(255, 255, 255, 0.25)",
+  },
+  card: {
+    backGround: "black",
   },
   breakpoints,
   media: generateMedia(breakpoints),

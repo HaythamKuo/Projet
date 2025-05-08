@@ -3,6 +3,7 @@ import App from "../App";
 import HomePage from "./HomePage";
 import LoginPage from "./LoginPage";
 import RegisterPage from "./RegisterPage";
+import AllProductsPage from "./AllProductsPage";
 
 export const createRouter = (toggleTheme) => {
   return createBrowserRouter([
@@ -21,6 +22,10 @@ export const createRouter = (toggleTheme) => {
         {
           path: "register",
           element: <RegisterPage />,
+        },
+        {
+          path: "products",
+          element: <AllProductsPage />,
         },
       ],
     },
