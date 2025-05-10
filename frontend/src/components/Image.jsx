@@ -32,6 +32,7 @@ function Image({
   borderRadius = "0.75rem",
   flex,
   topOnly,
+  ...rest
 }) {
   const [imgReady, setImgReady] = useState(false);
   const urlEndpoint = import.meta.env.VITE_IK_URL_ENDPOINT;
@@ -59,6 +60,7 @@ function Image({
       width={w}
       height={h}
       topOnly={topOnly}
+      {...rest}
     />
   );
 }

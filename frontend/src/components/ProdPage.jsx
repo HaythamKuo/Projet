@@ -1,4 +1,11 @@
+import Breadcrumb from "../styles/UI/Breadcrumb";
+import ProdImgGallery from "./ProdImgGallery";
 function ProdPage() {
-  return <>this is th single prod page</>;
+  return (
+    <>
+      <Breadcrumb />
+      <ProdImgGallery />
+    </>
+  );
 }
 export default ProdPage;
