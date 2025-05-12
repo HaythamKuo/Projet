@@ -36,6 +36,9 @@ export const lightTheme = {
   card: {
     backGround: "#f4f4f4",
   },
+  button: {
+    hovers: "#001a35",
+  },
 
   breakpoints,
   media: generateMedia(breakpoints),
@@ -57,6 +60,9 @@ export const darkTheme = {
   },
   card: {
     backGround: "black",
+  },
+  button: {
+    hovers: "#f2f2f2",
   },
   breakpoints,
   media: generateMedia(breakpoints),

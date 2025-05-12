@@ -12,9 +12,16 @@ import {
   ControlAmounts,
   Plus,
   Minus,
+  SubmitBox,
+  SubmitBtn,
 } from "../styles/ProdImgGallery.style";
 import Image from "./Image";
 import Loader from "../styles/UI/Loader";
+import {
+  MdDeliveryDining,
+  MdHomeRepairService,
+  MdSquareFoot,
+} from "react-icons/md";
 
 function ProdImgGallery({ thumbnailSize = 100 }) {
   const dogs = [
@@ -26,6 +33,13 @@ function ProdImgGallery({ thumbnailSize = 100 }) {
 
   const [selectIndex, setSelectIndex] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [count, setCount] = useState(0);
+
+  //控制數量
+  function minusCount() {
+    if (count <= 0) return;
+    setCount((preCount) => preCount - 1);
+  }
 
   useEffect(() => {
     setLoading(true);
@@ -62,16 +76,35 @@ function ProdImgGallery({ thumbnailSize = 100 }) {
           <h1 className="prodTitle">Golden-retriver</h1>
           <span className="prodPrice">$1299</span>
           <ControlAmounts>
-            <button>
+            <button onClick={minusCount}>
               <Minus />
             </button>
-            <span>0</span>
-            <button>
+            <span>{count}</span>
+            <button onClick={() => setCount((preCount) => preCount + 1)}>
               <Plus />
             </button>
           </ControlAmounts>
+          <SubmitBox>
+            <SubmitBtn>加入購物車</SubmitBtn>
+            <SubmitBtn>直接購買</SubmitBtn>
+          </SubmitBox>
         </Top>
-        <Center></Center>
+        <Center>
+          <div className="ProflieIcon">
+            <MdDeliveryDining />
+            <span>免費且快捷的運輸</span>
+          </div>
+          <div className="ProflieIcon">
+            <MdHomeRepairService />
+            <span>完善的售後服務</span>
+          </div>
+          <div className="ProflieIcon">
+            <MdSquareFoot />
+            <span>降低碳足跡排放</span>
+          </div>
+          {/* <span>完善的售後服務</span>
+          <span>降低碳足跡排放</span> */}
+        </Center>
         <Bottom></Bottom>
       </InfoPanel>
     </Gallery>
