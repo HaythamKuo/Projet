@@ -65,10 +65,6 @@ function Footer() {
           </div>
         </div>
       </FooterContainer>
-      <CopyRightContainer>
-        <CopyRight />
-        <span>this.Haytham. All rights reserved</span>
-      </CopyRightContainer>
     </>
   );
 }

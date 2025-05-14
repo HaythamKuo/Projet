@@ -1,9 +1,10 @@
 import styled from "styled-components";
 import { flexCenter, flexContainer } from "./theme";
+import { LayoutContainer } from "./layout.style";
 
 export const NavContainer = styled.nav`
-  ${flexContainer}
-  width: 100%;
+  /* ${flexContainer}
+  
   height: 5rem;
   padding: 1rem 1rem;
   background-color: ${({ theme }) => theme.colors.backGround};
@@ -12,15 +13,37 @@ export const NavContainer = styled.nav`
   top: 0;
   left: 0;
   right: 0;
+  z-index: 10; */
+
+  //ok?
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   z-index: 10;
+  background-color: ${({ theme }) => theme.colors.backGround};
+  box-shadow: ${({ theme }) => theme.colors.boxShadow};
 
   .navContent {
-    ${flexContainer}
+    /* ${flexContainer}
     width: 100%;
 
     //限制nav兩側最大寬度
     max-width: 1200px;
+    margin: 0 auto; */
+
+    //ok?
+    width: 100%;
+    max-width: 1280px;
     margin: 0 auto;
+    padding: 0 clamp(1rem, 4vw, 4rem);
+    box-sizing: border-box;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    height: 5rem;
 
     ${({ theme }) => theme.media.xl} {
       height: 4rem;
@@ -44,9 +67,6 @@ export const NavContainer = styled.nav`
   }
 
   .navLinks {
-    /* display: flex;
-    align-items: center;
-    justify-content: center; */
     ${flexCenter}
     gap: 2rem;
 
@@ -87,8 +107,8 @@ export const MobileNav = styled.div`
 `;
 
 //??
-export const ContentContainer = styled.main`
+export const ContentContainer = styled(LayoutContainer)`
   padding-top: 6rem;
-  width: 100%;
+  //width: 100%;
   //flex: 1;
 `;

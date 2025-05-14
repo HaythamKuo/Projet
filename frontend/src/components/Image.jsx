@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 const StyledIKImage = styled(IKImage)`
   max-width: 1060px;
+  width: 100%;
 
   //border-radius: ${(p) => `${p.$borderRadius} ${p.$borderRadius} 0 0`};
   border-radius: ${(p) =>
@@ -11,8 +12,8 @@ const StyledIKImage = styled(IKImage)`
   object-fit: cover;
 
   //test
-  width: ${(props) => (props.width ? `${props.width}px` : "100%")};
-  height: ${(prop) => (prop.height ? `${prop.height}px` : "auto")};
+  /* width: ${(props) => (props.width ? `${props.width}px` : "100%")};
+  height: ${(prop) => (prop.height ? `${prop.height}px` : "auto")}; */
 
   //rwd
   ${({ theme }) => theme.media.md} {

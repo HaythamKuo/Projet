@@ -27,9 +27,9 @@ footer, header, hgroup, menu, nav, section {
 	display: block;
 }
 body {
-    line-height: 1.5;
-   -webkit-font-smoothing: antialiased;
-background-color: ${({ theme }) => theme.colors.backGround};
+	line-height: 1.5;
+	-webkit-font-smoothing: antialiased;
+	background-color: ${({ theme }) => theme.colors.backGround};
   //overflow:hidden; 
   
 }
@@ -75,6 +75,7 @@ p, h1, h2, h3, h4, h5, h6 {
 
 #root, #__next {
   isolation: isolate;
+  
 }
 
 

@@ -7,13 +7,15 @@ import {
   MdSquareFoot,
 } from "react-icons/md";
 
+export const GalleryContainer = styled.div``;
+
 export const Gallery = styled.div`
   display: flex;
   gap: 1rem;
-  //background-color: yellow;
 
-  //將content縮小置中？
-  //padding: 0 20rem;
+  ${({ theme }) => theme.media.md} {
+    flex-direction: column;
+  }
 `;
 
 //縮圖
@@ -21,6 +23,9 @@ export const ThumbnailList = styled.div`
   display: flex;
   gap: 0.5rem;
   flex-direction: column;
+  ${({ theme }) => theme.media.md} {
+    flex-direction: row;
+  }
 `;
 
 export const ThumbnailWrapper = styled.div`
@@ -42,20 +47,45 @@ export const Thumbnail = styled(Image)`
 
 // 主圖
 export const MainImgWrapper = styled.div`
-  flex: 1;
-  /* max-width: 500px; */
-  //width: 100%;
+  /* width: 100%;
+  max-width: 810px;
+  overflow: hidden;
+  aspect-ratio: 16/9; */
+  width: 100%;
+
+  //固定高度
+  height: clamp(300px, 60vh, 700px);
+
+  overflow: hidden;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+
+  ${({ theme }) => theme.media.xxl} {
+    height: clamp(300px, 45vh, 700px);
+  }
+  ${({ theme }) => theme.media.lg} {
+    height: clamp(300px, 45vh, 700px);
+  }
+`;
+
+export const SingleImgCard = styled.img`
+  display: block;
+  //max-width: 100%;
+  width: auto;
+  height: 100%;
+  object-fit: cover;
 `;
 
 // 商品資訊
 export const InfoPanel = styled.div`
-  flex: 1;
+  //flex: 1;
   display: flex;
   flex-direction: column;
 `;
 export const Top = styled.div`
   .prodTitle {
-    font-size: 3rem;
+    font-size: 2rem;
     font-weight: bold;
   }
 
@@ -73,16 +103,16 @@ export const ControlAmounts = styled.div`
 
   span {
     background-color: azure;
-    padding: 1rem 2.75rem;
+    padding: 1rem 1.5rem;
     border-radius: 45px;
     font-size: 1.25rem;
   }
 
   button {
     border: none;
-    border-radius: 75%;
+    border-radius: 50%;
     background-color: azure;
-    padding: 1rem;
+    padding: 0.5rem;
     cursor: pointer;
     font-size: 1.25rem;
   }
@@ -97,9 +127,6 @@ export const SubmitBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-
-  //test
-  //width: 50%;
 `;
 
 export const SubmitBtn = styled.button`
@@ -137,13 +164,14 @@ export const Center = styled.div`
 
   display: flex;
   flex-direction: column;
+  gap: 1rem;
 
   .ProflieIcon {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 15px;
 
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-weight: bolder;
 
     & > svg {
@@ -153,3 +181,38 @@ export const Center = styled.div`
 `;
 
 export const Bottom = styled.div``;
+
+// Accordion
+export const Section = styled.section`
+  //background-color: red;
+  //border-top: 1px solid #e0e0e0;
+`;
+export const Item = styled.div`
+  border-bottom: 1px solid #e0e0e0;
+`;
+
+export const HeaderBtn = styled.button`
+  width: 100%;
+  padding: 1rem 0;
+  font-size: 1rem;
+  text-align: left;
+  background: none;
+  border: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+`;
+
+export const Icon = styled.span`
+  display: inline-block;
+  transition: transform 0.3s;
+  transform: ${(prop) => (prop.open ? "rotate(45deg)" : "rotate(0)")};
+`;
+
+export const AccordionContent = styled.div`
+  max-height: ${({ open }) => (open ? "500px" : "0")};
+  //height: ${({ open }) => (open ? "200px" : "0")};
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+`;
