@@ -21,6 +21,11 @@ import {
   AccordionContent,
   GalleryContainer,
   HighlightSectionContainer,
+  BottomWrapper,
+  IconWrapper,
+  MinorTitle,
+  MinorDes,
+  BottomContainer,
 } from "../styles/ProdImgGallery.style";
 //import Image from "./Image";
 import Loader from "../styles/UI/Loader";
@@ -30,6 +35,7 @@ import {
   MdHomeRepairService,
   MdSquareFoot,
 } from "react-icons/md";
+import { TbTruckDelivery, TbBuildingFactory2, TbBox } from "react-icons/tb";
 
 function ProdImgGallery({ thumbnailSize = 100 }) {
   const dogs = [
@@ -43,6 +49,24 @@ function ProdImgGallery({ thumbnailSize = 100 }) {
     { title: "Delivery & Returns", content: "在此填入配送與退貨的說明…" },
     { title: "Size & Fit", content: "在此填入尺寸與合身度說明…" },
     { title: "How This Was Made", content: "在此填入商品製作方式說明…" },
+  ];
+
+  const InfoData = [
+    {
+      title: "免費且速速的運輸",
+      Icon: <TbTruckDelivery />,
+      des: "lorem10lorem10lorem10lorem10lorem10lorem10",
+    },
+    {
+      title: "25hr速速送",
+      Icon: <TbBuildingFactory2 />,
+      des: "lorem10lorem10lorem10lorem10lorem10lorem10",
+    },
+    {
+      title: "不準退貨喔喔喔",
+      Icon: <TbBox />,
+      des: "lorem10lorem10lorem10lorem10lorem10lorem10",
+    },
   ];
 
   const [selectIndex, setSelectIndex] = useState(0);
@@ -152,6 +176,15 @@ function ProdImgGallery({ thumbnailSize = 100 }) {
         <HighLightSection attrs="row" />
         <HighLightSection attrs="row-reverse" />
       </HighlightSectionContainer>
+      <BottomContainer>
+        {InfoData.map((data, i) => (
+          <BottomWrapper key={i}>
+            <IconWrapper>{data.Icon}</IconWrapper>
+            <MinorTitle>{data.title}</MinorTitle>
+            <MinorDes>{data.des}</MinorDes>
+          </BottomWrapper>
+        ))}
+      </BottomContainer>
     </GalleryContainer>
   );
 }

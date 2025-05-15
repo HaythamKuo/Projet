@@ -1,11 +1,7 @@
 import styled from "styled-components";
 import Image from "../components/Image";
 import { FaMinus, FaPlus } from "react-icons/fa6";
-import {
-  MdDeliveryDining,
-  MdHomeRepairService,
-  MdSquareFoot,
-} from "react-icons/md";
+import { TbTruckDelivery } from "react-icons/tb";
 
 export const GalleryContainer = styled.div``;
 
@@ -214,7 +210,32 @@ export const AccordionContent = styled.div`
   transition: max-height 0.3s ease-in-out;
 `;
 
-//這裡是商品的概括
+//這裡是商品概括容器
 export const HighlightSectionContainer = styled.div`
   margin-top: 1rem;
 `;
+
+//3個icon容器概述
+
+export const BottomContainer = styled.div`
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-around;
+`;
+export const BottomWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 1rem;
+`;
+export const IconWrapper = styled.div`
+  & > svg {
+    font-size: 3rem;
+  }
+`;
+
+export const MinorTitle = styled.h3`
+  text-align: center;
+`;
+export const MinorDes = styled(MinorTitle).attrs({ as: "span" })``;
