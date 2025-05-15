@@ -3,18 +3,6 @@ import { flexCenter, flexContainer } from "./theme";
 import { LayoutContainer } from "./layout.style";
 
 export const NavContainer = styled.nav`
-  /* ${flexContainer}
-  
-  height: 5rem;
-  padding: 1rem 1rem;
-  background-color: ${({ theme }) => theme.colors.backGround};
-  box-shadow: ${({ theme }) => theme.colors.boxShadow};
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 10; */
-
   //ok?
   position: fixed;
   top: 0;
@@ -32,12 +20,11 @@ export const NavContainer = styled.nav`
     max-width: 1200px;
     margin: 0 auto; */
 
-    //ok?
+    //這裡版面之後確定沒有問題可以繼承 LayoutContainer
     width: 100%;
     max-width: 1280px;
     margin: 0 auto;
     padding: 0 clamp(1rem, 4vw, 4rem);
-    box-sizing: border-box;
 
     display: flex;
     justify-content: space-between;
@@ -45,12 +32,21 @@ export const NavContainer = styled.nav`
 
     height: 5rem;
 
+    ${({ theme }) => theme.media.xxl} {
+      padding: 0 16rem;
+    }
+
     ${({ theme }) => theme.media.xl} {
       height: 4rem;
+      padding: 0 8rem;
+    }
+    ${(props) => props.theme.media.lg} {
+      padding: 0 4rem;
     }
 
     ${({ theme }) => theme.media.md} {
-      justify-content: space-around;
+      //justify-content: space-around;
+      padding: 0 2rem;
     }
   }
 
@@ -106,9 +102,6 @@ export const MobileNav = styled.div`
   transition: transform 0.3s ease-in-out;
 `;
 
-//??
 export const ContentContainer = styled(LayoutContainer)`
   padding-top: 6rem;
-  //width: 100%;
-  //flex: 1;
 `;

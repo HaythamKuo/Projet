@@ -47,10 +47,6 @@ export const Thumbnail = styled(Image)`
 
 // 主圖
 export const MainImgWrapper = styled.div`
-  /* width: 100%;
-  max-width: 810px;
-  overflow: hidden;
-  aspect-ratio: 16/9; */
   width: 100%;
 
   //固定高度
@@ -60,9 +56,10 @@ export const MainImgWrapper = styled.div`
   display: flex;
   align-items: flex-start;
   justify-content: center;
+  border-radius: 1.5rem;
 
   ${({ theme }) => theme.media.xxl} {
-    height: clamp(300px, 45vh, 700px);
+    height: clamp(600px, 45vh, 900px);
   }
   ${({ theme }) => theme.media.lg} {
     height: clamp(300px, 45vh, 700px);
@@ -215,4 +212,9 @@ export const AccordionContent = styled.div`
   //height: ${({ open }) => (open ? "200px" : "0")};
   overflow: hidden;
   transition: max-height 0.3s ease-in-out;
+`;
+
+//這裡是商品的概括
+export const HighlightSectionContainer = styled.div`
+  margin-top: 1rem;
 `;

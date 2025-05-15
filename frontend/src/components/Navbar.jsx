@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { MobileNav, NavContainer } from "../styles/nav.style";
 import { FaAlignJustify, FaXmark } from "react-icons/fa6";
 import Image from "./Image";
 import Switch from "../styles/UI/Switch";
 import NavBtn from "../styles/UI/NavBtn";
-import { MobileNav, NavContainer } from "../styles/nav.style";
 import SplitText from "./reactBit/SplitText";
 function Navbar({ onClick }) {
   const [open, setOpen] = useState(false);

@@ -20,9 +20,11 @@ import {
   Icon,
   AccordionContent,
   GalleryContainer,
+  HighlightSectionContainer,
 } from "../styles/ProdImgGallery.style";
-import Image from "./Image";
+//import Image from "./Image";
 import Loader from "../styles/UI/Loader";
+import HighLightSection from "../styles/UI/HighLightSection";
 import {
   MdDeliveryDining,
   MdHomeRepairService,
@@ -143,6 +145,13 @@ function ProdImgGallery({ thumbnailSize = 100 }) {
           </Section>
         </InfoPanel>
       </Gallery>
+
+      <HighlightSectionContainer>
+        <HighLightSection attrs="column" />
+
+        <HighLightSection attrs="row" />
+        <HighLightSection attrs="row-reverse" />
+      </HighlightSectionContainer>
     </GalleryContainer>
   );
 }
