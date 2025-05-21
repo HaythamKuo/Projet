@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+
 import { MobileNav, NavContainer } from "../styles/nav.style";
 import { FaAlignJustify, FaXmark } from "react-icons/fa6";
 import Image from "./Image";
 import Switch from "../styles/UI/Switch";
 import NavBtn from "../styles/UI/NavBtn";
 import SplitText from "./reactBit/SplitText";
+import { useCart } from "../hooks/testCart";
 function Navbar({ onClick }) {
   const [open, setOpen] = useState(false);
 
@@ -14,6 +16,8 @@ function Navbar({ onClick }) {
   }
 
   // 日夜模式切換
+
+  const { setIsOpen } = useCart();
 
   return (
     <NavContainer>
@@ -41,6 +45,7 @@ function Navbar({ onClick }) {
           <Link to="login">
             <NavBtn name={"登入/註冊"} />
           </Link>
+          <NavBtn name="購物車" onClick={() => setIsOpen((pre) => !pre)} />
           <Switch onClick={onClick} />
         </div>
         {/* phone rwd mode */}

@@ -205,7 +205,6 @@ export const Icon = styled.span`
 
 export const AccordionContent = styled.div`
   max-height: ${({ open }) => (open ? "500px" : "0")};
-  //height: ${({ open }) => (open ? "200px" : "0")};
   overflow: hidden;
   transition: max-height 0.3s ease-in-out;
 `;
@@ -226,8 +225,11 @@ export const BottomWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-
   gap: 1rem;
+
+  //test
+  flex: 1;
+  min-width: 0;
 `;
 export const IconWrapper = styled.div`
   & > svg {
@@ -238,4 +240,10 @@ export const IconWrapper = styled.div`
 export const MinorTitle = styled.h3`
   text-align: center;
 `;
-export const MinorDes = styled(MinorTitle).attrs({ as: "span" })``;
+export const MinorDes = styled(MinorTitle).attrs({ as: "span" })`
+  //test
+  display: block; /* 變成 block，才能正確套用 max-width */
+  max-width: 100%; /* 不超出父容器 */
+  word-break: break-word; /* 必要時在單字內斷行 */
+  white-space: normal; /* 確保自動換行 */
+`;

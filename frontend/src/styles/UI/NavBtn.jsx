@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
-const NavBtn = ({ name, ismobile }) => {
+const NavBtn = ({ name, ismobile, onClick }) => {
   return (
     <StyledWrapper $isMobile={ismobile}>
-      <button>{name}</button>
+      <button onClick={onClick}>{name}</button>
     </StyledWrapper>
   );
 };

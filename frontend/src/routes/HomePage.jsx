@@ -6,12 +6,22 @@ import {
   AttributesContainer,
   ProdDesc,
   ImgWrapper,
+  ImgHover,
+  ImgHoverWrapper,
+  ImgHoverContainer,
+  ImgHoverTitle,
+  ImgHoverBox,
+  TextWrapper,
+  TextHover,
+  TextSearch,
 } from "../styles/homePage.style";
+
 import TypeWriter, { TypeWriterContainer } from "../components/TypeWriter";
 import Attribute from "../components/Attribute";
 import IntroTitle from "../components/reactBit/IntroTitle";
 import SpotlightCard from "../components/SpotlightCard";
 import Image from "../components/Image";
+import CartDrawer from "../components/CartDrawer";
 
 const titles = ["娃娃", "運送服務", "情緒價值"];
 
@@ -94,6 +104,26 @@ function HomePage() {
           </SpotlightCard>
         </ProdDesc>
       </div>
+
+      {/* 動畫特效 */}
+
+      <ImgHoverContainer>
+        <ImgHoverTitle>準備好掏出你的錢包了嗎</ImgHoverTitle>
+        <ImgHoverBox>
+          <ImgHoverWrapper>
+            <ImgHover>Cat</ImgHover>
+          </ImgHoverWrapper>
+          <ImgHoverWrapper>
+            <ImgHover>Cat</ImgHover>
+          </ImgHoverWrapper>
+
+          <TextWrapper>
+            <TextSearch />
+            <TextHover>Search</TextHover>
+          </TextWrapper>
+        </ImgHoverBox>
+      </ImgHoverContainer>
+      <CartDrawer />
     </HomeContainer>
   );
 }
