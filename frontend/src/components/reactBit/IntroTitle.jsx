@@ -56,20 +56,25 @@ const IntroTitle = ({
   ];
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setInView(true);
-          observer.unobserve(ref.current);
-        }
-      },
-      { threshold, rootMargin }
-    );
+    if (!ref.current) return;
+
+    function handleObserve(entries, observer) {
+      entries.forEach((element) => {
+        if (element.isIntersecting) setTimeout(() => setInView(true), delay);
+
+        setInView(false);
+      });
+    }
+
+    const observer = new IntersectionObserver(handleObserve, {
+      threshold,
+      rootMargin,
+    });
 
     observer.observe(ref.current);
 
     return () => observer.disconnect();
-  }, [threshold, rootMargin]);
+  }, [threshold, rootMargin, delay]);
 
   const springs = useSprings(
     elements.length,

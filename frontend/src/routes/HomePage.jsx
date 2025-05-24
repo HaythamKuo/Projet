@@ -1,4 +1,4 @@
-import HightLight from "../styles/UI/HighLight";
+import HighLight from "../styles/UI/HighLight";
 import { HeaderLayout } from "../styles/header.style";
 import {
   HomeContainer,
@@ -22,14 +22,40 @@ import IntroTitle from "../components/reactBit/IntroTitle";
 import SpotlightCard from "../components/SpotlightCard";
 import Image from "../components/Image";
 import CartDrawer from "../components/CartDrawer";
+//import { useState, useRef, useEffect } from "react";
 
 const titles = ["娃娃", "運送服務", "情緒價值"];
 
 function HomePage() {
+  // const [isScroll, setIsScroll] = useState(false);
+  // const observeRef = useRef(null);
+
+  // useEffect(() => {
+  //   const sentryNode = observeRef.current;
+
+  //   if (sentryNode) return;
+
+  //   const handleIntersecting = function (entries) {
+  //     const [entry] = entries;
+
+  //     setIsScroll(!entry.isIntersecting);
+  //   };
+
+  //   const obsOps = { root: null, rootMargin: "0px", threshold: 1 };
+
+  //   const observer = new IntersectionObserver(handleIntersecting, obsOps);
+
+  //   observer.observe();
+
+  //   return () => {
+  //     if (sentryNode) observer.disconnect(sentryNode);
+  //   };
+  // }, []);
+
   return (
     <HomeContainer>
       <HeaderLayout>
-        <HightLight />
+        <HighLight />
         <TypeWriterContainer>
           <span>I am</span>
           <TypeWriter

@@ -13,8 +13,6 @@ export const Drawer = styled.div`
   right: 0;
   height: 100vh;
 
-  //待調整
-  //width: 500px;
   width: clamp(320px, 75vw, 500px);
 
   background-color: white;

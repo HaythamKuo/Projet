@@ -33,7 +33,7 @@ const Section = styled.div`
 
 const Title = styled.h1`
   //使用mix-blend-mode就不用執著於文字顏色
-  /* color: #fff; */
+  color: #fff;
   font-size: 10rem;
   mix-blend-mode: difference;
 

@@ -10,6 +10,7 @@ export const NavContainer = styled.nav`
   right: 0;
   z-index: 10;
   background-color: ${({ theme }) => theme.colors.backGround};
+
   box-shadow: ${({ theme }) => theme.colors.boxShadow};
 
   .navContent {
@@ -84,6 +85,14 @@ export const NavContainer = styled.nav`
   }
 `;
 
+export const Sentinel = styled.div`
+  position: sticky;
+  height: 1px;
+  top: 5rem;
+  background-color: blue;
+  //z-index: -1;
+`;
+
 export const MobileNav = styled.div`
   position: fixed;
   top: 5rem;
@@ -103,5 +112,7 @@ export const MobileNav = styled.div`
 `;
 
 export const ContentContainer = styled(LayoutContainer)`
+  //為何原先要用padding?
+  //margin-top: 6rem;
   padding-top: 6rem;
 `;

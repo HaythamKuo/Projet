@@ -2,6 +2,7 @@ import { InputContainer, ProdPageContainer } from "../styles/prodPage.style";
 import Input from "../styles/UI/Input";
 import ParallaxSection from "../styles/UI/ParallaxSection";
 import ProdCard from "../components/ProdCard";
+
 import StarRating from "../styles/UI/StarRating";
 
 function AllProductsPage() {

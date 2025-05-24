@@ -3,7 +3,8 @@ import styled from "styled-components";
 export const HeaderLayout = styled.header`
   background-color: beige;
   display: flex;
-  flex-direction: row;
+  //  flex-direction: row;
+  justify-content: space-evenly;
   gap: 2rem;
   align-items: center;
   padding: 1rem 1rem;

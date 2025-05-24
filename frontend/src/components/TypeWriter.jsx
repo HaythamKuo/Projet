@@ -5,7 +5,7 @@ export const TypeWriterContainer = styled.div`
   display: flex;
   flex-direction: column;
 
-  flex: 2;
+  //flex: 1;
 
   // RWD
   ${({ theme }) => theme.media.md} {

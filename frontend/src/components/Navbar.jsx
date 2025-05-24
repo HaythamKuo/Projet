@@ -8,15 +8,24 @@ import Switch from "../styles/UI/Switch";
 import NavBtn from "../styles/UI/NavBtn";
 import SplitText from "./reactBit/SplitText";
 import { useCart } from "../hooks/testCart";
+
 function Navbar({ onClick }) {
   const [open, setOpen] = useState(false);
 
+  /**
+   * handleOpen
+   * @function 切換手機模式navbar
+   */
   function handleOpen() {
     setOpen((pre) => !pre);
   }
 
   // 日夜模式切換
-
+  /**
+   * useCart
+   * 透過 @function {useCart} 切換購物車開關
+   * @returns {Boolean} true/false
+   */
   const { setIsOpen } = useCart();
 
   return (
