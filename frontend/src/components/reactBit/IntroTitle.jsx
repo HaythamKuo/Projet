@@ -1,6 +1,7 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef } from "react";
 import { useSprings, animated } from "@react-spring/web";
 import styled from "styled-components";
+import { useIntersectionObserver } from "../../hooks/useIntersectObserve";
 
 // Styled components
 const TextContainer = styled.p`
@@ -28,8 +29,8 @@ const IntroTitle = ({
   $center = false,
 }) => {
   const elements = animateBy === "words" ? text.split(" ") : text.split("");
-  const [inView, setInView] = useState(false);
-  const ref = useRef();
+  // const [inView, setInView] = useState(false);
+  // const ref = useRef();
   const animatedCount = useRef(0);
 
   const defaultFrom =
@@ -55,26 +56,11 @@ const IntroTitle = ({
     { filter: "blur(0px)", opacity: 1, transform: "translate3d(0,0,0)" },
   ];
 
-  useEffect(() => {
-    if (!ref.current) return;
-
-    function handleObserve(entries, observer) {
-      entries.forEach((element) => {
-        if (element.isIntersecting) setTimeout(() => setInView(true), delay);
-
-        setInView(false);
-      });
-    }
-
-    const observer = new IntersectionObserver(handleObserve, {
-      threshold,
-      rootMargin,
-    });
-
-    observer.observe(ref.current);
-
-    return () => observer.disconnect();
-  }, [threshold, rootMargin, delay]);
+  const [ref, inView] = useIntersectionObserver({
+    delay,
+    threshold,
+    rootMargin,
+  });
 
   const springs = useSprings(
     elements.length,
