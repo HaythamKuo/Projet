@@ -1,6 +1,7 @@
 import { createBrowserRouter, Outlet } from "react-router-dom";
 import App from "../App";
 import HomePage from "./HomePage";
+import AuthLayout from "./AuthLayout";
 import LoginPage from "./LoginPage";
 import RegisterPage from "./RegisterPage";
 import AllProductsPage from "./AllProductsPage";
@@ -17,12 +18,12 @@ export const createRouter = (toggleTheme) => {
           element: <HomePage />,
         },
         {
-          path: "login",
-          element: <LoginPage />,
-        },
-        {
-          path: "register",
-          element: <RegisterPage />,
+          path: "auth",
+          element: <AuthLayout />,
+          children: [
+            { index: true, element: <LoginPage /> },
+            { path: "register", element: <RegisterPage /> },
+          ],
         },
         {
           path: "products",

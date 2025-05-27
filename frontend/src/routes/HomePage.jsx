@@ -22,36 +22,10 @@ import IntroTitle from "../components/reactBit/IntroTitle";
 import SpotlightCard from "../components/SpotlightCard";
 import Image from "../components/Image";
 import CartDrawer from "../components/CartDrawer";
-//import { useState, useRef, useEffect } from "react";
 
 const titles = ["娃娃", "運送服務", "情緒價值"];
 
 function HomePage() {
-  // const [isScroll, setIsScroll] = useState(false);
-  // const observeRef = useRef(null);
-
-  // useEffect(() => {
-  //   const sentryNode = observeRef.current;
-
-  //   if (sentryNode) return;
-
-  //   const handleIntersecting = function (entries) {
-  //     const [entry] = entries;
-
-  //     setIsScroll(!entry.isIntersecting);
-  //   };
-
-  //   const obsOps = { root: null, rootMargin: "0px", threshold: 1 };
-
-  //   const observer = new IntersectionObserver(handleIntersecting, obsOps);
-
-  //   observer.observe();
-
-  //   return () => {
-  //     if (sentryNode) observer.disconnect(sentryNode);
-  //   };
-  // }, []);
-
   return (
     <HomeContainer>
       <HeaderLayout>
@@ -134,7 +108,13 @@ function HomePage() {
       {/* 動畫特效 */}
 
       <ImgHoverContainer>
-        <ImgHoverTitle>準備好掏出你的錢包了嗎</ImgHoverTitle>
+        <IntroTitle
+          text="準備好掏出你的錢包了嗎"
+          delay={150}
+          animateBy="words"
+          direction="up"
+          className=""
+        />
         <ImgHoverBox>
           <ImgHoverWrapper>
             <ImgHover>Cat</ImgHover>

@@ -77,7 +77,7 @@ export const ImgWrapper = styled.div`
 export const ImgHoverContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.75rem;
 `;
 
 export const ImgHoverTitle = styled.h3`
