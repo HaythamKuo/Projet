@@ -6,18 +6,23 @@ import { Container, FormContainer, OptText } from "../styles/form.style";
 function LoginPage() {
   const [enterValue, setEnterValue] = useState({ email: "", password: "" });
 
-  const [valueIsInvalid, setvalueIsInvalid] = useState({
+  const [touched, setTouched] = useState({
     email: false,
     password: false,
   });
 
-  const emailHasError = valueIsInvalid.email && !enterValue.email.includes("@");
+  const emailHasError = touched.email && !enterValue.email.includes("@");
   const passwordHasError =
-    valueIsInvalid.password &&
+    touched.password &&
     (enterValue.password.length < 6 || enterValue.password.length > 15);
 
   function handleSubmit(e) {
     e.preventDefault();
+
+    if (emailHasError || passwordHasError) return;
+
+    setEnterValue({ email: "", password: "" });
+    setTouched({ email: false, password: false });
   }
 
   function handleValue(identifier, e) {
@@ -26,11 +31,11 @@ function LoginPage() {
       [identifier]: e.target.value,
     }));
 
-    setvalueIsInvalid((preValue) => ({ ...preValue, [identifier]: false }));
+    setTouched((preValue) => ({ ...preValue, [identifier]: false }));
   }
 
   function handleBlurValue(identifier) {
-    setvalueIsInvalid((preValue) => ({
+    setTouched((preValue) => ({
       ...preValue,
       [identifier]: true,
     }));
