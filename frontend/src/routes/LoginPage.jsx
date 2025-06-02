@@ -1,9 +1,15 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import FormField from "../components/FormField";
 import { Container, FormContainer, OptText } from "../styles/form.style";
+import { setCredentials } from "../store/slices/authSlice";
+import { useLoginMutation } from "../store/apis/apiSlice";
+import { toast } from "react-toastify";
 
 function LoginPage() {
+  const navigate = useNavigate();
+
   const [enterValue, setEnterValue] = useState({ email: "", password: "" });
 
   const [touched, setTouched] = useState({
@@ -16,13 +22,40 @@ function LoginPage() {
     touched.password &&
     (enterValue.password.length < 6 || enterValue.password.length > 15);
 
-  function handleSubmit(e) {
+  //非同步登入處理
+
+  const dispatch = useDispatch();
+  const { userInfo } = useSelector((state) => state.auth);
+  const [login] = useLoginMutation();
+
+  console.log(userInfo);
+
+  useEffect(() => {
+    if (userInfo) navigate("/");
+  }, [navigate, userInfo]);
+
+  //處理登入function與拋出錯誤
+  async function handleSubmit(e) {
     e.preventDefault();
 
     if (emailHasError || passwordHasError) return;
 
-    setEnterValue({ email: "", password: "" });
-    setTouched({ email: false, password: false });
+    try {
+      const res = await login({
+        email: enterValue.email,
+        password: enterValue.password,
+      }).unwrap();
+
+      dispatch(setCredentials({ ...res }));
+      console.log(res);
+
+      console.log(userInfo);
+      setEnterValue({ email: "", password: "" });
+      setTouched({ email: false, password: false });
+      navigate("/");
+    } catch (error) {
+      toast.error(error?.data?.message || error.error);
+    }
   }
 
   function handleValue(identifier, e) {

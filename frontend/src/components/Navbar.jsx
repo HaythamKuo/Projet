@@ -51,7 +51,7 @@ function Navbar({ onClick }) {
           <Link to="products">
             <NavBtn name={"全部產品"} />
           </Link>
-          <Link to="login">
+          <Link to="auth">
             <NavBtn name={"登入/註冊"} />
           </Link>
           <NavBtn name="購物車" onClick={() => setIsOpen((pre) => !pre)} />

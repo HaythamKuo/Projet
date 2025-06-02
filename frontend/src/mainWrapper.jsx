@@ -6,6 +6,7 @@ import GlobalStyle from "./styles/GlobalReset.jsx";
 import { createRouter } from "./routes/router.jsx";
 
 import { darkTheme, lightTheme } from "./styles/theme.js";
+import "react-toastify/dist/ReactToastify.css";
 
 function MainWrapper() {
   const [theme, setTheme] = useState("light");
