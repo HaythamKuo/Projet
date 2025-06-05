@@ -8,6 +8,7 @@ import Switch from "../styles/UI/Switch";
 import NavBtn from "../styles/UI/NavBtn";
 import SplitText from "./reactBit/SplitText";
 import { useCart } from "../hooks/testCart";
+import LoginDropDown from "./loginDropDown";
 
 function Navbar({ onClick }) {
   const [open, setOpen] = useState(false);
@@ -51,9 +52,12 @@ function Navbar({ onClick }) {
           <Link to="products">
             <NavBtn name={"全部產品"} />
           </Link>
-          <Link to="auth">
+          {/* <Link to="auth">
             <NavBtn name={"登入/註冊"} />
-          </Link>
+          </Link> */}
+
+          <LoginDropDown />
+
           <NavBtn name="購物車" onClick={() => setIsOpen((pre) => !pre)} />
           <Switch onClick={onClick} />
         </div>

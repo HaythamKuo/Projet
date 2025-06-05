@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import FormField from "../components/FormField";
 import { Container, FormContainer, OptText } from "../styles/form.style";
 import { setCredentials } from "../store/slices/authSlice";
@@ -8,7 +8,7 @@ import { useLoginMutation } from "../store/apis/apiSlice";
 import { toast } from "react-toastify";
 
 function LoginPage() {
-  const navigate = useNavigate();
+  //  const navigate = useNavigate();
 
   const [enterValue, setEnterValue] = useState({ email: "", password: "" });
 
@@ -26,13 +26,15 @@ function LoginPage() {
 
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.auth);
+
+  // 這裡需要一個參數 為何沒有？？？
   const [login] = useLoginMutation();
 
   console.log(userInfo);
 
-  useEffect(() => {
-    if (userInfo) navigate("/");
-  }, [navigate, userInfo]);
+  // useEffect(() => {
+  //   if (userInfo) navigate("/");
+  // }, [navigate, userInfo]);
 
   //處理登入function與拋出錯誤
   async function handleSubmit(e) {
@@ -52,7 +54,8 @@ function LoginPage() {
       console.log(userInfo);
       setEnterValue({ email: "", password: "" });
       setTouched({ email: false, password: false });
-      navigate("/");
+
+      //navigate("/");
     } catch (error) {
       toast.error(error?.data?.message || error.error);
     }

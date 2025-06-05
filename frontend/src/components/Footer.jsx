@@ -8,6 +8,7 @@ import {
   CopyRight,
 } from "../styles/Footer.style";
 import { FaMailchimp, FaInstagram, FaFacebook } from "react-icons/fa";
+import LoginDropDown from "./loginDropDown";
 
 function Footer() {
   const socialMedias = [
@@ -58,7 +59,7 @@ function Footer() {
               <li>殺時間</li>
             </ul>
           </div>
-
+          <LoginDropDown />
           <div className="linksSection">
             <h1>追蹤我們</h1>
             <IconContainer>{socialLoop()}</IconContainer>
