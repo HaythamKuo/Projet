@@ -1,14 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-// const raw = localStorage.getItem("userInfo") ?? "{}";
-// const initialState = {
-//   // raw 始终是个 JSON 字符串（要么是真实数据，要么就是 "{}"）
-//   userInfo: JSON.parse(raw),
-// };
+// const initialState = localStorage.getItem("userInfo")
+//   ? JSON.parse(localStorage.getItem("userInfo"))
+//   : {};
 
-const initialState = localStorage.getItem("userInfo")
+const storeUserString = localStorage.getItem("userInfo");
+const storeUser = storeUserString
   ? JSON.parse(localStorage.getItem("userInfo"))
-  : {};
+  : null;
+
+const initialState = {
+  userInfo: storeUser,
+  isAuthorized: Boolean(storeUser),
+};
 
 const authSlice = createSlice({
   name: "auth",
@@ -16,15 +20,23 @@ const authSlice = createSlice({
   reducers: {
     setCredentials: (state, action) => {
       state.userInfo = action.payload;
+      state.isAuthorized = true;
       localStorage.setItem("userInfo", JSON.stringify(action.payload));
     },
     logout: (state) => {
       //state.userInfo = {};
+      state.isAuthorized = false;
       state.userInfo = null;
+      localStorage.removeItem("userInfo");
+    },
+
+    clearCredential: (state) => {
+      state.userInfo = null;
+      state.isAuthorized = false;
       localStorage.removeItem("userInfo");
     },
   },
 });
 
-export const { setCredentials, logout } = authSlice.actions;
+export const { setCredentials, clearCredential, logout } = authSlice.actions;
 export default authSlice.reducer;

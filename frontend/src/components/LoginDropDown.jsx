@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   IconContainer,
   UserIcon,
@@ -12,13 +12,18 @@ import {
   UserState,
   StateBox,
 } from "../styles/loginDropDown.style";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../store/slices/authSlice";
+import { useLogoutUserMutation } from "../store/apis/apiSlice";
 
 function LoginDropDown() {
   const [openUser, setOpenUser] = useState(false);
   const closeTimeOut = useRef(null);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { userInfo } = useSelector((state) => state.auth);
+  const [callLogoutApi] = useLogoutUserMutation();
 
   const isUser = userInfo ? "Sign out" : "Sign in";
 
@@ -49,6 +54,16 @@ function LoginDropDown() {
     }, 500);
   }
 
+  async function handleLogout() {
+    try {
+      await callLogoutApi().unwrap();
+      dispatch(logout());
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <IconContainer
       onMouseEnter={handleMouseEnter}
@@ -72,7 +87,13 @@ function LoginDropDown() {
         </MenuSection>
 
         <BtnWrapper>
-          <SignInButton>登入</SignInButton>
+          {userInfo ? (
+            <SignInButton onClick={handleLogout}>登出</SignInButton>
+          ) : (
+            <Link to="auth">
+              <SignInButton>登入</SignInButton>
+            </Link>
+          )}
         </BtnWrapper>
       </DropDownMenu>
     </IconContainer>

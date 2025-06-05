@@ -74,6 +74,11 @@ export const loginUser = asyncHandler(async (req, res) => {
   });
 });
 
+export const logoutUser = asyncHandler((req, res) => {
+  res.cookie("jwt", "", { expires: new Date(0), httpOnly: true });
+  res.status(200).json({ message: "成功登出" });
+});
+
 export const specificUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
   if (!id) {
@@ -84,4 +89,15 @@ export const specificUser = asyncHandler(async (req, res) => {
   const user = await userModel.findOne({ _id: id });
 
   res.status(200).json(user);
+});
+
+export const getUserProfile = asyncHandler(async (req, res) => {
+  const user = await userModel.findById(req.user._id).select("-password");
+
+  if (!user) {
+    res.status(404);
+    throw new Error("這是getUserProfile的錯誤");
+  }
+
+  res.status(200).json({ _id: user._id, name: user.name, email: user.email });
 });
