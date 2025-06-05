@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, Navigate } from "react-router-dom";
 import {
   IconContainer,
   UserIcon,
@@ -15,11 +15,13 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../store/slices/authSlice";
 import { useLogoutUserMutation } from "../store/apis/apiSlice";
+import { toast } from "react-toastify";
 
 function LoginDropDown() {
   const [openUser, setOpenUser] = useState(false);
   const closeTimeOut = useRef(null);
   const dispatch = useDispatch();
+
   const navigate = useNavigate();
 
   const { userInfo } = useSelector((state) => state.auth);
@@ -60,7 +62,7 @@ function LoginDropDown() {
       dispatch(logout());
       navigate("/");
     } catch (error) {
-      console.log(error);
+      toast.error(error);
     }
   }
 

@@ -6,6 +6,7 @@ import LoginPage from "./LoginPage";
 import RegisterPage from "./RegisterPage";
 import AllProductsPage from "./AllProductsPage";
 import ProdPage from "../components/ProdPage";
+import PrivateRoute from "../components/PrivateRoute";
 
 export const createRouter = (toggleTheme) => {
   return createBrowserRouter([
@@ -30,7 +31,11 @@ export const createRouter = (toggleTheme) => {
           element: <Outlet />,
           children: [
             { index: true, element: <AllProductsPage /> },
-            { path: ":prodID", element: <ProdPage /> },
+            // { path: ":prodID", element: <ProdPage /> },
+            {
+              element: <PrivateRoute />,
+              children: [{ path: ":prodID", element: <ProdPage /> }],
+            },
           ],
         },
       ],
