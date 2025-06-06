@@ -6,6 +6,7 @@ function PrivateRoute() {
   const location = useLocation();
 
   const { userInfo } = useSelector((state) => state.auth);
+  //要做個spinner
   // if (isFetching) {
   //     return <div>載入中…</div>; // 或者你自己做個 loading component
   //   }

@@ -23,7 +23,7 @@ export const registerSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string()
     .min(6)
-    .max(20)
+    .max(15)
     .pattern(/^[a-zA-Z0-9]+$/)
     .required(),
 });

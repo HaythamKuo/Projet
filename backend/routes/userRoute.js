@@ -14,6 +14,6 @@ userRouter.route("/profile").get(protect, getUserProfile);
 userRouter.route("/logout").post(logoutUser);
 userRouter.route("/login").post(loginUser);
 userRouter.route("/:id").get(specificUser);
-userRouter.route("/").post(registerUser);
+userRouter.route("/register").post(registerUser);
 
 export default userRouter;

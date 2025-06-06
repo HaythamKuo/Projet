@@ -27,7 +27,6 @@ function LoginPage() {
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.auth);
 
-  // 這裡需要一個參數 為何沒有？？？
   const [login] = useLoginMutation();
 
   console.log(userInfo);
