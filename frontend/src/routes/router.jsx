@@ -6,7 +6,8 @@ import LoginPage from "./LoginPage";
 import RegisterPage from "./RegisterPage";
 import AllProductsPage from "./AllProductsPage";
 import ProdPage from "../components/ProdPage";
-//import PrivateRoute from "../components/PrivateRoute";
+import PrivateRoute from "../components/PrivateRoute";
+import Profile from "../components/Profile";
 
 export const createRouter = (toggleTheme) => {
   return createBrowserRouter([
@@ -32,6 +33,16 @@ export const createRouter = (toggleTheme) => {
           children: [
             { index: true, element: <AllProductsPage /> },
             { path: ":prodID", element: <ProdPage /> },
+          ],
+        },
+        // { path: "profile", element: <Profile /> },
+        {
+          element: <PrivateRoute />,
+          children: [
+            {
+              path: "profile",
+              element: <Profile />,
+            },
           ],
         },
       ],

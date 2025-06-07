@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import { flexCenter } from "../theme";
 
-const Loader = ({ ...rest }) => {
+const Loader = ({ $heightlight, ...rest }) => {
   return (
-    <StyledWrapper {...rest}>
+    <StyledWrapper {...rest} $heightlight={$heightlight}>
       <div className="loader" />
     </StyledWrapper>
   );
@@ -11,12 +11,18 @@ const Loader = ({ ...rest }) => {
 
 const StyledWrapper = styled.div`
   ${flexCenter}
+  position:absolute;
+  top: 50%;
+  left: 50%;
   width: ${(prop) => prop.width}px;
   height: ${(prop) => prop.height}px;
+  z-index: ${(prop) => (prop.$heightlight ? prop.$heightlight : 1000)};
 
-  .loader {
+  /* .loader {
     border: 4px solid rgba(0, 0, 0, 0.1);
+
     border-left-color: transparent;
+
     border-radius: 50%;
   }
 
@@ -30,6 +36,16 @@ const StyledWrapper = styled.div`
   .loader {
     border: 4px solid rgba(0, 0, 0, 0.1);
     border-left-color: transparent;
+    width: 36px;
+    height: 36px;
+    animation: spin89345 1s linear infinite;
+  } */
+
+  .loader {
+    //border: 4px solid rgba(0, 0, 0, 0.1);
+    border: 4px solid white;
+    border-left-color: transparent;
+    border-radius: 50%;
     width: 36px;
     height: 36px;
     animation: spin89345 1s linear infinite;

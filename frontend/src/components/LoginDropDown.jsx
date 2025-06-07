@@ -80,7 +80,7 @@ function LoginDropDown() {
         <MenuSection>
           <MenuList>
             <MenuItem>
-              <Link to="auth">我的帳戶</Link>
+              <Link to="profile">我的帳戶</Link>
             </MenuItem>
             <MenuItem>我的清單</MenuItem>
             <MenuItem>我的訂單</MenuItem>

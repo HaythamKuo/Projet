@@ -1,14 +1,18 @@
 import { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import FormField from "../components/FormField";
 import { Container, FormContainer, OptText } from "../styles/form.style";
 import { setCredentials } from "../store/slices/authSlice";
 import { useLoginMutation } from "../store/apis/apiSlice";
 import { toast } from "react-toastify";
+import { OverLay } from "../styles/CartDrawer.style";
+import Loader from "../styles/UI/Loader";
 
 function LoginPage() {
-  //  const navigate = useNavigate();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
 
   const [enterValue, setEnterValue] = useState({ email: "", password: "" });
 
@@ -25,15 +29,9 @@ function LoginPage() {
   //非同步登入處理
 
   const dispatch = useDispatch();
-  const { userInfo } = useSelector((state) => state.auth);
+  //  const { userInfo } = useSelector((state) => state.auth);
 
-  const [login] = useLoginMutation();
-
-  console.log(userInfo);
-
-  // useEffect(() => {
-  //   if (userInfo) navigate("/");
-  // }, [navigate, userInfo]);
+  const [login, { isLoading }] = useLoginMutation();
 
   //處理登入function與拋出錯誤
   async function handleSubmit(e) {
@@ -48,13 +46,11 @@ function LoginPage() {
       }).unwrap();
 
       dispatch(setCredentials({ ...res }));
-      console.log(res);
 
-      console.log(userInfo);
       setEnterValue({ email: "", password: "" });
       setTouched({ email: false, password: false });
-
-      //navigate("/");
+      toast.success("登入成功!");
+      navigate(from, { replace: true });
     } catch (error) {
       toast.error(error?.data?.message || error.error);
     }
@@ -77,42 +73,50 @@ function LoginPage() {
   }
 
   return (
-    <Container>
-      <h1>登入你的帳戶</h1>
+    <>
+      {isLoading && (
+        <OverLay>
+          <Loader $heightlight={1000} />
+        </OverLay>
+      )}
 
-      <FormContainer onSubmit={handleSubmit} key={"login"}>
-        <FormField
-          label="電子郵件"
-          type="email"
-          name="email"
-          placeholder="替代文字"
-          value={enterValue.email}
-          onChange={(e) => handleValue("email", e)}
-          onBlur={() => handleBlurValue("email")}
-          mes="錯誤郵件"
-          err={emailHasError}
-        />
+      <Container>
+        <h1>登入你的帳戶</h1>
 
-        <FormField
-          label="密碼"
-          type="password"
-          name="password"
-          placeholder="替代文字"
-          value={enterValue.password}
-          onChange={(e) => handleValue("password", e)}
-          onBlur={() => handleBlurValue("password")}
-          maxLength={15}
-          minLength={6}
-          mes="錯誤密碼"
-          err={passwordHasError}
-        />
+        <FormContainer onSubmit={handleSubmit} key={"login"}>
+          <FormField
+            label="電子郵件"
+            type="email"
+            name="email"
+            placeholder="替代文字"
+            value={enterValue.email}
+            onChange={(e) => handleValue("email", e)}
+            onBlur={() => handleBlurValue("email")}
+            mes="錯誤郵件"
+            err={emailHasError}
+          />
 
-        <button>登入</button>
-        <Link to="register">
-          <OptText>沒有帳號嗎？立刻註冊</OptText>
-        </Link>
-      </FormContainer>
-    </Container>
+          <FormField
+            label="密碼"
+            type="password"
+            name="password"
+            placeholder="替代文字"
+            value={enterValue.password}
+            onChange={(e) => handleValue("password", e)}
+            onBlur={() => handleBlurValue("password")}
+            maxLength={15}
+            minLength={6}
+            mes="錯誤密碼"
+            err={passwordHasError}
+          />
+
+          <button>登入</button>
+          <Link to="register">
+            <OptText>沒有帳號嗎？立刻註冊</OptText>
+          </Link>
+        </FormContainer>
+      </Container>
+    </>
   );
 }
 export default LoginPage;

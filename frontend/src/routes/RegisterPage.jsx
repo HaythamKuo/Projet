@@ -11,6 +11,8 @@ import {
   validateMail,
   validateUserName,
 } from "../utils/validation";
+import { OverLay } from "../styles/CartDrawer.style";
+import Loader from "../styles/UI/Loader";
 
 function RegisterPage() {
   const dispatch = useDispatch();
@@ -80,62 +82,69 @@ function RegisterPage() {
       setErrs({ userName: "", email: "", password: "", confirmPassword: "" });
       e.target.reset();
       navigate("/");
-      toast.success("登入成功!!");
+      toast.success("註冊成功!!");
     } catch (error) {
       toast.error(error?.data?.message || error.error);
     }
   }
 
   return (
-    <Container>
-      <h1>註冊你的帳戶</h1>
+    <>
+      {isLoading && (
+        <OverLay>
+          <Loader $heightlight={1000} />
+        </OverLay>
+      )}
+      <Container>
+        <h1>註冊你的帳戶</h1>
 
-      <FormContainer onSubmit={handleFormData}>
-        <FormField
-          label="用戶名稱"
-          type="text"
-          name="userName"
-          placeholder="限制"
-          maxLength={10}
-          minLength={2}
-          mes={errs.userName}
-          err={errs.userName}
-        />
-        <FormField
-          label="電子郵件"
-          type="email"
-          name="email"
-          placeholder="限制"
-          mes={errs.email}
-          err={errs.email}
-        />
-        <FormField
-          label="密碼"
-          type="password"
-          name="password"
-          placeholder="限制"
-          maxLength={15}
-          minLength={6}
-          mes={errs.password}
-          err={errs.password}
-        />
-        <FormField
-          label="再次輸入密碼"
-          type="password"
-          name="accuratePassword"
-          placeholder="限制"
-          maxLength={15}
-          minLength={6}
-          mes={errs.confirmPassword}
-          err={errs.confirmPassword}
-        />
+        <FormContainer onSubmit={handleFormData}>
+          <FormField
+            label="用戶名稱"
+            type="text"
+            name="userName"
+            placeholder="限制"
+            maxLength={10}
+            minLength={2}
+            mes={errs.userName}
+            err={errs.userName}
+          />
+          <FormField
+            label="電子郵件"
+            type="email"
+            name="email"
+            placeholder="限制"
+            mes={errs.email}
+            err={errs.email}
+          />
+          <FormField
+            label="密碼"
+            type="password"
+            name="password"
+            placeholder="限制"
+            maxLength={15}
+            minLength={6}
+            mes={errs.password}
+            err={errs.password}
+          />
+          <FormField
+            label="再次輸入密碼"
+            type="password"
+            name="confirmPassword"
+            placeholder="限制"
+            maxLength={15}
+            minLength={6}
+            mes={errs.confirmPassword}
+            err={errs.confirmPassword}
+          />
 
-        <button type="submit" disabled={isLoading}>
-          註冊
-        </button>
-        <OptText onClick={() => navigate("/auth")}>已經有帳號了？</OptText>
-      </FormContainer>
-    </Container>
+          <button type="submit" disabled={isLoading}>
+            註冊
+          </button>
+          <OptText onClick={() => navigate("/auth")}>已經有帳號了？</OptText>
+        </FormContainer>
+      </Container>
+    </>
   );
 }
 export default RegisterPage;

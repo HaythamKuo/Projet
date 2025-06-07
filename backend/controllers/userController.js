@@ -22,7 +22,7 @@ export const registerUser = asyncHandler(async (req, res) => {
   const existUser = await userModel.findOne({ email: value.email });
   if (existUser) {
     res.status(400);
-    throw new Error("已存在該使用者");
+    throw new Error("此信箱已被註冊過");
   }
 
   const newUser = await userModel.create({
