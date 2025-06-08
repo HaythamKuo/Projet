@@ -27,8 +27,6 @@ function LoginDropDown() {
   const { userInfo } = useSelector((state) => state.auth);
   const [callLogoutApi] = useLogoutUserMutation();
 
-  const isUser = userInfo ? "Sign out" : "Sign in";
-
   useEffect(() => {
     const clearTimeRef = closeTimeOut.current;
     return () => {
@@ -73,7 +71,8 @@ function LoginDropDown() {
     >
       <StateBox>
         <UserIcon />
-        <UserState>{isUser}</UserState>
+        {/* <UserState>{isUser}</UserState> */}
+        <UserState>{userInfo ? "Sign out" : "Sign in"}</UserState>
       </StateBox>
 
       <DropDownMenu $isOpen={openUser}>

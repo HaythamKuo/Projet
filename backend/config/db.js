@@ -9,13 +9,6 @@ if (env === "production") {
   mongoUri = process.env.MONGODB_URI_DEV;
 }
 
-// mongoose.connection.once("open", () => {
-//   console.log(`正在連接${env}的資料庫`);
-// });
-// mongoose.connection.on("error", (error) => {
-//   console.error(error);
-// });
-
 const connectDB = async () => {
   try {
     await mongoose.connect(mongoUri);

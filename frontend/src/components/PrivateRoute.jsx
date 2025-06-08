@@ -19,7 +19,7 @@ function PrivateRoute() {
 
       const timer = setTimeout(() => {
         setShowRedirect((pre) => !pre);
-      }, 1000);
+      }, 500);
 
       return () => clearTimeout(timer);
     }
