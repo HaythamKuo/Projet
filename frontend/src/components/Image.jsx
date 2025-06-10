@@ -8,12 +8,8 @@ const StyledIKImage = styled(IKImage)`
 
   //border-radius: ${(p) => `${p.$borderRadius} ${p.$borderRadius} 0 0`};
   border-radius: ${(p) =>
-    p.topOnly ? `${p.$borderRadius} ${p.$borderRadius} 0 0` : p.$borderRadius};
+    p.$topOnly ? `${p.$borderRadius} ${p.$borderRadius} 0 0` : p.$borderRadius};
   object-fit: cover;
-
-  //test
-  /* width: ${(props) => (props.width ? `${props.width}px` : "100%")};
-  height: ${(prop) => (prop.height ? `${prop.height}px` : "auto")}; */
 
   //rwd
   ${({ theme }) => theme.media.md} {
@@ -60,7 +56,7 @@ function Image({
       alt={alt || "default image"}
       width={w}
       height={h}
-      topOnly={topOnly}
+      $topOnly={topOnly}
       {...rest}
     />
   );

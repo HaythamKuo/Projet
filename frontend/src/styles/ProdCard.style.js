@@ -25,20 +25,28 @@ export const Cards = styled.ul`
 
 export const CardItem = styled.li`
   display: flex;
-  padding: 1rem;
+  padding: 0.5rem;
 
-  //test
   flex: 0 0 25%;
 
+  /* ${({ theme }) => theme.media.xxl} {
+    flex: 0 0 25%; // 4 張
+  } */
+
   ${({ theme }) => theme.media.xxl} {
-    flex: 0 0 33.3333%;
+    flex: 0 0 33.3333%; // 3 張
   }
 
   ${({ theme }) => theme.media.xl} {
-    flex: 0 0 50%;
+    flex: 0 0 33.3333%; // 3 張
   }
-  ${({ theme }) => theme.media.xxl} {
-    flex: 0 0 100%;
+
+  ${({ theme }) => theme.media.lg} {
+    flex: 0 0 50%; // 2 張
+  }
+
+  ${({ theme }) => theme.media.md} {
+    flex: 0 0 100%; // 1 張
   }
 `;
 

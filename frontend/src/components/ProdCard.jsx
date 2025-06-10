@@ -15,7 +15,8 @@ import {
   BookMark,
   CartMarkBox,
 } from "../styles/ProdCard.style";
-import Image from "./Image";
+//import Image from "./Image";
+import ImgContent from "./ImgContent";
 import StarRating from "../styles/UI/StarRating";
 
 function ProdCard() {
@@ -54,13 +55,16 @@ function ProdCard() {
     <CardItem key={item.id}>
       <Card>
         <ImageWrapper>
-          <Image
+          {/* <Image
             src={item.imagePath}
             alt={item.title}
             flex={1}
             borderRadius={0.75}
             topOnly
-          />
+          /> */}
+
+          {/* 似乎不需要borderRadius? */}
+          <ImgContent src={item.imagePath} alt={item.title} flex={1} topOnly />
         </ImageWrapper>
 
         <CardContent>
@@ -84,7 +88,7 @@ function ProdCard() {
 
   return (
     <CardsContainer>
-      <Heading>RWD Cards</Heading>
+      <Heading>所有娃娃我都放在這了 去找吧!</Heading>
       <Cards>{contents}</Cards>
     </CardsContainer>
   );

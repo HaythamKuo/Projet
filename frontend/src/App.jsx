@@ -2,7 +2,8 @@ import { Outlet } from "react-router-dom";
 import { CartProvider } from "./hooks/CreatCart";
 import Footer from "./components/Footer";
 
-import { ContentContainer } from "./styles/nav.style";
+//import { ContentContainer } from "./styles/nav.style";
+import { ContentContainer, LayoutWrapper, MainContent } from "./styles/index";
 
 import Navbar from "./components/Navbar";
 import { CopyRight, CopyRightContainer } from "./styles/Footer.style";
@@ -24,16 +25,21 @@ function App({ toggleTheme }) {
         theme="colored" // 佈景：light, dark, colored
       />
       <CartProvider>
-        <Navbar onClick={toggleTheme} />
+        <LayoutWrapper>
+          <Navbar onClick={toggleTheme} />
 
-        <ContentContainer>
-          <Outlet />
-          <Footer />
-          <CopyRightContainer>
-            <CopyRight />
-            <span>this.Haytham. All rights reserved</span>
-          </CopyRightContainer>
-        </ContentContainer>
+          <ContentContainer>
+            <MainContent>
+              <Outlet />
+            </MainContent>
+
+            <Footer />
+            <CopyRightContainer>
+              <CopyRight />
+              <span>this.Haytham. All rights reserved</span>
+            </CopyRightContainer>
+          </ContentContainer>
+        </LayoutWrapper>
       </CartProvider>
     </>
   );

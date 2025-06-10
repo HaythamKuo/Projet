@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { flexCenter } from "./theme";
+import { flexCenter, flexContainer } from "./theme";
 import { FaSearch } from "react-icons/fa";
 
 export const HomeContainer = styled.div`
@@ -18,10 +18,8 @@ export const CenterOfHome = styled.div`
 
 export const AttributesContainer = styled.div`
   width: 100%;
-  display: flex;
+  ${flexCenter}
   flex-wrap: wrap; /* 允許換行 */
-  align-items: center;
-  justify-content: center;
 
   /* 初始狀態：三張卡片水平方向排列 */
   & > * {
@@ -55,9 +53,9 @@ export const AttributesContainer = styled.div`
 
 // for product desc section
 export const ProdDesc = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
+  ${flexContainer}
+  justify-content:space-around;
+
   gap: 1rem;
   margin: 1rem 0;
 
@@ -91,6 +89,7 @@ export const ImgHoverBox = styled.div`
 `;
 
 export const ImgHoverWrapper = styled.div`
+  border-radius: 0.75rem;
   flex: 2;
 
   position: relative;
@@ -129,11 +128,10 @@ export const ImgHover = styled.h1`
 `;
 
 export const TextWrapper = styled.div`
+  border-radius: 0.75rem;
   flex: 1;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  ${flexCenter}
   gap: 10px;
 
   background-color: #ebebeb;

@@ -47,7 +47,9 @@ function Navbar({ onClick }) {
           />
         </div>
         <div className="navLinks">
-          <NavBtn name={"首頁"} />
+          <Link to={"/"}>
+            <NavBtn name={"首頁"} />
+          </Link>
           <NavBtn name={"關於"} />
           <Link to="products">
             <NavBtn name={"全部產品"} />

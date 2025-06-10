@@ -90,7 +90,6 @@ export const Sentinel = styled.div`
   height: 1px;
   top: 5rem;
   background-color: blue;
-  //z-index: -1;
 `;
 
 export const MobileNav = styled.div`
@@ -109,10 +108,4 @@ export const MobileNav = styled.div`
   z-index: 1100;
   transform: ${({ open }) => (open ? "translateX(0)" : "translateX(100%)")};
   transition: transform 0.3s ease-in-out;
-`;
-
-export const ContentContainer = styled(LayoutContainer)`
-  //為何原先要用padding?
-  //margin-top: 6rem;
-  padding-top: 6rem;
 `;

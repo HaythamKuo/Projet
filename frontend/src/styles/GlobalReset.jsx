@@ -33,6 +33,7 @@ body {
   //overflow:hidden; 
   
 }
+
 ol, ul {
 	list-style: none;
 }
@@ -75,7 +76,7 @@ p, h1, h2, h3, h4, h5, h6 {
 
 #root, #__next {
   isolation: isolate;
-  
+  /* min-height: 100vh; */
 }
 
 
