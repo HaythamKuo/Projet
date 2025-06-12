@@ -12,7 +12,7 @@ const usersApi = createApi({
       register: builder.mutation({
         query: (data) => ({
           method: "POST",
-          url: "api/users/register",
+          url: "/api/users/register",
           body: data,
         }),
         invalidatesTags: ["User"],

@@ -14,10 +14,13 @@ import {
   InfoCartMarkBox,
   BookMark,
   CartMarkBox,
+  TestImg,
 } from "../styles/ProdCard.style";
 //import Image from "./Image";
 import ImgContent from "./ImgContent";
+
 import StarRating from "../styles/UI/StarRating";
+import { useFetchProdQuery } from "../store/apis/prodApiSlice";
 
 function ProdCard() {
   const sampleCards = [
@@ -51,27 +54,31 @@ function ProdCard() {
     },
   ];
 
-  const contents = sampleCards.map((item) => (
-    <CardItem key={item.id}>
+  const { data = [], isLoading, isError, error } = useFetchProdQuery();
+
+  //console.log(data[0].images[0].url);
+  let contents;
+
+  if (isLoading) {
+    contents = <p>載入中 請稍候</p>;
+  }
+
+  if (isError) {
+    contents = <p>{error.toString()}</p>;
+  }
+
+  contents = data.map((item) => (
+    <CardItem key={item._id}>
       <Card>
         <ImageWrapper>
-          {/* <Image
-            src={item.imagePath}
-            alt={item.title}
-            flex={1}
-            borderRadius={0.75}
-            topOnly
-          /> */}
-
-          {/* 似乎不需要borderRadius? */}
-          <ImgContent src={item.imagePath} alt={item.title} flex={1} topOnly />
+          <TestImg src={item.images[0].url} alt={item.name} />
         </ImageWrapper>
 
         <CardContent>
-          <CardTitle>{item.title}</CardTitle>
+          <CardTitle>{item.name}</CardTitle>
           <TextRatingBox>
             <CardText>{item.price}</CardText>
-            <StarRating rating={item.rating} />
+            <StarRating rating={item.rate} />
           </TextRatingBox>
           <InfoCartMarkBox>
             <Button>更多資訊</Button>
@@ -85,6 +92,43 @@ function ProdCard() {
       </Card>
     </CardItem>
   ));
+
+  // 我是分隔線
+  // const contents = sampleCards.map((item) => (
+  //   <CardItem key={item.id}>
+  //     <Card>
+  //       <ImageWrapper>
+  //         {/* <Image
+  //           src={item.imagePath}
+  //           alt={item.title}
+  //           flex={1}
+  //           borderRadius={0.75}
+  //           topOnly
+  //         /> */}
+
+  //         {/* 似乎不需要borderRadius? */}
+  //         {/* <ImgContent src={item.imagePath} alt={item.title} flex={1} topOnly /> */}
+  //         <TestImg src={item.imagePath} alt={item.title} />
+  //       </ImageWrapper>
+
+  //       <CardContent>
+  //         <CardTitle>{item.title}</CardTitle>
+  //         <TextRatingBox>
+  //           <CardText>{item.price}</CardText>
+  //           <StarRating rating={item.rating} />
+  //         </TextRatingBox>
+  //         <InfoCartMarkBox>
+  //           <Button>更多資訊</Button>
+
+  //           <CartMarkBox>
+  //             <BookMark />
+  //             <Cart />
+  //           </CartMarkBox>
+  //         </InfoCartMarkBox>
+  //       </CardContent>
+  //     </Card>
+  //   </CardItem>
+  // ));
 
   return (
     <CardsContainer>

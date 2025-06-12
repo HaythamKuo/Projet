@@ -8,6 +8,7 @@ import AllProductsPage from "./AllProductsPage";
 import ProdPage from "../components/ProdPage";
 import PrivateRoute from "../components/PrivateRoute";
 import Profile from "../components/Profile";
+import CreateProd from "./CreateProd";
 
 export const createRouter = (toggleTheme) => {
   return createBrowserRouter([
@@ -36,6 +37,10 @@ export const createRouter = (toggleTheme) => {
           ],
         },
         // { path: "profile", element: <Profile /> },
+        {
+          path: "createProd",
+          element: <CreateProd />,
+        },
         {
           element: <PrivateRoute />,
           children: [

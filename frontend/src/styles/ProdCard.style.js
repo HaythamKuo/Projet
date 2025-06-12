@@ -145,3 +145,10 @@ export const BookMark = styled(FaRegBookmark)`
   font-size: 2rem;
   cursor: pointer;
 `;
+
+export const TestImg = styled.img`
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+`;
