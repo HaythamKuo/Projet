@@ -1,7 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config();
 import ImageKit from "imagekit";
-//import { getUploadAuth } from "../config/ikimage.js";
 
 const imagekit = new ImageKit({
   urlEndpoint: process.env.IK_URL_ENDPOINT,

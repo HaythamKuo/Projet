@@ -21,7 +21,9 @@
     "imagekit": "^6.0.0",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.11.0"
+    "mongoose": "^8.11.0",
+    "multer": "^2.0.1",
+    "multer-cloud-storage": "^4.1.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"
