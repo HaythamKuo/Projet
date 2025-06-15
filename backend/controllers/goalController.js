@@ -1,4 +1,4 @@
-//將req, res獨立出來作為controller
+//待刪除
 
 import asyncHandler from "express-async-handler";
 

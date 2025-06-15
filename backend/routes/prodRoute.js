@@ -1,12 +1,9 @@
 import { Router } from "express";
-import { addNewProd, getAllProds } from "../controllers/prodController.js";
-import { getImgsAuth } from "../controllers/imgController.js";
+import { uploadProd } from "../controllers/prodController.js";
+import upload from "../middlewares/multerConfig.js";
 
 const prodRouter = Router();
 
-prodRouter.route("/addnew").post(addNewProd);
-prodRouter.route("/getprods").get(getAllProds);
-
-prodRouter.route("/getimgs").get(getImgsAuth);
+prodRouter.route("/createpord").post(upload.single("images"), uploadProd);
 
 export default prodRouter;
