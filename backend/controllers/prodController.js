@@ -4,7 +4,7 @@ import prodModel from "../models/prodModel.js";
 export const uploadProd = asyncHandler(async (req, res) => {
   const { name, price, description, category, stock, rate } = req.body;
 
-  if (!name || !price || !description || !category) {
+  if (!name || !price || !description) {
     res.status(400);
     throw new Error("請提供 name, price, description, category 等欄位");
   }
@@ -13,6 +13,8 @@ export const uploadProd = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("未上傳圖片或圖片格式錯誤");
   }
+
+  onsole.log(req.file);
 
   const imageUrl = req.file.linkUrl;
 

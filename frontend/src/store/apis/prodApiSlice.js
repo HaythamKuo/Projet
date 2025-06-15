@@ -15,10 +15,19 @@ const prodsApi = createApi({
         }),
         providesTags: ["Product"],
       }),
+
+      uploadProds: builder.mutation({
+        query: (data) => ({
+          method: "POST",
+          url: "/api/prods/createpord",
+          body: data,
+        }),
+        invalidatesTags: ["Product"],
+      }),
     };
   },
 });
 
-export const { useFetchProdQuery } = prodsApi;
+export const { useFetchProdQuery, useUploadProdsMutation } = prodsApi;
 
 export { prodsApi };
