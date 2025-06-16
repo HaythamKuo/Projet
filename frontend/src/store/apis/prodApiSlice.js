@@ -3,7 +3,7 @@ const pause = (duration) =>
   new Promise((resolve) => setTimeout(resolve, duration));
 
 const customBaseQuery = async (...args) => {
-  await pause(2000); // 模擬延遲一秒
+  await pause(2000);
   return fetchBaseQuery({ baseUrl: "http://localhost:5001" })(...args);
 };
 
@@ -18,21 +18,31 @@ const prodsApi = createApi({
           method: "GET",
           url: "/api/prods/",
         }),
-        providesTags: ["Product"],
+        invalidatesTags: ["Product"],
       }),
 
       uploadProds: builder.mutation({
         query: (data) => ({
           method: "POST",
-          url: "/api/prods/createpord",
+          url: "/api/prods/createprod",
           body: data,
         }),
-        invalidatesTags: ["Product"],
+        providesTags: ["Product"],
+      }),
+      fetchSpecificProd: builder.query({
+        query: (id) => ({
+          method: "GET",
+          url: `/api/prods/${id}`,
+        }),
       }),
     };
   },
 });
 
-export const { useFetchProdQuery, useUploadProdsMutation } = prodsApi;
+export const {
+  useFetchProdQuery,
+  useFetchSpecificProdQuery,
+  useUploadProdsMutation,
+} = prodsApi;
 
 export { prodsApi };

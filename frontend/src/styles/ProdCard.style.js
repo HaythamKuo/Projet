@@ -60,11 +60,33 @@ export const Card = styled.div`
 `;
 
 export const ImageWrapper = styled.div`
-  width: 100%;
+  /* width: 100%;
 
   //test
-  flex: 0 0 auto;
+  flex: 0 0 auto; */
+
+  position: relative;
+  width: 100%;
+  //padding-top: 75%; // 4:3 比例（可改為 56.25% 表示 16:9）
+  padding-top: 75%;
+  overflow: hidden;
 `;
+
+export const TestImg = styled.img`
+  /* width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover; */
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+`;
+
 export const CardContent = styled.div`
   padding: 1rem;
   //background: linear-gradient(to bottom left, #ef8d9c 40%, #ffc39e 100%);
@@ -144,11 +166,4 @@ export const Cart = styled(FaCartShopping)`
 export const BookMark = styled(FaRegBookmark)`
   font-size: 2rem;
   cursor: pointer;
-`;
-
-export const TestImg = styled.img`
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
 `;

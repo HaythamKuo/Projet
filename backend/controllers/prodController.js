@@ -1,8 +1,10 @@
+import mongoose from "mongoose";
 import asyncHandler from "express-async-handler";
 import prodModel from "../models/prodModel.js";
 
 export const uploadProd = asyncHandler(async (req, res) => {
   const { name, price, description, category, stock, rate } = req.body;
+  console.log(req.body);
 
   if (!name || !price || !description) {
     res.status(400);
@@ -48,4 +50,22 @@ export const getAllProds = asyncHandler(async (req, res) => {
   }
 
   res.status(200).json(products);
+});
+
+export const getSpecificProd = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    res.status(400);
+    throw new Error("商品 ID 格式錯誤");
+  }
+
+  const prod = await prodModel.findById(id);
+
+  if (!prod) {
+    res.status(404);
+    throw new Error("無此商品");
+  }
+
+  res.status(200).json(prod);
 });

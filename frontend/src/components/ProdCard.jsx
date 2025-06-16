@@ -16,6 +16,7 @@ import {
   CartMarkBox,
   TestImg,
 } from "../styles/ProdCard.style";
+import { useNavigate } from "react-router-dom";
 
 import ImgContent from "./ImgContent";
 
@@ -24,15 +25,15 @@ import { useFetchProdQuery } from "../store/apis/prodApiSlice";
 import Skeleton, { SkeletonCardItem } from "../styles/UI/Skeleton";
 
 function ProdCard() {
+  const navigate = useNavigate();
+
+  function handleDetailProd(id) {
+    navigate(id);
+  }
+
   const { data, isLoading, isError, error } = useFetchProdQuery();
 
   let contents;
-
-  Array.from({ length: 6 }, (_, i) => (
-    <SkeletonCardItem key={i}>
-      <Skeleton />
-    </SkeletonCardItem>
-  ));
 
   if (isLoading) {
     contents = Array.from({ length: 6 }, (_, i) => (
@@ -41,7 +42,7 @@ function ProdCard() {
       </SkeletonCardItem>
     ));
   } else if (isError) {
-    contents = <p>{error.toString()}</p>;
+    contents = <p>錯誤：{error?.data?.message || "發生錯誤"}</p>;
   } else if (data && data.length > 0) {
     contents = data.map((item) => (
       <CardItem key={item._id}>
@@ -53,11 +54,13 @@ function ProdCard() {
           <CardContent>
             <CardTitle>{item.name}</CardTitle>
             <TextRatingBox>
-              <CardText>{item.price}</CardText>
+              <CardText>$ {item.price}</CardText>
               <StarRating rating={item.rate} />
             </TextRatingBox>
             <InfoCartMarkBox>
-              <Button>更多資訊</Button>
+              <Button onClick={() => handleDetailProd(item._id)}>
+                更多資訊
+              </Button>
               <CartMarkBox>
                 <BookMark />
                 <Cart />

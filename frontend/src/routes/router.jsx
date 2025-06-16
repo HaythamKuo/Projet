@@ -33,7 +33,7 @@ export const createRouter = (toggleTheme) => {
           element: <Outlet />,
           children: [
             { index: true, element: <AllProductsPage /> },
-            { path: ":prodID", element: <ProdPage /> },
+            { path: ":prodid", element: <ProdPage /> },
           ],
         },
         // { path: "profile", element: <Profile /> },

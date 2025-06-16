@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import {
   Gallery,
   ThumbnailList,
@@ -36,6 +37,8 @@ import {
   MdSquareFoot,
 } from "react-icons/md";
 import { TbTruckDelivery, TbBuildingFactory2, TbBox } from "react-icons/tb";
+
+import { useFetchSpecificProdQuery } from "../store/apis/prodApiSlice";
 
 function ProdImgGallery({ thumbnailSize = 100 }) {
   const dogs = [
@@ -76,6 +79,8 @@ function ProdImgGallery({ thumbnailSize = 100 }) {
   //起始為空 因為不知道哪一個panel被開啟
   const [open, setOpen] = useState(null);
 
+  const { prodid } = useParams();
+
   //控制數量
   function minusCount() {
     if (count <= 0) return;
@@ -85,6 +90,20 @@ function ProdImgGallery({ thumbnailSize = 100 }) {
   useEffect(() => {
     setLoading(true);
   }, [selectIndex]);
+
+  const {
+    data: prod,
+    isLoading,
+    isError,
+    error,
+  } = useFetchSpecificProdQuery(prodid);
+
+  if (isLoading) {
+    return <p>載入中....</p>;
+  }
+  if (isError) {
+    return <p>{error?.data?.message || "發生錯誤"}</p>;
+  }
 
   return (
     <GalleryContainer>
@@ -103,7 +122,7 @@ function ProdImgGallery({ thumbnailSize = 100 }) {
         </ThumbnailList>
 
         <MainImgWrapper>
-          {loading && <Loader width={810} height={810} />}
+          {/* {loading && <Loader width={810} height={810} />} */}
           {/* <Image
           src={dogs[selectIndex].res}
           key={dogs[selectIndex].res}
@@ -119,8 +138,8 @@ function ProdImgGallery({ thumbnailSize = 100 }) {
 
         <InfoPanel>
           <Top>
-            <h1 className="prodTitle">Goldenretriver</h1>
-            <span className="prodPrice">$1299</span>
+            <h1 className="prodTitle">{prod.name}</h1>
+            <span className="prodPrice">$ {prod.price}</span>
             <ControlAmounts>
               <button onClick={minusCount}>
                 <Minus />

@@ -12,6 +12,8 @@ function CreateProd() {
     const form = e.target;
     const data = new FormData(form);
 
+    console.log(data);
+
     try {
       await uploadProds(data).unwrap();
       toast.success("上傳成功");
