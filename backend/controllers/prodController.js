@@ -14,8 +14,6 @@ export const uploadProd = asyncHandler(async (req, res) => {
     throw new Error("未上傳圖片或圖片格式錯誤");
   }
 
-  onsole.log(req.file);
-
   const imageUrl = req.file.linkUrl;
 
   const newProduct = await prodModel.create({
@@ -39,4 +37,15 @@ export const uploadProd = asyncHandler(async (req, res) => {
     images: newProduct.images,
     createdAt: newProduct.createdAt,
   });
+});
+
+export const getAllProds = asyncHandler(async (req, res) => {
+  const products = await prodModel.find();
+
+  if (!products || products.length === 0) {
+    res.status(404);
+    throw new Error("沒有找到商品或是發生了一些錯誤");
+  }
+
+  res.status(200).json(products);
 });
