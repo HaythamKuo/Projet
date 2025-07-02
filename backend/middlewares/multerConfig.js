@@ -22,13 +22,23 @@ function fileFilter(req, file, cb) {
 const upload = multer({
   storage: multerGoogleStorage.storageEngine({
     projectId: process.env.PROJECT_ID,
-    keyFilename: process.env.KEY_FILE_PATH,
+
+    //keyFilename: path.resolve(process.env.KEY_FILE_PATH),
     bucket: process.env.BUCKET_NAME,
     destination: "products/",
-    filename: (req, file, cb) =>
-      cb(null, `${Date.now()}_${path.extname(file.originalname)}`),
+
+    // filename: (req, file, cb) =>
+    //   cb(null, `${Date.now()}_${path.extname(file.originalname)}`),
+    filename: (req, file, cb) => {
+      const ext = path.extname(file.originalname); // e.g. ".jpg"
+      const base = path.basename(file.originalname, ext); // e.g. "cat"
+      cb(null, `${Date.now()}_${base}${ext}`);
+    },
   }),
   fileFilter,
+  limits: {
+    fileSize: 5 * 1024 * 1024,
+  },
 });
 
 export default upload;

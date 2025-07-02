@@ -60,7 +60,7 @@ export const SkeletonCardItem = styled.li`
 `;
 
 // 骨架卡片本體（仿 Card）
-const SkeletonCard = styled.div`
+export const SkeletonCard = styled.div`
   border-radius: 12px;
   box-shadow: 0 20px 40px -14px rgba(0, 0, 0, 0.1);
   display: flex;

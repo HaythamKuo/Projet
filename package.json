@@ -11,6 +11,7 @@
   "author": "Haytham",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/storage": "^7.16.0",
     "bcryptjs": "^3.0.2",
     "colors": "^1.4.0",
     "cookie-parser": "^1.4.7",

@@ -130,7 +130,9 @@ export const InfoCartMarkBox = styled.div`
   }
 `;
 
-export const Button = styled.button`
+export const Button = styled.button.attrs((prop) => ({
+  type: prop.type || "button",
+}))`
   background-color: ${({ theme }) => theme.spotLight.color};
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 4px;

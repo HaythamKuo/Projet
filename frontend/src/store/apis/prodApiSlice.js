@@ -4,7 +4,10 @@ const pause = (duration) =>
 
 const customBaseQuery = async (...args) => {
   await pause(2000);
-  return fetchBaseQuery({ baseUrl: "http://localhost:5001" })(...args);
+  return fetchBaseQuery({
+    baseUrl: "http://localhost:5001",
+    credentials: "include",
+  })(...args);
 };
 
 const prodsApi = createApi({
@@ -18,7 +21,15 @@ const prodsApi = createApi({
           method: "GET",
           url: "/api/prods/",
         }),
-        invalidatesTags: ["Product"],
+        providesTags: ["Product"],
+      }),
+
+      fetchMyProds: builder.query({
+        query: () => ({
+          method: "GET",
+          url: "/api/prods/mine",
+        }),
+        providesTags: ["Product"],
       }),
 
       uploadProds: builder.mutation({
@@ -27,13 +38,28 @@ const prodsApi = createApi({
           url: "/api/prods/createprod",
           body: data,
         }),
-        providesTags: ["Product"],
+        invalidatesTags: ["Product"],
       }),
       fetchSpecificProd: builder.query({
         query: (id) => ({
           method: "GET",
           url: `/api/prods/${id}`,
         }),
+        providesTags: (result, err, { id }) => [{ type: "Product", id }],
+      }),
+      editMyProd: builder.mutation({
+        query: ({ id, formData }) => ({
+          method: "PUT",
+          url: `/api/prods/editprod/${id}`,
+          body: formData,
+        }),
+      }),
+      deleteMyProd: builder.mutation({
+        query: (id) => ({
+          method: "DELETE",
+          url: `/api/prods/deleteprod/${id}`,
+        }),
+        invalidatesTags: ["Product"],
       }),
     };
   },
@@ -43,6 +69,9 @@ export const {
   useFetchProdQuery,
   useFetchSpecificProdQuery,
   useUploadProdsMutation,
+  useFetchMyProdsQuery,
+  useEditMyProdMutation,
+  useDeleteMyProdMutation,
 } = prodsApi;
 
 export { prodsApi };
