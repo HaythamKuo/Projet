@@ -48,7 +48,7 @@ function ProdCard() {
       <CardItem key={item._id}>
         <Card>
           <ImageWrapper>
-            <TestImg src={item.images[0]} alt={item.name} />
+            <TestImg src={item.images[0].url} alt={item.name} />
           </ImageWrapper>
 
           <CardContent>

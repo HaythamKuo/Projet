@@ -61,6 +61,12 @@ const prodsApi = createApi({
         }),
         invalidatesTags: ["Product"],
       }),
+      fetchCategories: builder.query({
+        query: () => ({
+          method: "GET",
+          url: "/api/prods/category",
+        }),
+      }),
     };
   },
 });
@@ -72,6 +78,7 @@ export const {
   useFetchMyProdsQuery,
   useEditMyProdMutation,
   useDeleteMyProdMutation,
+  useFetchCategoriesQuery,
 } = prodsApi;
 
 export { prodsApi };

@@ -10,6 +10,7 @@ import {
   editProdSchemaFn,
   createProdSchemaFn,
 } from "../middlewares/joiValidation.js";
+import { selectedRuleSchema } from "../middlewares/categoryValidation.js";
 
 //const keyFilePath = path.resolve(process.env.KEY_FILE_PATH);
 
@@ -18,21 +19,35 @@ const storage = new Storage();
 const buck = storage.bucket(process.env.BUCKET_NAME);
 
 export const uploadProd = asyncHandler(async (req, res) => {
-  const { name, price, description, category, stock, rate } = req.body;
-
-  // if (!name || !price || !description) {
-  //   res.status(400);
-  //   throw new Error("請提供 name, price, description, category 等欄位");
-  // }
+  const { name, price, description, stock, rate, mainCategory, subCategory } =
+    req.body;
 
   const { error } = createProdSchemaFn({
     name,
     price,
     description,
-    category,
     stock,
     rate,
   });
+
+  if (error) {
+    const messages = error.details.map((e) => e.message);
+    res.status(400);
+    throw new Error(messages.join(" / "));
+  }
+
+  const { error: categoryErr } = selectedRuleSchema.validate(
+    {
+      mainCategory,
+      subCategory,
+    },
+    { abortEarly: false }
+  );
+
+  if (categoryErr) {
+    res.status(400);
+    throw new Error(categoryErr);
+  }
 
   if (!req.files || req.files.length === 0) {
     res.status(400);
@@ -48,7 +63,8 @@ export const uploadProd = asyncHandler(async (req, res) => {
     name,
     price,
     description,
-    category,
+    mainCategory,
+    subCategory,
     stock,
     rate,
     createdBy: req.user._id,
@@ -60,7 +76,8 @@ export const uploadProd = asyncHandler(async (req, res) => {
     name: newProduct.name,
     price: newProduct.price,
     description: newProduct.description,
-    category: newProduct.category,
+    mainCategory: newProduct.mainCategory,
+    subCategory: newProduct.subCategory,
     stock: newProduct.stock,
     rate: newProduct.rate,
     images: newProduct.images,

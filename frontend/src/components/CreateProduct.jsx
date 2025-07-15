@@ -8,10 +8,13 @@ import Loader from "../styles/UI/Loader";
 import { validateForm } from "../utils/validation";
 import { FormContainer, FormBtn } from "../styles/createProduct.style";
 import SplitText from "./reactBit/SplitText";
+import SelectOption from "./SelectOption";
 
 function CreateProduct() {
   const [imgs, setImg] = useState([]);
   const [imgReset, setimgReset] = useState(false);
+  const [category, setCategory] = useState("");
+  const [subCategory, setSubCategory] = useState("");
 
   const [createProd, { isLoading }] = useUploadProdsMutation();
 
@@ -42,6 +45,8 @@ function CreateProduct() {
     payload.append("price", cleanValue.price);
     payload.append("description", cleanValue.description);
     payload.append("rate", cleanValue.rate);
+    payload.append("mainCategory", category);
+    payload.append("subCategory", subCategory);
 
     if (imgs) {
       imgs.forEach((img) => payload.append("images", img.img));
@@ -52,11 +57,12 @@ function CreateProduct() {
     try {
       await createProd(payload).unwrap();
 
-      toast.success("創建成功");
+      //toast.success("創建成功");
       e.target.reset();
       setimgReset(true);
       setTimeout(() => setimgReset(false), 1000);
       setImg([]);
+      setCategory("");
     } catch (error) {
       toast.error(error?.data?.message || error?.error);
     }
@@ -76,6 +82,12 @@ function CreateProduct() {
         <FormField label="價錢" type="text" name="price" />
         <FormField label="描述" type="text" name="description" />
         <FormField label="星星" type="text" name="rate" />
+        <SelectOption
+          category={category}
+          subCategory={subCategory}
+          setCategory={setCategory}
+          setSubCategory={setSubCategory}
+        />
         <UploadButton onFileSelect={handleImg} reset={imgReset} />
         <FormBtn type="submit">送出</FormBtn>
       </FormContainer>
