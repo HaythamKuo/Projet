@@ -128,29 +128,35 @@ export const getMyProds = asyncHandler(async (req, res) => {
 
 export const editMyProd = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { name, price, description, oldImages } = req.body;
+  const { name, price, description, oldImages, mainCategory, subCategory } =
+    req.body;
 
   const prod = await prodModel.findById(id);
+
+  console.log(prod);
 
   if (!prod) {
     res.status(404);
     throw new Error("無此產品或是發生了一些錯誤");
   }
 
+  const { error: optionErr } = selectedRuleSchema.validate({
+    mainCategory,
+    subCategory,
+  });
+  if (optionErr) {
+    res.status(400);
+    throw new Error(optionErr);
+  }
+
   let parseImgs = [];
   try {
     parseImgs = JSON.parse(oldImages || "[]");
-    if (!Array.isArray(parseImgs)) throw new Error();
+    if (!Array.isArray(parseImgs)) throw new Error("似乎不是陣列");
   } catch (error) {
     res.status(400);
     throw new Error("oldImages 格式錯誤，請傳入 JSON 陣列");
   }
-
-  //const oldImgs = JSON.parse(oldImages || "[]");
-  // if (!name || !price || !description || oldImages.length === 0) {
-  //   res.status(400);
-  //   throw new Error("請提供 name, price, description, category 等欄位");
-  // }
 
   const dataToValidate = { name, price, description, oldImages: parseImgs };
 
@@ -172,6 +178,8 @@ export const editMyProd = asyncHandler(async (req, res) => {
   prod.name = dataToValidate.name;
   prod.price = dataToValidate.price;
   prod.description = dataToValidate.description;
+  prod.mainCategory = mainCategory;
+  prod.subCategory = subCategory;
   prod.images = finalImgs;
 
   await prod.save();

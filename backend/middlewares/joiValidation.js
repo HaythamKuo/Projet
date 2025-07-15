@@ -51,7 +51,7 @@ const editProdSchema = Joi.object({
       Joi.object({
         url: Joi.string().uri().required(),
         alt: Joi.string().allow(""),
-      })
+      }).unknown(true)
     )
     .required()
     .messages({ "array.base": "oldImages 必須是圖片陣列" }),

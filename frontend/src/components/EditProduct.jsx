@@ -6,16 +6,22 @@ import {
   useFetchSpecificProdQuery,
 } from "../store/apis/prodApiSlice";
 import FormField from "./FormField";
+import SelectOption from "./SelectOption";
 import UploadButton from "../styles/UI/UploadBtn";
+import { useEffect } from "react";
 
 function EditProduct() {
   const { prodid } = useParams();
+
+  const [category, setCategory] = useState("");
+  const [subCategory, setSubCategory] = useState("");
 
   const [resetUpload, setResetUpload] = useState(false);
   const [isSubmit, setSubmit] = useState(false);
   const [imgs, setImgs] = useState([]);
 
-  const { data, isLoading, isError, error } = useFetchSpecificProdQuery(prodid);
+  const { data, isLoading, isSuccess, isError, error } =
+    useFetchSpecificProdQuery(prodid);
   const [editProd, { isLoading: editting, isError: editErr }] =
     useEditMyProdMutation();
 
@@ -44,13 +50,20 @@ function EditProduct() {
       setResetUpload(true);
     } catch (error) {
       if (error) {
-        console.log(error?.error?.message || error.error);
+        console.log(error?.error?.message || error?.data?.message);
         toast.error("更新失敗");
       }
     } finally {
       setSubmit(false);
     }
   }
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      setCategory(data.mainCategory);
+      setSubCategory(data.subCategory);
+    }
+  }, [data, isSuccess]);
 
   if (isLoading) return <p>載入中</p>;
   if (isError) return <p>{error?.data?.message || "發生了一些錯誤"}</p>;
@@ -77,6 +90,12 @@ function EditProduct() {
         type="text"
         name="description"
         defaultValue={data.description}
+      />
+      <SelectOption
+        category={category}
+        setCategory={setCategory}
+        subcategory={subCategory}
+        setSubCategory={setSubCategory}
       />
       <UploadButton
         existingImgs={data?.images}

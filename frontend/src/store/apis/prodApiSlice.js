@@ -13,7 +13,7 @@ const customBaseQuery = async (...args) => {
 const prodsApi = createApi({
   reducerPath: "allProds",
   baseQuery: customBaseQuery,
-  tagTypes: ["Product"],
+  tagTypes: ["Product", "MyProduct"],
   endpoints(builder) {
     return {
       fetchProd: builder.query({
@@ -29,7 +29,7 @@ const prodsApi = createApi({
           method: "GET",
           url: "/api/prods/mine",
         }),
-        providesTags: ["Product"],
+        providesTags: ["MyProduct"],
       }),
 
       uploadProds: builder.mutation({
@@ -38,14 +38,14 @@ const prodsApi = createApi({
           url: "/api/prods/createprod",
           body: data,
         }),
-        invalidatesTags: ["Product"],
+        invalidatesTags: ["Product", "MyProduct"],
       }),
       fetchSpecificProd: builder.query({
         query: (id) => ({
           method: "GET",
           url: `/api/prods/${id}`,
         }),
-        providesTags: (result, err, { id }) => [{ type: "Product", id }],
+        providesTags: (result, err, id) => [{ type: "Product", id }],
       }),
       editMyProd: builder.mutation({
         query: ({ id, formData }) => ({
@@ -53,13 +53,22 @@ const prodsApi = createApi({
           url: `/api/prods/editprod/${id}`,
           body: formData,
         }),
+        invalidatesTags: (result, err, { id }) => [
+          { type: "Product", id },
+          "Product",
+          "MyProduct",
+        ],
       }),
       deleteMyProd: builder.mutation({
         query: (id) => ({
           method: "DELETE",
           url: `/api/prods/deleteprod/${id}`,
         }),
-        invalidatesTags: ["Product"],
+        invalidatesTags: (result, err, { id }) => [
+          { type: "Product", id },
+          "Product",
+          "MyProduct",
+        ],
       }),
       fetchCategories: builder.query({
         query: () => ({
