@@ -29,7 +29,7 @@ export const validateLogin = (data) => loginSchema.validate(data);
 
 //抽取相同屬性
 const baseProdSchema = {
-  name: Joi.string().min(2).max(10).trim().required().messages({
+  name: Joi.string().min(2).max(15).trim().required().messages({
     "any.required": "請填寫商品名稱",
     "string.empty": "商品名稱不可為空",
   }),

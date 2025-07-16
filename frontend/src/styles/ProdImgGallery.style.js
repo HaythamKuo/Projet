@@ -1,7 +1,9 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
+
 import Image from "../components/Image";
 import { FaMinus, FaPlus } from "react-icons/fa6";
 import { TbTruckDelivery } from "react-icons/tb";
+import { MdOutlineBrokenImage } from "react-icons/md";
 
 export const GalleryContainer = styled.div``;
 
@@ -27,18 +29,69 @@ export const ThumbnailList = styled.div`
 export const ThumbnailWrapper = styled.div`
   border-radius: ${(props) => props.borderRadius};
   cursor: pointer;
+  width: 100px;
+  height: 100px;
 `;
 
-export const Thumbnail = styled(Image)`
+// export const Thumbnail = styled(Image)`
+//   opacity: ${({ $isActive }) => ($isActive ? "1" : "0.7")};
+
+//   border: ${({ $isActive, theme }) =>
+//     $isActive ? `2px solid ${theme.colors.primary}` : "1px solid transparent"};
+//   transition: border 0.2s ease-out, opacity 0.2s ease;
+
+//   &:hover {
+//     opacity: 1;
+//   }
+// `;
+
+const jointStyledThumbnail = css`
   opacity: ${({ $isActive }) => ($isActive ? "1" : "0.7")};
 
+  width: 100%;
+  height: 100%;
+  display: block;
+
   border: ${({ $isActive, theme }) =>
-    $isActive ? `2px solid ${theme.colors.primary}` : "1px solid transparent"};
+    $isActive ? `2px solid ${theme.colors.default}` : "1px solid transparent"};
+
   transition: border 0.2s ease-out, opacity 0.2s ease;
 
   &:hover {
     opacity: 1;
   }
+`;
+
+export const Thumbnail = styled.img`
+  /* opacity: ${({ $isActive }) => ($isActive ? "1" : "0.7")};
+
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+
+  border: ${({ $isActive, theme }) =>
+    $isActive ? `2px solid ${theme.colors.default}` : "1px solid transparent"};
+
+  transition: border 0.2s ease-out, opacity 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+  } */
+  ${jointStyledThumbnail}
+  object-fit: cover;
+`;
+
+export const DefaultImg = styled(MdOutlineBrokenImage)`
+  ${jointStyledThumbnail}
+  /* padding: 8px;
+  box-sizing: border-box;
+  color: red; */
+
+  opacity: 0.4;
+  filter: grayscale(100%);
+  //background-color: ${({ theme }) => theme.colors.backgroundLight};
+  border-style: dashed;
 `;
 
 // 主圖

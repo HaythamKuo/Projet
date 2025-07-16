@@ -5,7 +5,7 @@ const imageSchema = Schema({
   alt: { type: String, default: "飯粒圖片" },
   // displayDescription: {
   //   type: String,
-  //   default: "",
+
   //   maxLength: 500,
   //   minLength: 10,
   //   required: true,
@@ -19,7 +19,7 @@ const prodSchema = Schema(
       type: String,
       required: true,
       trim: true,
-      maxLength: 10,
+      maxLength: 15,
       minLength: 2,
     },
     price: { type: Number, required: true, min: 0 },

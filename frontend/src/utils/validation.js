@@ -20,7 +20,7 @@ export const validateForm = (formData, img) => {
   //如果有錯誤就推入errs
 
   if (!name || name.length < 2 || name.length > 10)
-    errs.push("請填寫產品名稱且字元長度不應小於2, 大於10");
+    errs.push("請填寫產品名稱且字元長度不應小於2, 或是大於15");
   if (isNaN(price) || price < 0) errs.push("請輸入正確的價格");
   if (!description || description.length < 2 || description.length > 50)
     errs.push("請輸入描述且字元長度不應小於2, 大於50");

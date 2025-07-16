@@ -9,7 +9,7 @@ const HighLightComponent = styled.div`
   margin-top: 1rem;
 
   //用prop來換
-  flex-direction: ${(prop) => prop.attrs || "row"};
+  flex-direction: ${(prop) => prop.$attrs || "row"};
 `;
 
 const TextWrapper = styled.div`
@@ -41,10 +41,10 @@ const ImgWrapper = styled.div`
 `;
 
 //title, description, img, 皆為prop
-function HighLightSection({ attrs }) {
+function HighLightSection({ $attrs }) {
   return (
     <Fragment>
-      <HighLightComponent attrs={attrs}>
+      <HighLightComponent $attrs={$attrs}>
         <TextWrapper>
           <h1 className="wrapper_title">prop標題</h1>
           <span className="wrapper_des">

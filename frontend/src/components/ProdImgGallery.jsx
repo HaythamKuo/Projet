@@ -27,6 +27,7 @@ import {
   MinorTitle,
   MinorDes,
   BottomContainer,
+  DefaultImg,
 } from "../styles/ProdImgGallery.style";
 //import Image from "./Image";
 import Loader from "../styles/UI/Loader";
@@ -35,6 +36,7 @@ import {
   MdDeliveryDining,
   MdHomeRepairService,
   MdSquareFoot,
+  MdOutlineBrokenImage,
 } from "react-icons/md";
 import { TbTruckDelivery, TbBuildingFactory2, TbBox } from "react-icons/tb";
 
@@ -45,7 +47,7 @@ function ProdImgGallery({ thumbnailSize = 100 }) {
     { id: 1, res: "/cat-2.jpg" },
     { id: 2, res: "/husky-2.jpg" },
     { id: 3, res: "/golden-2.jpg" },
-    { id: 4, res: "/cat-1.jpg" },
+    { id: 4, res: "/cat.jpg" },
   ];
 
   const datas = [
@@ -105,35 +107,48 @@ function ProdImgGallery({ thumbnailSize = 100 }) {
     return <p>{error?.data?.message || "發生錯誤"}</p>;
   }
 
+  let total = 4;
+  const { images = [] } = prod;
+  const selectImage = images[selectIndex];
+
+  const spreadImgs = [
+    ...images.map((item) => ({ ...item, isPlaceholder: false })),
+    ...Array.from({ length: Math.max(0, total - images.length) }, (_, i) => ({
+      id: `default-${i}`,
+      url: <DefaultImg />,
+      alt: "預設圖片",
+      isPlaceholder: true,
+    })),
+  ];
+
   return (
     <GalleryContainer>
       <Gallery>
         <ThumbnailList>
-          {dogs.map((item, i) => (
-            <ThumbnailWrapper key={item.id} onClick={() => setSelectIndex(i)}>
+          {spreadImgs.map((item, i) => (
+            <ThumbnailWrapper
+              key={item.id || `placeholder-${i}`}
+              onClick={() => setSelectIndex(i)}
+            >
               <Thumbnail
-                src={item.res}
-                w={thumbnailSize}
-                h={thumbnailSize}
+                src={item.url}
                 $isActive={i === selectIndex}
+                $isPlaceholder={item.isPlaceholder}
               />
             </ThumbnailWrapper>
           ))}
         </ThumbnailList>
 
         <MainImgWrapper>
-          {/* {loading && <Loader width={810} height={810} />} */}
-          {/* <Image
-          src={dogs[selectIndex].res}
-          key={dogs[selectIndex].res}
-          onLoad={() => setLoading(false)}
-        /> */}
-
-          <SingleImgCard
-            src={dogs[selectIndex].res}
-            key={dogs[selectIndex].res}
-            onLoad={() => setLoading(false)}
-          />
+          {selectImage ? (
+            <SingleImgCard
+              src={selectImage.url}
+              key={selectImage.url}
+              alt={selectImage.alt}
+            />
+          ) : (
+            <DefaultImg />
+          )}
         </MainImgWrapper>
 
         <InfoPanel>
@@ -190,10 +205,10 @@ function ProdImgGallery({ thumbnailSize = 100 }) {
       </Gallery>
 
       <HighlightSectionContainer>
-        <HighLightSection attrs="column" />
+        <HighLightSection $attrs="column" />
 
-        <HighLightSection attrs="row" />
-        <HighLightSection attrs="row-reverse" />
+        <HighLightSection $attrs="row" />
+        <HighLightSection $attrs="row-reverse" />
       </HighlightSectionContainer>
       <BottomContainer>
         {InfoData.map((data, i) => (
