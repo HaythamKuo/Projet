@@ -31,6 +31,9 @@ const ImgWrapper = styled.div`
   width: 100%;
   overflow: hidden;
   flex: 2;
+  border-radius: 8px;
+  aspect-ratio: 4 / 3;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 
   img {
     display: block;
@@ -41,7 +44,7 @@ const ImgWrapper = styled.div`
 `;
 
 //title, description, img, 皆為prop
-function HighLightSection({ $attrs }) {
+function HighLightSection({ $attrs, ...res }) {
   return (
     <Fragment>
       <HighLightComponent $attrs={$attrs}>
@@ -55,7 +58,8 @@ function HighLightSection({ $attrs }) {
         </TextWrapper>
 
         <ImgWrapper>
-          <img src="/golden-2.jpg" alt="dog" />
+          {/* <img src="/golden-2.jpg" alt="dog" /> */}
+          <img {...res} />
         </ImgWrapper>
       </HighLightComponent>
     </Fragment>

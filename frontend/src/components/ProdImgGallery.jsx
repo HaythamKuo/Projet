@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   Gallery,
@@ -29,30 +29,19 @@ import {
   BottomContainer,
   DefaultImg,
 } from "../styles/ProdImgGallery.style";
-//import Image from "./Image";
-import Loader from "../styles/UI/Loader";
 import HighLightSection from "../styles/UI/HighLightSection";
 import {
   MdDeliveryDining,
   MdHomeRepairService,
   MdSquareFoot,
-  MdOutlineBrokenImage,
 } from "react-icons/md";
 import { TbTruckDelivery, TbBuildingFactory2, TbBox } from "react-icons/tb";
 
 import { useFetchSpecificProdQuery } from "../store/apis/prodApiSlice";
 
 function ProdImgGallery({ thumbnailSize = 100 }) {
-  const dogs = [
-    { id: 1, res: "/cat-2.jpg" },
-    { id: 2, res: "/husky-2.jpg" },
-    { id: 3, res: "/golden-2.jpg" },
-    { id: 4, res: "/cat.jpg" },
-  ];
-
   const datas = [
     { title: "Delivery & Returns", content: "在此填入配送與退貨的說明…" },
-    { title: "Size & Fit", content: "在此填入尺寸與合身度說明…" },
     { title: "How This Was Made", content: "在此填入商品製作方式說明…" },
   ];
 
@@ -75,11 +64,11 @@ function ProdImgGallery({ thumbnailSize = 100 }) {
   ];
 
   const [selectIndex, setSelectIndex] = useState(0);
-  const [loading, setLoading] = useState(true);
   const [count, setCount] = useState(0);
 
   //起始為空 因為不知道哪一個panel被開啟
   const [open, setOpen] = useState(null);
+  const [staticOpen, setStaticOpen] = useState(false);
 
   const { prodid } = useParams();
 
@@ -88,10 +77,6 @@ function ProdImgGallery({ thumbnailSize = 100 }) {
     if (count <= 0) return;
     setCount((preCount) => preCount - 1);
   }
-
-  useEffect(() => {
-    setLoading(true);
-  }, [selectIndex]);
 
   const {
     data: prod,
@@ -120,6 +105,23 @@ function ProdImgGallery({ thumbnailSize = 100 }) {
       isPlaceholder: true,
     })),
   ];
+
+  //img={url:'', alt:'飯粒圖片'}
+
+  function getHightlightImgs(images = []) {
+    const filledImgs = [...images];
+
+    while (filledImgs.length < 3) {
+      filledImgs.push({ url: <DefaultImg />, alt: "預設圖片" });
+    }
+
+    return filledImgs.slice(0, 3).map((img, index) => ({
+      ...img,
+      attrs: ["column", "row", "row-reverse"][index],
+    }));
+  }
+
+  const hightlightImgs = getHightlightImgs(images);
 
   return (
     <GalleryContainer>
@@ -200,15 +202,27 @@ function ProdImgGallery({ thumbnailSize = 100 }) {
                 </Item>
               );
             })}
+
+            <Item>
+              <HeaderBtn onClick={() => setStaticOpen((pre) => !pre)}>
+                我是title
+                <Icon open={staticOpen}>+</Icon>
+              </HeaderBtn>
+              <AccordionContent open={staticOpen}>yyyy</AccordionContent>
+            </Item>
           </Section>
         </InfoPanel>
       </Gallery>
 
       <HighlightSectionContainer>
-        <HighLightSection $attrs="column" />
-
-        <HighLightSection $attrs="row" />
-        <HighLightSection $attrs="row-reverse" />
+        {hightlightImgs.map((item, i) => (
+          <HighLightSection
+            key={item.url + i}
+            src={item.url}
+            $attrs={item.attrs}
+            alt={item.alt}
+          />
+        ))}
       </HighlightSectionContainer>
       <BottomContainer>
         {InfoData.map((data, i) => (

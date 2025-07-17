@@ -18,8 +18,6 @@ function CreateProduct() {
 
   const [createProd, { isLoading }] = useUploadProdsMutation();
 
-  //const handleImg = (files) => setImg((pre) => [...pre, ...files]);
-
   const handleImg = (file) => {
     const newImgs = file.filter(
       (item) => !item.isOld && item.img instanceof File
