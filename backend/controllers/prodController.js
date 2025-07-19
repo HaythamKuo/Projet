@@ -19,14 +19,25 @@ const storage = new Storage();
 const buck = storage.bucket(process.env.BUCKET_NAME);
 
 export const uploadProd = asyncHandler(async (req, res) => {
-  const { name, price, description, stock, rate, mainCategory, subCategory } =
+  let { name, price, description, rate, mainCategory, subCategory, size } =
     req.body;
+
+  try {
+    if (typeof size === "string") {
+      size = JSON.parse(size);
+    }
+  } catch (error) {
+    res.status(400);
+    throw new Error(error || "size格式出錯");
+  }
+
+  console.log(size);
 
   const { error } = createProdSchemaFn({
     name,
     price,
     description,
-    stock,
+    size,
     rate,
   });
 
@@ -65,7 +76,7 @@ export const uploadProd = asyncHandler(async (req, res) => {
     description,
     mainCategory,
     subCategory,
-    stock,
+    size,
     rate,
     createdBy: req.user._id,
     images: imageUrl,
@@ -78,12 +89,22 @@ export const uploadProd = asyncHandler(async (req, res) => {
     description: newProduct.description,
     mainCategory: newProduct.mainCategory,
     subCategory: newProduct.subCategory,
-    stock: newProduct.stock,
+    size: newProduct.size,
     rate: newProduct.rate,
     images: newProduct.images,
     createdBy: newProduct.createdBy,
     createdAt: newProduct.createdAt,
   });
+
+  //除錯專用
+
+  // res.status(201).json({
+  //   name,
+  //   price,
+  //   description,
+  //   size,
+  //   rate,
+  // });
 });
 
 export const getAllProds = asyncHandler(async (req, res) => {

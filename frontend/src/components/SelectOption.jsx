@@ -1,4 +1,3 @@
-//import { useState } from "react";
 import { useFetchCategoriesQuery } from "../store/apis/prodApiSlice";
 
 function SelectOption({ category, subcategory, setCategory, setSubCategory }) {
@@ -6,13 +5,14 @@ function SelectOption({ category, subcategory, setCategory, setSubCategory }) {
     data: categories = [],
     isLoading,
     isError,
+    error,
   } = useFetchCategoriesQuery();
 
   const designatedCategory = categories.find((attrs) => attrs.id === category);
   const designatedSubCategory = designatedCategory?.subcategory || [];
 
   if (isLoading) return <p>載入中</p>;
-  if (isError) return <p>發生了一些問題</p>;
+  if (isError) return <p> {error?.error} </p>;
 
   return (
     <>

@@ -44,8 +44,25 @@ const baseProdSchema = {
   }),
 };
 
+const sizes = ["S", "M", "L"];
+const sizeRules = Joi.number()
+  .integer()
+  .min(0)
+  .default(0)
+  .required()
+  .messages({ "number.min": "庫存不能低於0", "number.base": "請輸入正整數" });
+
+//這是尺寸庫存的schema
+const sizeSchema = Joi.object(
+  sizes.reduce((acc, size) => {
+    acc[size] = sizeRules;
+    return acc;
+  }, {})
+);
+
 const editProdSchema = Joi.object({
   ...baseProdSchema,
+
   oldImages: Joi.array()
     .items(
       Joi.object({
@@ -64,11 +81,7 @@ export const editProdSchemaFn = (data) =>
 
 const createProdSchema = Joi.object({
   ...baseProdSchema,
-
-  stock: Joi.number().integer().min(0).optional().messages({
-    "number.base": "庫存必須為數字",
-    "number.integer": "庫存必須為整數",
-  }),
+  size: sizeSchema,
   rate: Joi.number().min(0).max(5).optional().messages({
     "number.base": "評分必須為數字",
     "number.min": "評分不能小於 0",

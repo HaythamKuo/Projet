@@ -9,12 +9,18 @@ import { validateForm } from "../utils/validation";
 import { FormContainer, FormBtn } from "../styles/createProduct.style";
 import SplitText from "./reactBit/SplitText";
 import SelectOption from "./SelectOption";
+import ProdSize from "./ProdSize";
 
 function CreateProduct() {
   const [imgs, setImg] = useState([]);
   const [imgReset, setimgReset] = useState(false);
   const [category, setCategory] = useState("");
   const [subCategory, setSubCategory] = useState("");
+  const [size, setSize] = useState({
+    S: 0,
+    M: 0,
+    L: 0,
+  });
 
   const [createProd, { isLoading }] = useUploadProdsMutation();
 
@@ -31,7 +37,9 @@ function CreateProduct() {
 
     const res = new FormData(e.target);
 
-    const { isValid, errs, cleanValue } = validateForm(res, imgs);
+    console.log(res);
+
+    const { isValid, errs, cleanValue } = validateForm(res, imgs, { size });
 
     if (!isValid) {
       errs.forEach((e) => toast.error(e));
@@ -45,6 +53,7 @@ function CreateProduct() {
     payload.append("rate", cleanValue.rate);
     payload.append("mainCategory", category);
     payload.append("subCategory", subCategory);
+    payload.append("size", JSON.stringify(size));
 
     if (imgs) {
       imgs.forEach((img) => payload.append("images", img.img));
@@ -56,11 +65,16 @@ function CreateProduct() {
       await createProd(payload).unwrap();
 
       //toast.success("創建成功");
-      e.target.reset();
+      //e.target.reset();
       setimgReset(true);
       setTimeout(() => setimgReset(false), 1000);
       setImg([]);
       setCategory("");
+      setSize({
+        S: 0,
+        M: 0,
+        L: 0,
+      });
     } catch (error) {
       toast.error(error?.data?.message || error?.error);
     }
@@ -86,6 +100,7 @@ function CreateProduct() {
           setCategory={setCategory}
           setSubCategory={setSubCategory}
         />
+        <ProdSize size={size} setSize={setSize} />
         <UploadButton onFileSelect={handleImg} reset={imgReset} />
         <FormBtn type="submit">送出</FormBtn>
       </FormContainer>

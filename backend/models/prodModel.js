@@ -38,14 +38,12 @@ const prodSchema = Schema(
       type: String,
       required: true,
     },
-    size: [
-      {
-        label: { type: String, required: true },
-        stock: { type: Number, default: 0 },
-        min: { type: Number, default: 0 },
-      },
-    ],
-    stock: { min: 0, default: 0, type: Number },
+    size: {
+      S: { type: Number, required: true, min: 0 },
+      M: { type: Number, required: true, min: 0 },
+      L: { type: Number, required: true, min: 0 },
+    },
+
     rate: { min: 1, default: 5, type: Number, required: true },
     images: [imageSchema],
 
