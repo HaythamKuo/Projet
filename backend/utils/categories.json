@@ -2,11 +2,11 @@
   {
     "id": "dogs",
     "label": "狗狗專區",
-    "subcategory": ["黃金獵犬", "柴犬", "哈士奇"]
+    "subCategory": ["黃金獵犬", "柴犬", "哈士奇"]
   },
   {
     "id": "cats",
     "label": "喵咪專區",
-    "subcategory": ["英國短毛貓", "暹羅貓", "橘貓"]
+    "subCategory": ["英國短毛貓", "暹羅貓", "橘貓"]
   }
 ]

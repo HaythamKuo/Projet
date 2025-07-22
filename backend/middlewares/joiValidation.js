@@ -45,24 +45,27 @@ const baseProdSchema = {
 };
 
 const sizes = ["S", "M", "L"];
-const sizeRules = Joi.number()
-  .integer()
-  .min(0)
-  .default(0)
-  .required()
-  .messages({ "number.min": "庫存不能低於0", "number.base": "請輸入正整數" });
 
 //這是尺寸庫存的schema
 const sizeSchema = Joi.object(
   sizes.reduce((acc, size) => {
-    acc[size] = sizeRules;
+    acc[size] = Joi.number().integer().min(0).required().messages({
+      "number.min": "庫存不能低於0",
+      "number.base": "請輸入正整數",
+    });
     return acc;
   }, {})
-);
+).custom((value, helpers) => {
+  const totalStock = Object.values(value).reduce((sum, val) => sum + val, 0);
+  if (totalStock === 0) {
+    return helpers.message("至少需要一個尺寸有庫存");
+  }
+  return value;
+});
 
 const editProdSchema = Joi.object({
   ...baseProdSchema,
-
+  size: sizeSchema,
   oldImages: Joi.array()
     .items(
       Joi.object({

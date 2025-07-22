@@ -1,20 +1,27 @@
-import { useCallback, useState } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   useEditMyProdMutation,
   useFetchSpecificProdQuery,
 } from "../store/apis/prodApiSlice";
+import { EditContainer, EditForm } from "../styles/editForm.style";
 import FormField from "./FormField";
 import SelectOption from "./SelectOption";
 import UploadButton from "../styles/UI/UploadBtn";
-import { useEffect } from "react";
+import ProdSize from "./ProdSize";
+import { validateEditForm } from "../utils/validation";
 
 function EditProduct() {
   const { prodid } = useParams();
 
-  const [category, setCategory] = useState("");
-  const [subCategory, setSubCategory] = useState("");
+  const [category, setCategory] = useState(null);
+  const [subCategory, setSubCategory] = useState(null);
+  const [size, setSize] = useState({
+    S: 0,
+    M: 0,
+    L: 0,
+  });
 
   const [resetUpload, setResetUpload] = useState(false);
   const [isSubmit, setSubmit] = useState(false);
@@ -38,12 +45,43 @@ function EditProduct() {
       .filter((img) => !img.isOld && img.img instanceof File)
       .map((img) => img.img);
 
-    form.append("oldImages", JSON.stringify(oldImg));
-    newImg.forEach((e) => form.append("newImages", e));
+    const { isErr, errs, cleanValue } = validateEditForm(
+      form,
+      category,
+      subCategory,
+      size,
+      oldImg || [],
+      newImg || []
+    );
+
+    if (!isErr) {
+      errs.forEach((e) => toast.error(e));
+      return;
+    }
+
+    //console.log(cleanValue);
+
+    const payload = new FormData();
+
+    payload.append("name", cleanValue.name);
+    payload.append("price", cleanValue.price);
+    payload.append("description", cleanValue.description);
+    payload.append("mainCategory", category);
+    payload.append("subCategory", subCategory);
+
+    //尚未完成size的驗證
+    payload.append("size", JSON.stringify(size));
+    payload.append("oldImages", JSON.stringify(cleanValue.oldImg));
+
+    if (Array.isArray(cleanValue.newImg)) {
+      cleanValue.newImg.forEach((file) => payload.append("newImages", file));
+    }
+
+    // newImg.forEach((e) => form.append("newImages", e));
 
     try {
-      await editProd({ id: data._id, formData: form }).unwrap();
-      //console.log(form);
+      await editProd({ id: data._id, formData: payload }).unwrap();
+      //console.log(payload);
 
       //toast.success("更新成功");
       setImgs([]);
@@ -51,7 +89,7 @@ function EditProduct() {
     } catch (error) {
       if (error) {
         console.log(error?.error?.message || error?.data?.message);
-        toast.error("更新失敗");
+        toast.error(error?.error);
       }
     } finally {
       setSubmit(false);
@@ -62,16 +100,15 @@ function EditProduct() {
     if (isSuccess && data) {
       setCategory(data.mainCategory);
       setSubCategory(data.subCategory);
+      setSize(data.size);
     }
   }, [data, isSuccess]);
 
   if (isLoading) return <p>載入中</p>;
   if (isError) return <p>{error?.data?.message || "發生了一些錯誤"}</p>;
 
-  //console.log("這裡是data.images: " + data.images);
-
   return (
-    <form onSubmit={handleForm}>
+    <EditForm onSubmit={handleForm}>
       <span>產品id: {data._id}</span>
       <FormField
         label="產品名稱"
@@ -94,9 +131,10 @@ function EditProduct() {
       <SelectOption
         category={category}
         setCategory={setCategory}
-        subcategory={subCategory}
+        subCategory={subCategory}
         setSubCategory={setSubCategory}
       />
+      <ProdSize size={size} setSize={setSize} />
       <UploadButton
         existingImgs={data?.images}
         //onFileSelect={(newFiles) => setImgs((pre) => [...pre, ...newFiles])}
@@ -108,7 +146,7 @@ function EditProduct() {
       <button type="submit" disabled={isSubmit}>
         {isSubmit ? "處理中" : "送出"}
       </button>
-    </form>
+    </EditForm>
   );
 }
 export default EditProduct;

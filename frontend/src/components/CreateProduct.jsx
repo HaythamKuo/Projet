@@ -14,8 +14,8 @@ import ProdSize from "./ProdSize";
 function CreateProduct() {
   const [imgs, setImg] = useState([]);
   const [imgReset, setimgReset] = useState(false);
-  const [category, setCategory] = useState("");
-  const [subCategory, setSubCategory] = useState("");
+  const [category, setCategory] = useState(null);
+  const [subCategory, setSubCategory] = useState(null);
   const [size, setSize] = useState({
     S: 0,
     M: 0,
@@ -32,14 +32,19 @@ function CreateProduct() {
   };
 
   //setImg(files);
+
   async function handleForm(e) {
     e.preventDefault();
 
     const res = new FormData(e.target);
 
-    console.log(res);
-
-    const { isValid, errs, cleanValue } = validateForm(res, imgs, { size });
+    const { isValid, errs, cleanValue } = validateForm(
+      res,
+      imgs,
+      { size },
+      category,
+      subCategory
+    );
 
     if (!isValid) {
       errs.forEach((e) => toast.error(e));
@@ -58,8 +63,17 @@ function CreateProduct() {
     if (imgs) {
       imgs.forEach((img) => payload.append("images", img.img));
     }
-
     //console.log(payload);
+
+    //     [Object: null prototype] {
+    //   name: 'blue',
+    //   price: '456',
+    //   description: 'happy unity',
+    //   mainCategory: 'dogs',
+    //   subCategory: '黃金獵犬',
+    //   size: '{"S":0,"M":0,"L":67}',
+    //   oldImages: '[{"url":"https://storage.googleapis.com/doll-project/products/1753156188099_golden-retriver.jpg","alt":"golden-retriver","_id":"687f0a5c6f62a82ea82b3dba"}]'
+    // }
 
     try {
       await createProd(payload).unwrap();
@@ -70,6 +84,7 @@ function CreateProduct() {
       setTimeout(() => setimgReset(false), 1000);
       setImg([]);
       setCategory("");
+      setSubCategory("");
       setSize({
         S: 0,
         M: 0,
@@ -77,6 +92,7 @@ function CreateProduct() {
       });
     } catch (error) {
       toast.error(error?.data?.message || error?.error);
+      console.log(error);
     }
   }
 

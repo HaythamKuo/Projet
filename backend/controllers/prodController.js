@@ -31,8 +31,6 @@ export const uploadProd = asyncHandler(async (req, res) => {
     throw new Error(error || "size格式出錯");
   }
 
-  console.log(size);
-
   const { error } = createProdSchemaFn({
     name,
     price,
@@ -149,12 +147,19 @@ export const getMyProds = asyncHandler(async (req, res) => {
 
 export const editMyProd = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { name, price, description, oldImages, mainCategory, subCategory } =
-    req.body;
+  const {
+    name,
+    price,
+    description,
+    oldImages,
+    mainCategory,
+    subCategory,
+    size,
+  } = req.body;
 
   const prod = await prodModel.findById(id);
 
-  console.log(prod);
+  //console.log(req.body);
 
   if (!prod) {
     res.status(404);
@@ -179,9 +184,28 @@ export const editMyProd = asyncHandler(async (req, res) => {
     throw new Error("oldImages 格式錯誤，請傳入 JSON 陣列");
   }
 
-  const dataToValidate = { name, price, description, oldImages: parseImgs };
+  let sizeObj;
+  try {
+    sizeObj = JSON.parse(size);
+  } catch (error) {
+    res.status(400);
+    throw new Error("size 格式錯誤，請傳入有效的 JSON 物件字串");
+  }
+
+  const purePrice = +price;
+  //console.log(sizeObj);
+
+  const dataToValidate = {
+    name,
+    price: purePrice,
+    description,
+    size: sizeObj,
+    oldImages: parseImgs,
+  };
 
   const { error } = editProdSchemaFn(dataToValidate);
+
+  //console.log(error);
 
   if (error) {
     const messages = error.details.map((e) => e.message);
@@ -199,9 +223,12 @@ export const editMyProd = asyncHandler(async (req, res) => {
   prod.name = dataToValidate.name;
   prod.price = dataToValidate.price;
   prod.description = dataToValidate.description;
+  prod.size = dataToValidate.size;
   prod.mainCategory = mainCategory;
   prod.subCategory = subCategory;
   prod.images = finalImgs;
+
+  console.log(prod);
 
   await prod.save();
   res.status(200).json("編輯成功");

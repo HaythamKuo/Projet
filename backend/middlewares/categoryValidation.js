@@ -2,7 +2,7 @@ import Joi from "joi";
 import categoryData from "../utils/categories.json" assert { type: "json" };
 
 const categoryMap = categoryData.reduce((acc, item) => {
-  acc[item.id] = item.subcategory;
+  acc[item.id] = item.subCategory;
   return acc;
 }, {});
 

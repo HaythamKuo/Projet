@@ -38,6 +38,11 @@ export const FormGroup = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
+  padding: 10px;
+
+  &:first-child {
+    padding: 10px 10px 10px 0;
+  }
 
   label {
     font-size: 14px;

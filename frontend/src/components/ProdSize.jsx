@@ -1,6 +1,10 @@
 import { useState } from "react";
 import styled from "styled-components";
 
+const Container = styled.div`
+  margin-top: 1.5rem;
+`;
+
 const SizeLabel = styled.span`
   margin: 0 1rem;
   padding: 10px;
@@ -41,7 +45,7 @@ function ProdSize({ size, setSize }) {
   }
 
   return (
-    <div>
+    <Container>
       <div>
         {["S", "M", "L"].map((label) => (
           <SizeLabel
@@ -61,7 +65,7 @@ function ProdSize({ size, setSize }) {
           />
         </InputSizeContainer>
       </div>
-    </div>
+    </Container>
   );
 }
 export default ProdSize;
