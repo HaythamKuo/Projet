@@ -36,7 +36,7 @@ function EditProduct() {
 
   async function handleForm(e) {
     e.preventDefault();
-    setSubmit(true);
+
     const form = new FormData(e.target);
 
     const oldImg = imgs.filter((item) => item.isOld).map((img) => img.url);
@@ -45,7 +45,7 @@ function EditProduct() {
       .filter((img) => !img.isOld && img.img instanceof File)
       .map((img) => img.img);
 
-    const { isErr, errs, cleanValue } = validateEditForm(
+    const { isValid, errs, cleanValue } = validateEditForm(
       form,
       category,
       subCategory,
@@ -54,12 +54,15 @@ function EditProduct() {
       newImg || []
     );
 
-    if (!isErr) {
+    if (!isValid) {
       errs.forEach((e) => toast.error(e));
+      setSubmit(false);
       return;
     }
 
+    setSubmit(true);
     //console.log(cleanValue);
+    //setSubmit(true);
 
     const payload = new FormData();
 
@@ -70,7 +73,7 @@ function EditProduct() {
     payload.append("subCategory", subCategory);
 
     //尚未完成size的驗證
-    payload.append("size", JSON.stringify(size));
+    payload.append("size", JSON.stringify(cleanValue.cleanStock));
     payload.append("oldImages", JSON.stringify(cleanValue.oldImg));
 
     if (Array.isArray(cleanValue.newImg)) {

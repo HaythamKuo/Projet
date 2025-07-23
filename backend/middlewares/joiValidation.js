@@ -85,7 +85,7 @@ export const editProdSchemaFn = (data) =>
 const createProdSchema = Joi.object({
   ...baseProdSchema,
   size: sizeSchema,
-  rate: Joi.number().min(0).max(5).optional().messages({
+  rate: Joi.number().min(1).max(5).optional().messages({
     "number.base": "評分必須為數字",
     "number.min": "評分不能小於 0",
     "number.max": "評分不能大於 5",

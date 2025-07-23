@@ -41,7 +41,7 @@ function CreateProduct() {
     const { isValid, errs, cleanValue } = validateForm(
       res,
       imgs,
-      { size },
+      size,
       category,
       subCategory
     );
@@ -58,22 +58,12 @@ function CreateProduct() {
     payload.append("rate", cleanValue.rate);
     payload.append("mainCategory", category);
     payload.append("subCategory", subCategory);
-    payload.append("size", JSON.stringify(size));
+    payload.append("size", JSON.stringify(cleanValue.cleanStock));
 
     if (imgs) {
       imgs.forEach((img) => payload.append("images", img.img));
     }
     //console.log(payload);
-
-    //     [Object: null prototype] {
-    //   name: 'blue',
-    //   price: '456',
-    //   description: 'happy unity',
-    //   mainCategory: 'dogs',
-    //   subCategory: '黃金獵犬',
-    //   size: '{"S":0,"M":0,"L":67}',
-    //   oldImages: '[{"url":"https://storage.googleapis.com/doll-project/products/1753156188099_golden-retriver.jpg","alt":"golden-retriver","_id":"687f0a5c6f62a82ea82b3dba"}]'
-    // }
 
     try {
       await createProd(payload).unwrap();

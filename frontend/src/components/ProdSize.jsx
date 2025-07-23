@@ -36,12 +36,16 @@ function ProdSize({ size, setSize }) {
   const [selectSize, setSelectSize] = useState("S");
 
   function handleSizeStock(e) {
-    const newStock = +e.target.value || 0;
+    const value = e.target.value;
 
-    setSize((pre) => ({
-      ...pre,
-      [selectSize]: newStock,
-    }));
+    const newStock = value === "" ? "" : parseInt(value, 10);
+
+    if (value === "" || (!isNaN(newStock) && newStock >= 0)) {
+      setSize((pre) => ({
+        ...pre,
+        [selectSize]: newStock,
+      }));
+    }
   }
 
   return (
@@ -59,8 +63,8 @@ function ProdSize({ size, setSize }) {
         <InputSizeContainer>
           <label>{selectSize}的庫存</label>
           <input
-            type="text"
-            value={size[selectSize]}
+            type="number"
+            value={size[selectSize] ?? ""}
             onChange={handleSizeStock}
           />
         </InputSizeContainer>

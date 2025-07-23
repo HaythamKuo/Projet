@@ -17,7 +17,7 @@ export const selectedRuleSchema = Joi.object({
     .required()
     .custom((value, helper) => {
       //取出當前被驗證值的第一項 在此處就是取出mainCategory
-      const mainCategory = helper.state.ancestors[0]?.mainCategory;
+      const { mainCategory } = helper.state.ancestors[0];
       if (!mainCategory) return helper.message("遺失主要屬性");
 
       const validSub = categoryMap[mainCategory];
