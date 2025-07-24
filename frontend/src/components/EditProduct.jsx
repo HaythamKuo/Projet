@@ -5,7 +5,7 @@ import {
   useEditMyProdMutation,
   useFetchSpecificProdQuery,
 } from "../store/apis/prodApiSlice";
-import { EditContainer, EditForm } from "../styles/editForm.style";
+import { EditForm, EditFormBtn } from "../styles/editForm.style";
 import FormField from "./FormField";
 import SelectOption from "./SelectOption";
 import UploadButton from "../styles/UI/UploadBtn";
@@ -146,9 +146,9 @@ function EditProduct() {
         reset={resetUpload}
         onResetFinished={() => setResetUpload(false)}
       />
-      <button type="submit" disabled={isSubmit}>
+      <EditFormBtn type="submit" disabled={isSubmit}>
         {isSubmit ? "處理中" : "送出"}
-      </button>
+      </EditFormBtn>
     </EditForm>
   );
 }

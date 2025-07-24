@@ -64,12 +64,34 @@ const prodsApi = createApi({
           method: "DELETE",
           url: `/api/prods/deleteprod/${id}`,
         }),
+        async onQueryStarted(id, { dispatch, queryFulfilled }) {
+          const patchRes = dispatch(
+            prodsApi.util.updateQueryData(
+              "fetchMyProds",
+              undefined,
+              (draft) => {
+                const prodId = draft.findIndex((prod) => prod._id === id);
+
+                if (prodId !== -1) draft.splice(prodId, 1);
+              }
+            )
+          );
+
+          try {
+            await queryFulfilled;
+          } catch (error) {
+            patchRes.undo();
+            console.error("後端刪除失敗，回滾 UI：", error);
+          }
+        },
+
         invalidatesTags: (result, err, { id }) => [
           { type: "Product", id },
           "Product",
           "MyProduct",
         ],
       }),
+
       fetchCategories: builder.query({
         query: () => ({
           method: "GET",

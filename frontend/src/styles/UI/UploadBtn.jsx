@@ -25,6 +25,12 @@ const UploadBtn = styled.button`
   }
 `;
 
+const ImgContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+`;
+
 const PreviewWrapper = styled.div`
   position: relative;
   width: 200px;
@@ -42,6 +48,7 @@ const DeleteIcon = styled(TiDelete)`
 const UploadPreview = styled.img`
   //width: 200px;
   width: 100%;
+  aspect-ratio: 1 / 1;
   border-radius: 8px;
   object-fit: cover;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -143,31 +150,33 @@ const UploadButton = ({
         ref={fileInputRef}
         onChange={handleChange}
       />
-      {preview &&
-        preview.map((img, index) => {
-          // <PreviewWrapper key={img.url}>
-          //   <UploadPreview src={img.url} alt="圖片預覽" />
-          //   <DeleteIcon onClick={() => deleteSpecificImg(img.url)} />
-          // </PreviewWrapper>
+      <ImgContainer>
+        {preview &&
+          preview.map((img, index) => {
+            // <PreviewWrapper key={img.url}>
+            //   <UploadPreview src={img.url} alt="圖片預覽" />
+            //   <DeleteIcon onClick={() => deleteSpecificImg(img.url)} />
+            // </PreviewWrapper>
 
-          if (img.isOld) {
-            //舊圖
-            return (
-              <PreviewWrapper key={img.url + index}>
-                <UploadPreview src={img.url.url} alt={img.url.alt} />
-                <DeleteIcon onClick={() => deleteSpecificImg(img.url.url)} />
-              </PreviewWrapper>
-            );
-          } else {
-            //新圖
-            return (
-              <PreviewWrapper key={img.url + index}>
-                <UploadPreview src={img.url} alt="圖片預覽" />
-                <DeleteIcon onClick={() => deleteSpecificImg(img.url)} />
-              </PreviewWrapper>
-            );
-          }
-        })}
+            if (img.isOld) {
+              //舊圖
+              return (
+                <PreviewWrapper key={img.url + index}>
+                  <UploadPreview src={img.url.url} alt={img.url.alt} />
+                  <DeleteIcon onClick={() => deleteSpecificImg(img.url.url)} />
+                </PreviewWrapper>
+              );
+            } else {
+              //新圖
+              return (
+                <PreviewWrapper key={img.url + index}>
+                  <UploadPreview src={img.url} alt="圖片預覽" />
+                  <DeleteIcon onClick={() => deleteSpecificImg(img.url)} />
+                </PreviewWrapper>
+              );
+            }
+          })}
+      </ImgContainer>
     </UploadWrapper>
   );
 };

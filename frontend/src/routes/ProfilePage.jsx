@@ -13,6 +13,8 @@ import {
   InfoDelete,
   ProfileOption,
 } from "../styles/profile.style";
+import ProcessLoader from "../styles/UI/ProcessLoader";
+
 import UploadProdList from "../components/UploadProdList";
 import Collections from "../components/Collections";
 

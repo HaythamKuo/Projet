@@ -21,14 +21,27 @@ const SizeLabel = styled.span`
 `;
 
 const InputSizeContainer = styled.div`
-  margin-top: 1rem;
+  margin-top: 2rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
 
+  label {
+    font-size: 20px;
+    font-weight: bold;
+  }
+
   input {
     border: 2px solid grey;
     border-radius: 1rem;
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    /* 針對 Firefox */
+    -moz-appearance: textfield;
   }
 `;
 

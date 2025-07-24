@@ -1,10 +1,13 @@
 import styled from "styled-components";
+import { FormBtn } from "./createProduct.style";
 
-export const EditContainer = styled.div`
-  /* display: flex;
-  flex-direction: column; */
-`;
 export const EditForm = styled.form`
-  /* display: flex;
-  flex-direction: column; */
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  margin-bottom: 2rem;
+`;
+export const EditFormBtn = styled(FormBtn)`
+  width: 30%;
 `;

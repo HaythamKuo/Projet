@@ -5,6 +5,8 @@ export const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+
+  margin-bottom: 2rem;
 `;
 
 export const FormBtn = styled(Button)`

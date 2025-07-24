@@ -18,6 +18,7 @@ import Skeleton, {
   SkeletonCard,
 } from "../styles/UI/Skeleton";
 import Modal from "./Modal";
+import ProcessLoader from "../styles/UI/ProcessLoader";
 
 function UploadProdList() {
   const [target, setTarget] = useState(null);
@@ -37,18 +38,34 @@ function UploadProdList() {
   }
 
   async function removeTargetDeed() {
+    // if (target) {
+    //   try {
+    //     const res = await remove(target).unwrap();
+    //     dialogRef.current?.close();
+    //     //toast.success("看來是刪除成功了");
+    //     console.log(res);
+    //   } catch (error) {
+    //     console.log(error?.data?.message || error);
+    //   }
+    //   setIsScroll(false);
+    //   //dialogRef.current.close();
+    // } else {
+    //   toast.warn("看來是removeTargetDeed Fn 發生了一些問題");
+    // }
+
     if (target) {
+      dialogRef.current?.close();
+      setIsScroll(false);
+
       try {
-        const res = await remove(target);
-        //toast.success("看來是刪除成功了");
+        const res = await remove(target).unwrap();
+
         console.log(res);
       } catch (error) {
         console.log(error?.data?.message || error);
       }
-      setIsScroll(false);
-      //dialogRef.current.close();
     } else {
-      toast.warn("看來是removeTargetDeed Fn 發生了一些問題");
+      toast.warn("刪除函數接收的 target 無效");
     }
   }
 
@@ -71,7 +88,7 @@ function UploadProdList() {
     };
   }, [isScroll]);
 
-  if (deleting) return <p>刪除中</p>;
+  //if (deleting) return <ProcessLoader />;
 
   let content;
   if (isLoading) {
@@ -100,6 +117,7 @@ function UploadProdList() {
 
   return (
     <>
+      {deleting && <ProcessLoader />}
       <Modal ref={dialogRef} onConfirm={removeTargetDeed} />
       <ProdListContainer>{content || "哈哈是我啦"}</ProdListContainer>
     </>
