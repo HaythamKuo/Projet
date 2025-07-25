@@ -6,6 +6,9 @@ import {
   Edit,
   IconBox,
   ProdListContainer,
+  EmptyWrapper,
+  PromptProd,
+  PromptTitle,
 } from "../styles/UploadProdList.style";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -38,21 +41,6 @@ function UploadProdList() {
   }
 
   async function removeTargetDeed() {
-    // if (target) {
-    //   try {
-    //     const res = await remove(target).unwrap();
-    //     dialogRef.current?.close();
-    //     //toast.success("看來是刪除成功了");
-    //     console.log(res);
-    //   } catch (error) {
-    //     console.log(error?.data?.message || error);
-    //   }
-    //   setIsScroll(false);
-    //   //dialogRef.current.close();
-    // } else {
-    //   toast.warn("看來是removeTargetDeed Fn 發生了一些問題");
-    // }
-
     if (target) {
       dialogRef.current?.close();
       setIsScroll(false);
@@ -100,7 +88,12 @@ function UploadProdList() {
   } else if (isError) {
     content = <p>發生一些錯誤</p>;
   } else if (!data || !Array.isArray(data) || data.length === 0) {
-    content = <p>目前沒有上傳的商品</p>;
+    content = (
+      <EmptyWrapper>
+        <PromptTitle>該上傳自己的商品了吧</PromptTitle>
+        <PromptProd />
+      </EmptyWrapper>
+    );
   } else {
     content = data.map((item) => (
       <ImageWrapper key={item._id}>

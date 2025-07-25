@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { TiDelete } from "react-icons/ti";
 import { TbPencil } from "react-icons/tb";
+import promptSvg from "../assets/shoud_upload.svg?react";
+import { flexCenter } from "./theme";
 const ProdListContainer = styled.div`
   width: 100%;
   display: flex;
@@ -66,4 +68,30 @@ const MyImg = styled.img`
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 `;
 
-export { MyImg, ImageWrapper, Delete, Edit, IconBox, ProdListContainer };
+const EmptyWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  ${flexCenter}
+  gap: 2rem;
+`;
+
+const PromptProd = styled(promptSvg)`
+  width: 300px;
+  height: 300px;
+  align-self: center;
+`;
+const PromptTitle = styled.span`
+  font-size: 2rem;
+`;
+
+export {
+  MyImg,
+  ImageWrapper,
+  Delete,
+  Edit,
+  IconBox,
+  ProdListContainer,
+  EmptyWrapper,
+  PromptProd,
+  PromptTitle,
+};
