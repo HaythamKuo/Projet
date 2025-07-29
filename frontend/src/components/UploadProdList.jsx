@@ -76,8 +76,6 @@ function UploadProdList() {
     };
   }, [isScroll]);
 
-  //if (deleting) return <ProcessLoader />;
-
   let content;
   if (isLoading) {
     content = Array.from({ length: 3 }, (_, index) => (

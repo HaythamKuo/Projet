@@ -9,6 +9,7 @@ import errHandler from "./middlewares/ErrMiddleware.js";
 
 import userRouter from "./routes/userRoute.js";
 import prodRouter from "./routes/prodRoute.js";
+import cartRouter from "./routes/cartRoute.js";
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/goals", router);
 app.use("/api/users", userRouter);
 app.use("/api/prods", prodRouter);
+app.use("/api/cart", cartRouter);
 
 app.use(errHandler);
 

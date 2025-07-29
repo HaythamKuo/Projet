@@ -68,8 +68,8 @@ function CreateProduct() {
     try {
       await createProd(payload).unwrap();
 
-      //toast.success("創建成功");
-      //e.target.reset();
+      toast.success("創建成功");
+      e.target.reset();
       setimgReset(true);
       setTimeout(() => setimgReset(false), 1000);
       setImg([]);
