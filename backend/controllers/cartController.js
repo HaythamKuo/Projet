@@ -2,9 +2,6 @@ import asyncHandler from "express-async-handler";
 import cartModel from "../models/cartModel.js";
 
 export const addOrUpdateCartItem = asyncHandler(async (req, res) => {
-  // 名字 價錢 圖片 數量
-  //const { name, price, quantity, images } = req.body;
-  //要把商品的id放進去才能建立購物車
   const { productId, selectedSizes, unitPrice } = req.body;
   const userId = req.user._id;
 
@@ -30,51 +27,35 @@ export const addOrUpdateCartItem = asyncHandler(async (req, res) => {
   let cart = await cartModel.findOne({ userId });
   if (!cart) cart = new cartModel({ userId, items: [], totalPrice: 0 });
 
-  // function transformAndCompare(sizeA, sizeB) {
-  //   const planA =
-  //     sizeA instanceof Map ? Object.fromEntries(sizeA.entries()) : sizeA;
-  //   const planB =
-  //     sizeB instanceof Map ? Object.fromEntries(sizeB.entries()) : sizeB;
-
-  //   const keyA = Object.keys(planA);
-  //   const keyB = Object.keys(planB);
+  // function compareSize(a, b) {
+  //   const keyA = Object.keys(a);
+  //   const keyB = Object.keys(b);
 
   //   if (keyA.length !== keyB.length) return false;
 
-  //   return keyA.every(
-  //     (key) => planB.hasOwnProperty(key) && planA[key] === planB[key]
-  //   );
+  //   return keyA.every((key) => b.hasOwnProperty(key) && a[key] === b[key]);
   // }
 
-  function compareSize(a, b) {
-    const keyA = Object.keys(a);
-    const keyB = Object.keys(b);
-
-    if (keyA.length !== keyB.length) return false;
-
-    return keyA.every((key) => b.hasOwnProperty(key) && a[key] === b[key]);
-  }
-
   const existingItem = cart.items.find(
-    (item) =>
-      item.productId.toString() === productId.toString() &&
-      compareSize(item.selectedSizes, selectedSizes)
+    (item) => item.productId.toString() === productId.toString()
   );
 
   if (existingItem) {
-    for (const [size, qty] of Object.entries(selectedSizes)) {
-      existingItem.selectedSizes[size] =
-        (existingItem.selectedSizes[size] || 0) + qty;
-    }
+    // for (const [size, qty] of Object.entries(selectedSizes)) {
+    //   existingItem.selectedSizes[size] =
+    //     (existingItem.selectedSizes[size] || 0) + qty;
+    // }
 
-    existingItem.quantity = Object.values(existingItem.selectedSizes).reduce(
-      (acc, size) => acc + size,
-      0
-    );
+    // existingItem.quantity = Object.values(existingItem.selectedSizes).reduce(
+    //   (acc, size) => acc + size,
+    //   0
+    // );
 
-    existingItem.unitPrice = unitPrice;
+    // existingItem.unitPrice = unitPrice;
+
+    existingItem.selectedSizes = { ...selectedSizes };
+    existingItem.quantity = quantities;
   } else {
-    //const computedQty = Object.values(selectedSizes).reduce((sum, q) => sum + q, 0);
     cart.items.push({
       quantity: quantities,
       unitPrice,
@@ -107,4 +88,49 @@ export const getCart = asyncHandler(async (req, res) => {
   }
 
   res.status(200).json(cartData);
+});
+
+export const removeCart = asyncHandler(async (req, res) => {
+  const { productId, sizeToRemove } = req.body;
+  const userId = req.user._id;
+
+  const cart = await cartModel.findOne({ userId });
+  if (!cart) {
+    res.status(400);
+    throw new Error("找不到購物車");
+  }
+
+  const itemIndex = cart.items.findIndex(
+    (item) => item.productId._id.toString() === productId.toString()
+  );
+
+  if (itemIndex === -1) throw new Error("找不到該商品");
+
+  const item = cart.items[itemIndex];
+
+  for (const [size, qty] of Object.entries(sizeToRemove)) {
+    //[[s,4],[m,5]]
+    if (item.selectedSizes[size] !== null) {
+      item.selectedSizes[size] -= qty;
+
+      if (item.selectedSizes[size] < 0) {
+        delete item.selectedSizes[size];
+      }
+    }
+  }
+
+  item.quantity = Object.values(item.selectedSizes).reduce(
+    (acc, size) => acc + size,
+    0
+  );
+
+  if (item.quantity === 0) {
+    cart.items.splice(itemIndex, 1);
+  }
+  cart.totalPrice = cart.items.reduce(
+    (acc, item) => acc + item.quantity * item.unitPrice,
+    0
+  );
+
+  res.status(201).json(cart);
 });

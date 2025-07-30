@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import HighLight from "../styles/UI/HighLight";
 import { HeaderLayout } from "../styles/header.style";
 import {
@@ -26,6 +27,8 @@ import CartDrawer from "../components/CartDrawer";
 const titles = ["娃娃", "運送服務", "情緒價值"];
 
 function HomePage() {
+  //const { isOpen } = useSelector((state) => state.cart);
+
   return (
     <HomeContainer>
       <HeaderLayout>

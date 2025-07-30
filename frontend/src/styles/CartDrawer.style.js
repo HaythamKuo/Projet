@@ -1,7 +1,8 @@
 import styled, { keyframes } from "styled-components";
 import { FiX } from "react-icons/fi";
-import { flexContainer } from "./theme";
+import { flexCenter, flexContainer } from "./theme";
 import { Button } from "./ProdCard.style";
+import noProdSvg from "../assets/noprodhere.svg?react";
 
 //控制overlay淡出/淡入
 const fadeIn = keyframes`
@@ -16,8 +17,8 @@ export const Drawer = styled.div`
   width: clamp(320px, 75vw, 500px);
 
   background-color: white;
-  transform: translateX(${(prop) => (prop.open ? "0" : "100%")});
   transition: transform 0.3s ease-out;
+  transform: translateX(${({ $open }) => ($open ? "0" : "100%")});
   z-index: 1000;
 
   display: flex;
@@ -136,4 +137,26 @@ export const CartBottom = styled.div`
 
 export const CheckBtn = styled(Button)`
   font-size: 1rem;
+`;
+
+export const DefaultBox = styled.div`
+  height: 100%;
+  top: 50%;
+  ${flexCenter}
+  flex-direction: column;
+`;
+export const NoProdSpan = styled.span`
+  font-size: 2rem;
+`;
+
+export const RemindToLoginSpan = styled.span``;
+
+export const RemindToLoginBtn = styled.button.attrs({ type: "button" })``;
+
+export const NoProd = styled(noProdSvg)`
+  width: 300px;
+  height: 300px;
+
+  /* align-items: center;
+  justify-content: center; */
 `;

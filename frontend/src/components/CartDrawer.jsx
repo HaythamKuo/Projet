@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { useCart } from "../hooks/testCart";
+import { Link } from "react-router-dom";
+
 import {
   Drawer,
   OverLay,
@@ -11,10 +12,24 @@ import {
   CartQuantity,
   ItemsContainer,
   CheckBtn,
+  NoProd,
+  DefaultBox,
+  NoProdSpan,
+  RemindToLoginSpan,
+  RemindToLoginBtn,
 } from "../styles/CartDrawer.style";
 import QuantityAmount from "../styles/UI/QuantityAmount";
+
+import { useSelector, useDispatch } from "react-redux";
+import { closeCart } from "../store/slices/cartSlice";
+
 function CartDrawer() {
-  const { isOpen, setIsOpen } = useCart();
+  const dispatch = useDispatch();
+
+  const { userInfo } = useSelector((state) => state.auth);
+  const { isOpen } = useSelector((state) => state.cart);
+
+  const isLogined = !!userInfo && userInfo.token;
 
   useEffect(() => {
     if (isOpen) {
@@ -27,7 +42,7 @@ function CartDrawer() {
 
     const keyDown = (e) => {
       if (e.key === "Escape") {
-        setIsOpen(false);
+        dispatch(closeCart());
       }
     };
     window.addEventListener("keydown", keyDown);
@@ -35,23 +50,39 @@ function CartDrawer() {
       window.removeEventListener("keydown", keyDown);
       document.body.style.overflow = "";
     };
-  }, [isOpen, setIsOpen]);
+  }, [dispatch, isOpen]);
 
   return (
     <>
-      {isOpen && <OverLay onClick={() => setIsOpen(false)} />}
+      {isOpen && <OverLay onClick={() => dispatch(closeCart())} />}
 
-      <Drawer open={isOpen}>
+      <Drawer $open={isOpen}>
         <CartContainer>
           <CartTop>
             <CartQuantity>
               <h3>你的購物車</h3>
               <span>0</span>
             </CartQuantity>
-            <CloseBtn onClick={() => setIsOpen(false)} />
+            <CloseBtn onClick={() => dispatch(closeCart())} />
           </CartTop>
           <CartCenter>
-            <ItemsContainer>
+            <DefaultBox>
+              <NoProd />
+              <NoProdSpan>看來是還沒購物喔</NoProdSpan>
+
+              {!isLogined && (
+                <>
+                  <RemindToLoginSpan>
+                    如果要購物請先登入會員喔！
+                  </RemindToLoginSpan>
+                  <Link to="/login">
+                    <RemindToLoginBtn>前去登入</RemindToLoginBtn>
+                  </Link>
+                </>
+              )}
+            </DefaultBox>
+
+            {/* <ItemsContainer>
               <div className="thumbNailWrapper">
                 <img src="/cat-1.jpg" alt="default img" />
               </div>
@@ -128,7 +159,7 @@ function CartDrawer() {
                   <QuantityAmount />
                 </div>
               </div>
-            </ItemsContainer>
+            </ItemsContainer> */}
           </CartCenter>
 
           <CartBottom>

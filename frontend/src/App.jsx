@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { CartProvider } from "./hooks/CreatCart";
+
 import Footer from "./components/Footer";
 
 //import { ContentContainer } from "./styles/nav.style";
@@ -24,23 +24,22 @@ function App({ toggleTheme }) {
         pauseOnHover // 滑鼠移至通知時是否暫停計時
         theme="colored" // 佈景：light, dark, colored
       />
-      <CartProvider>
-        <LayoutWrapper>
-          <Navbar onClick={toggleTheme} />
 
-          <ContentContainer>
-            <MainContent>
-              <Outlet />
-            </MainContent>
+      <LayoutWrapper>
+        <Navbar onClick={toggleTheme} />
 
-            <Footer />
-            <CopyRightContainer>
-              <CopyRight />
-              <span>this.Haytham. All rights reserved</span>
-            </CopyRightContainer>
-          </ContentContainer>
-        </LayoutWrapper>
-      </CartProvider>
+        <ContentContainer>
+          <MainContent>
+            <Outlet />
+          </MainContent>
+
+          <Footer />
+          <CopyRightContainer>
+            <CopyRight />
+            <span>this.Haytham. All rights reserved</span>
+          </CopyRightContainer>
+        </ContentContainer>
+      </LayoutWrapper>
     </>
   );
 }

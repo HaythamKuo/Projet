@@ -7,11 +7,14 @@ import Image from "./Image";
 import Switch from "../styles/UI/Switch";
 import NavBtn from "../styles/UI/NavBtn";
 import SplitText from "./reactBit/SplitText";
-import { useCart } from "../hooks/testCart";
+//import { useCart } from "../hooks/testCart";
 import LoginDropDown from "./loginDropDown";
+import { useDispatch } from "react-redux";
+import { toggleCart } from "../store/slices/cartSlice";
 
 function Navbar({ onClick }) {
   const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
 
   /**
    * handleOpen
@@ -27,7 +30,6 @@ function Navbar({ onClick }) {
    * 透過 @function {useCart} 切換購物車開關
    * @returns {Boolean} true/false
    */
-  const { setIsOpen } = useCart();
 
   return (
     <NavContainer>
@@ -60,7 +62,7 @@ function Navbar({ onClick }) {
 
           <LoginDropDown />
 
-          <NavBtn name="購物車" onClick={() => setIsOpen((pre) => !pre)} />
+          <NavBtn name="購物車" onClick={() => dispatch(toggleCart())} />
           <Switch onClick={onClick} />
         </div>
         {/* phone rwd mode */}
