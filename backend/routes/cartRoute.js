@@ -9,7 +9,7 @@ import { protect } from "../middlewares/authMiddle.js";
 const cartRouter = Router();
 
 cartRouter.route("/addgoods").post(protect, addOrUpdateCartItem);
-cartRouter.route("/:userId").get(getCart);
+cartRouter.route("/").get(protect, getCart);
 cartRouter.route("/:productId").delete(protect, removeCart);
 
 export default cartRouter;

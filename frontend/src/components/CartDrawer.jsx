@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import {
   Drawer,
@@ -21,16 +21,22 @@ import {
 import QuantityAmount from "../styles/UI/QuantityAmount";
 
 import { useSelector, useDispatch } from "react-redux";
+import { fetchGoods } from "../store/thunks/fetchGoods";
 import { closeCart } from "../store/slices/cartSlice";
 
 function CartDrawer() {
   const dispatch = useDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const { userInfo } = useSelector((state) => state.auth);
-  const { isOpen } = useSelector((state) => state.cart);
+  const { isOpen, items } = useSelector((state) => state.cart);
 
-  const isLogined = !!userInfo && userInfo.token;
+  const isLogined = !!userInfo?._id;
 
+  console.log(items);
+
+  //用於esc and 點擊陰影就能消失的函式
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -46,11 +52,18 @@ function CartDrawer() {
       }
     };
     window.addEventListener("keydown", keyDown);
-    () => {
+    return () => {
       window.removeEventListener("keydown", keyDown);
       document.body.style.overflow = "";
     };
   }, [dispatch, isOpen]);
+  useEffect(() => {
+    dispatch(fetchGoods());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(closeCart());
+  }, [isLogined, dispatch]);
 
   return (
     <>
@@ -75,9 +88,14 @@ function CartDrawer() {
                   <RemindToLoginSpan>
                     如果要購物請先登入會員喔！
                   </RemindToLoginSpan>
-                  <Link to="/login">
-                    <RemindToLoginBtn>前去登入</RemindToLoginBtn>
-                  </Link>
+
+                  <RemindToLoginBtn
+                    onClick={() =>
+                      navigate("/auth", { state: { from: location.pathname } })
+                    }
+                  >
+                    前去登入
+                  </RemindToLoginBtn>
                 </>
               )}
             </DefaultBox>

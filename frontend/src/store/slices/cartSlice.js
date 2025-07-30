@@ -3,7 +3,7 @@ import { addGoods } from "../thunks/addGoods";
 import { fetchGoods } from "../thunks/fetchGoods";
 
 const initialState = {
-  data: [],
+  items: [],
   isLoading: false,
   isOpen: false,
   error: null,
@@ -29,11 +29,12 @@ const cartSlice = createSlice({
     });
     builder.addCase(fetchGoods.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.data = action.payload;
+      state.items = action.payload;
     });
     builder.addCase(fetchGoods.rejected, (state, action) => {
       state.isLoading = false;
-      state.error = action.error;
+      state.error =
+        action.payload || action.error?.message || "無法取得購物車內的資料";
     });
   },
 });
