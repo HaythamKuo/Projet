@@ -43,7 +43,10 @@ function CartDrawer() {
   const { userInfo } = useSelector((state) => state.auth);
   const isLogined = !!userInfo?._id;
 
-  //console.log(prods);
+  function handleLogin() {
+    dispatch(closeCart());
+    navigate("/auth", { state: { from: location.pathname, fromCart: true } });
+  }
 
   //用於esc and 點擊陰影就能消失的函式
   useEffect(() => {
@@ -67,20 +70,24 @@ function CartDrawer() {
     };
   }, [dispatch, isOpen]);
   useEffect(() => {
-    if (!isLogined) return; // 只有登入才 fetch
+    if (!isLogined || !isOpen) return; // 只有登入才 fetch
     const fetchData = async () => {
       try {
         await dispatch(fetchGoods()).unwrap();
       } catch (error) {
-        toast.error(error || "載入失敗");
+        //toast.error(error || "載入失敗");
+        console.log(error);
       }
     };
     fetchData();
-  }, [dispatch, isLogined]);
+  }, [dispatch, isLogined, isOpen]);
 
-  // useEffect(() => {
-  //   dispatch(closeCart());
-  // }, [isLogined, dispatch]);
+  useEffect(() => {
+    if (isOpen && location.pathname.startsWith("/auth")) {
+      dispatch(closeCart());
+    }
+  }, [dispatch, isOpen, location.pathname]);
+
   useEffect(() => {
     //有必要寫成這樣嗎？
     if (!err) return;
@@ -89,6 +96,7 @@ function CartDrawer() {
       toast.error(err.message || "載入失敗", { toastId });
     }
   }, [err]);
+
   if (isLoading) return <ProcessLoader />;
 
   return (
@@ -129,8 +137,8 @@ function CartDrawer() {
                     前去登入
                   </RemindToLoginBtn> */}
 
-                  <RemindToLoginBtn>
-                    <Link to="/auth">前去登入</Link>
+                  <RemindToLoginBtn onClick={handleLogin}>
+                    前去登入
                   </RemindToLoginBtn>
                 </>
               )}

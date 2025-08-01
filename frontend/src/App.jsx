@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-
+import CartDrawer from "./components/CartDrawer";
 import Footer from "./components/Footer";
 
 //import { ContentContainer } from "./styles/nav.style";
@@ -30,6 +30,7 @@ function App({ toggleTheme }) {
 
         <ContentContainer>
           <MainContent>
+            <CartDrawer />
             <Outlet />
           </MainContent>
 

@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import FormField from "../components/FormField";
 import { Container, FormContainer, OptText } from "../styles/form.style";
 import { setCredentials } from "../store/slices/authSlice";
-//import { closeCart } from "../store/slices/cartSlice";
+import { closeCart } from "../store/slices/cartSlice";
 import { useLoginMutation } from "../store/apis/apiSlice";
 import { toast } from "react-toastify";
 import { OverLay } from "../styles/CartDrawer.style";
@@ -13,10 +13,16 @@ import Loader from "../styles/UI/Loader";
 function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
-
+  const dispatch = useDispatch();
+  const [login, { isLoading }] = useLoginMutation();
   // 要進到需授權的頁面會跳轉至登入
   const from = location.state?.from?.pathname || "/";
-  //const fromCart = location.state?.fromCart || false;
+  const fromCart = location.state?.fromCart || false;
+
+  // 從cartDrawer來的屬性 如果為true會強制關閉購物車
+  if (fromCart) {
+    dispatch(closeCart());
+  }
 
   const [enterValue, setEnterValue] = useState({ email: "", password: "" });
 
@@ -32,10 +38,7 @@ function LoginPage() {
 
   //非同步登入處理
 
-  const dispatch = useDispatch();
   //  const { userInfo } = useSelector((state) => state.auth);
-
-  const [login, { isLoading }] = useLoginMutation();
 
   //處理登入function與拋出錯誤
   async function handleSubmit(e) {
@@ -49,10 +52,6 @@ function LoginPage() {
       }).unwrap();
 
       dispatch(setCredentials({ ...res }));
-
-      // if (fromCart) {
-      //   dispatch(closeCart());
-      // }
 
       setEnterValue({ email: "", password: "" });
       setTouched({ email: false, password: false });
