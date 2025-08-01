@@ -3,6 +3,8 @@ import { FiX } from "react-icons/fi";
 import { flexCenter, flexContainer } from "./theme";
 import { Button } from "./ProdCard.style";
 import noProdSvg from "../assets/noprodhere.svg?react";
+import { Delete } from "./UploadProdList.style";
+import { TiHeartFullOutline } from "react-icons/ti";
 
 //控制overlay淡出/淡入
 const fadeIn = keyframes`
@@ -81,6 +83,7 @@ export const CartCenter = styled.div`
 export const ItemsContainer = styled.div`
   display: flex;
   border-bottom: 1px solid black;
+
   //padding-bottom: 1rem;
   //margin-bottom: 1rem;
   padding-right: 1rem;
@@ -109,9 +112,22 @@ export const ItemsContainer = styled.div`
     .influxInfo-top {
       display: flex;
       justify-content: space-between;
+      background-color: green;
+    }
+    .influxInfo-center {
+      display: flex;
     }
 
     .influxInfo-bottom {
+      //background-color: yellow;
+      display: flex;
+      justify-content: space-between;
+
+      & .influxInfo-bottom_span {
+        border: 1px solid grey;
+        border-radius: 10px;
+        padding: 10px;
+      }
     }
   }
 `;
@@ -140,8 +156,8 @@ export const CheckBtn = styled(Button)`
 `;
 
 export const DefaultBox = styled.div`
-  height: 100%;
-  top: 50%;
+  /* height: 100%;
+  top: 50%; */
   ${flexCenter}
   flex-direction: column;
 `;
@@ -156,7 +172,7 @@ export const RemindToLoginBtn = styled.button.attrs({ type: "button" })``;
 export const NoProd = styled(noProdSvg)`
   width: 300px;
   height: 300px;
-
-  /* align-items: center;
-  justify-content: center; */
 `;
+
+export const DeleteCart = styled(Delete)``;
+export const CartToSave = styled(TiHeartFullOutline)``;

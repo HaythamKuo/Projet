@@ -12,7 +12,9 @@ export const fetchGoods = createAsyncThunk(
       return res.data;
     } catch (err) {
       console.error("購物車取得失敗", err);
-      return thunkApi.rejectWithValue(err.response?.data || "Unknown error");
+      return thunkApi.rejectWithValue(
+        err.response?.data || "fetchGoods.jsx發生意外"
+      );
     }
   }
 );

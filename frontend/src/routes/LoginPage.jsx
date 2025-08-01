@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import FormField from "../components/FormField";
 import { Container, FormContainer, OptText } from "../styles/form.style";
 import { setCredentials } from "../store/slices/authSlice";
+//import { closeCart } from "../store/slices/cartSlice";
 import { useLoginMutation } from "../store/apis/apiSlice";
 import { toast } from "react-toastify";
 import { OverLay } from "../styles/CartDrawer.style";
@@ -12,7 +13,10 @@ import Loader from "../styles/UI/Loader";
 function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
+
+  // 要進到需授權的頁面會跳轉至登入
   const from = location.state?.from?.pathname || "/";
+  //const fromCart = location.state?.fromCart || false;
 
   const [enterValue, setEnterValue] = useState({ email: "", password: "" });
 
@@ -38,7 +42,6 @@ function LoginPage() {
     e.preventDefault();
 
     if (emailHasError || passwordHasError) return;
-
     try {
       const res = await login({
         email: enterValue.email,
@@ -46,6 +49,10 @@ function LoginPage() {
       }).unwrap();
 
       dispatch(setCredentials({ ...res }));
+
+      // if (fromCart) {
+      //   dispatch(closeCart());
+      // }
 
       setEnterValue({ email: "", password: "" });
       setTouched({ email: false, password: false });
