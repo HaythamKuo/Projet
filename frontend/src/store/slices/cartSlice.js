@@ -1,6 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 import { addGoods } from "../thunks/addGoods";
 import { fetchGoods } from "../thunks/fetchGoods";
+import { deleteGood } from "../thunks/deleteGood";
 import { logout } from "./authSlice";
 
 const initialState = {
@@ -9,6 +10,9 @@ const initialState = {
   isOpen: false,
   error: null,
 };
+
+export const selectCartItems = (state) =>
+  Array.isArray(state.cart.items?.items) ? state.cart.items.items : [];
 
 const cartSlice = createSlice({
   name: "cart",
@@ -23,9 +27,26 @@ const cartSlice = createSlice({
     toggleCart: (state) => {
       state.isOpen = !state.isOpen;
     },
+    removeItem: (state, action) => {
+      //console.log("state.items: " + JSON.stringify(current(state.items)));
+      //console.log("action.payload: " + JSON.stringify(current(action.payload)));
+      //console.log(action.payload);
+
+      state.items.items = state.items?.items.filter(
+        (item) => item.productId._id !== action.payload
+      );
+    },
+    //roll back
+    restoreItem: (state, action) => {
+      const exists = state.items.find(
+        (item) => item.productId._id === action.payload._id
+      );
+
+      if (!exists) state.items.push(action.payload);
+    },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchGoods.pending, (state, action) => {
+    builder.addCase(fetchGoods.pending, (state) => {
       state.isLoading = true;
       state.error = null;
     });
@@ -39,6 +60,24 @@ const cartSlice = createSlice({
         action.payload || action.error?.message || "無法取得購物車內的資料";
     });
 
+    //delete something
+    builder.addCase(deleteGood.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
+    });
+    builder.addCase(deleteGood.fulfilled, (state, action) => {
+      console.log(action.payload);
+
+      state.isLoading = false;
+      state.items = action.payload.items ?? action.payload;
+    });
+    builder.addCase(deleteGood.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error =
+        action.payload || action.error?.message || "無法刪除購物車內的產品";
+    });
+
+    //登出
     builder.addCase(logout, (state) => {
       state.items = [];
       state.isLoading = false;
@@ -48,5 +87,6 @@ const cartSlice = createSlice({
   },
 });
 
-export const { openCart, closeCart, toggleCart } = cartSlice.actions;
+export const { openCart, closeCart, toggleCart, removeItem, restoreItem } =
+  cartSlice.actions;
 export default cartSlice.reducer;

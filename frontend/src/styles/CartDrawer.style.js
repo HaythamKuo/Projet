@@ -3,8 +3,7 @@ import { FiX } from "react-icons/fi";
 import { flexCenter, flexContainer } from "./theme";
 import { Button } from "./ProdCard.style";
 import noProdSvg from "../assets/noprodhere.svg?react";
-import { Delete } from "./UploadProdList.style";
-import { TiHeartFullOutline } from "react-icons/ti";
+import { FaHeart, FaRegTrashCan } from "react-icons/fa6";
 
 //控制overlay淡出/淡入
 const fadeIn = keyframes`
@@ -31,7 +30,7 @@ export const OverLay = styled.div`
   inset: 0;
   position: fixed;
   background: rgba(0, 0, 0, 0.5);
-  animation: ${fadeIn} 0.3s ease;
+  animation: ${fadeIn} 0.4s ease;
   z-index: 999;
 `;
 
@@ -116,6 +115,10 @@ export const ItemsContainer = styled.div`
     }
     .influxInfo-center {
       display: flex;
+      gap: 1.5rem;
+      & svg {
+        cursor: pointer;
+      }
     }
 
     .influxInfo-bottom {
@@ -159,6 +162,7 @@ export const DefaultBox = styled.div`
   /* height: 100%;
   top: 50%; */
   ${flexCenter}
+  flex: ${({ $isFlex }) => ($isFlex ? 0 : 1)};
   flex-direction: column;
 `;
 export const NoProdSpan = styled.span`
@@ -174,5 +178,12 @@ export const NoProd = styled(noProdSvg)`
   height: 300px;
 `;
 
-export const DeleteCart = styled(Delete)``;
-export const CartToSave = styled(TiHeartFullOutline)``;
+export const IconBtn = styled.button.attrs({ type: "button" })`
+  border: none;
+  background-color: white;
+`;
+
+export const DeleteCart = styled(FaRegTrashCan)``;
+export const CartToSave = styled(FaHeart)`
+  //color: red;
+`;

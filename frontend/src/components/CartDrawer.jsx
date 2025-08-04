@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import ProcessLoader from "../styles/UI/ProcessLoader";
 
@@ -21,32 +21,50 @@ import {
   RemindToLoginBtn,
   DeleteCart,
   CartToSave,
+  IconBtn,
 } from "../styles/CartDrawer.style";
-import QuantityAmount from "../styles/UI/QuantityAmount";
+//import QuantityAmount from "../styles/UI/QuantityAmount";
 
 import { useSelector, useDispatch } from "react-redux";
 import { fetchGoods } from "../store/thunks/fetchGoods";
-import { closeCart } from "../store/slices/cartSlice";
+import { deleteGood } from "../store/thunks/deleteGood";
+import {
+  closeCart,
+  removeItem,
+  restoreItem,
+  selectCartItems,
+} from "../store/slices/cartSlice";
 
 function CartDrawer() {
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
 
-  const {
-    isOpen,
-    items: prods,
-    isLoading,
-    error: err,
-  } = useSelector((state) => state.cart);
+  const { isOpen, isLoading, error: err } = useSelector((state) => state.cart);
+
+  const items = useSelector(selectCartItems);
 
   const { userInfo } = useSelector((state) => state.auth);
   const isLogined = !!userInfo?._id;
 
-  function handleLogin() {
+  const handleLogin = () => {
     dispatch(closeCart());
     navigate("/auth", { state: { from: location.pathname, fromCart: true } });
-  }
+  };
+
+  //處理刪除
+  const handleDelete = async (productId) => {
+    dispatch(removeItem(productId._id));
+
+    try {
+      await dispatch(deleteGood(productId._id)).unwrap();
+      toast.success("刪除成功");
+    } catch (error) {
+      dispatch(restoreItem(productId));
+      console.log(error);
+      toast.error("刪除失敗");
+    }
+  };
 
   //用於esc and 點擊陰影就能消失的函式
   useEffect(() => {
@@ -75,7 +93,6 @@ function CartDrawer() {
       try {
         await dispatch(fetchGoods()).unwrap();
       } catch (error) {
-        //toast.error(error || "載入失敗");
         console.log(error);
       }
     };
@@ -97,14 +114,17 @@ function CartDrawer() {
     }
   }, [err]);
 
-  if (isLoading) return <ProcessLoader />;
-
   return (
     <>
       {isOpen && <OverLay onClick={() => dispatch(closeCart())} />}
 
       <Drawer $open={isOpen}>
         <CartContainer>
+          {isLoading && (
+            <>
+              <ProcessLoader />
+            </>
+          )}
           <CartTop>
             <CartQuantity>
               <h3>你的購物車</h3>
@@ -113,8 +133,8 @@ function CartDrawer() {
             <CloseBtn onClick={() => dispatch(closeCart())} />
           </CartTop>
           <CartCenter>
-            <DefaultBox>
-              {Array.isArray(prods?.items) && prods.items.length === 0 && (
+            <DefaultBox $isFlex={isLogined}>
+              {Array.isArray(items) && items.length === 0 && (
                 <>
                   <NoProd />
                   <NoProdSpan>看來是還沒購物喔</NoProdSpan>
@@ -127,23 +147,13 @@ function CartDrawer() {
                     如果要購物請先登入會員喔！
                   </RemindToLoginSpan>
 
-                  {/* <RemindToLoginBtn
-                    onClick={() =>
-                      navigate("/auth", {
-                        state: { from: location.pathname, fromCart: true },
-                      })
-                    }
-                  >
-                    前去登入
-                  </RemindToLoginBtn> */}
-
                   <RemindToLoginBtn onClick={handleLogin}>
                     前去登入
                   </RemindToLoginBtn>
                 </>
               )}
             </DefaultBox>
-            {isLogined
+            {/* {isLogined
               ? prods?.items?.map((item) => (
                   <ItemsContainer key={item._id}>
                     <div className="thumbNailWrapper">
@@ -158,8 +168,16 @@ function CartDrawer() {
                         <span>{item.unitPrice}</span>
                       </div>
                       <div className="influxInfo-center">
-                        <DeleteCart />
-                        <CartToSave />
+                        <IconBtn
+                          onClick={() => handleDelete(item.productId)}
+                          disabled={isLoading}
+                        >
+                          <DeleteCart />
+                        </IconBtn>
+
+                        <IconBtn disabled={isLoading}>
+                          <CartToSave />
+                        </IconBtn>
                       </div>
                       <div className="influxInfo-bottom">
                         <span className="influxInfo-bottom_span">
@@ -175,7 +193,48 @@ function CartDrawer() {
                     </div>
                   </ItemsContainer>
                 ))
-              : ""}
+              : ""} */}
+
+            {isLogined &&
+              items.map((item) => (
+                <ItemsContainer key={item._id}>
+                  <div className="thumbNailWrapper">
+                    <img
+                      src={item.productId.images[0].url}
+                      alt={item.productId.images[0].alt}
+                    />
+                  </div>
+                  <div className="influxInfo">
+                    <div className="influxInfo-top">
+                      <span>{item.productId.name}</span>
+                      <span>{item.unitPrice}</span>
+                    </div>
+                    <div className="influxInfo-center">
+                      <IconBtn
+                        onClick={() => handleDelete(item.productId)}
+                        disabled={isLoading}
+                      >
+                        <DeleteCart />
+                      </IconBtn>
+
+                      <IconBtn disabled={isLoading}>
+                        <CartToSave />
+                      </IconBtn>
+                    </div>
+                    <div className="influxInfo-bottom">
+                      <span className="influxInfo-bottom_span">
+                        S x {item.selectedSizes["S"]}
+                      </span>
+                      <span className="influxInfo-bottom_span">
+                        M x {item.selectedSizes["M"]}
+                      </span>
+                      <span className="influxInfo-bottom_span">
+                        L x {item.selectedSizes["L"]}
+                      </span>
+                    </div>
+                  </div>
+                </ItemsContainer>
+              ))}
           </CartCenter>
 
           <CartBottom>

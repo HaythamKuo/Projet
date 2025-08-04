@@ -15,8 +15,10 @@ function LoginPage() {
   const location = useLocation();
   const dispatch = useDispatch();
   const [login, { isLoading }] = useLoginMutation();
+
   // 要進到需授權的頁面會跳轉至登入
   const from = location.state?.from?.pathname || "/";
+
   const fromCart = location.state?.fromCart || false;
 
   // 從cartDrawer來的屬性 如果為true會強制關閉購物車
