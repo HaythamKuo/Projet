@@ -1,6 +1,11 @@
 import styled, { css } from "styled-components";
 
 import Image from "../components/Image";
+import {
+  Container,
+  SizeLabel,
+  InputSizeContainer,
+} from "../components/ProdSize";
 import { FaMinus, FaPlus } from "react-icons/fa6";
 import { TbTruckDelivery } from "react-icons/tb";
 import { MdOutlineBrokenImage } from "react-icons/md";
@@ -63,34 +68,16 @@ const jointStyledThumbnail = css`
 `;
 
 export const Thumbnail = styled.img`
-  /* opacity: ${({ $isActive }) => ($isActive ? "1" : "0.7")};
-
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-
-  border: ${({ $isActive, theme }) =>
-    $isActive ? `2px solid ${theme.colors.default}` : "1px solid transparent"};
-
-  transition: border 0.2s ease-out, opacity 0.2s ease;
-
-  &:hover {
-    opacity: 1;
-  } */
   ${jointStyledThumbnail}
   object-fit: cover;
 `;
 
 export const DefaultImg = styled(MdOutlineBrokenImage)`
   ${jointStyledThumbnail}
-  /* padding: 8px;
-  box-sizing: border-box;
-  color: red; */
 
   opacity: 0.4;
   filter: grayscale(100%);
-  //background-color: ${({ theme }) => theme.colors.backgroundLight};
+
   border-style: dashed;
 `;
 
@@ -300,3 +287,12 @@ export const MinorDes = styled(MinorTitle).attrs({ as: "span" })`
   word-break: break-word; /* 必要時在單字內斷行 */
   white-space: normal; /* 確保自動換行 */
 `;
+
+//Size select
+export const SizeContainer = styled(Container)`
+  margin-top: 0;
+`;
+
+export const SizeSpan = styled(SizeLabel)``;
+
+export const InputSizeBox = styled(InputSizeContainer)``;

@@ -1,11 +1,11 @@
 import { useState } from "react";
 import styled from "styled-components";
 
-const Container = styled.div`
+export const Container = styled.div`
   margin-top: 1.5rem;
 `;
 
-const SizeLabel = styled.span`
+export const SizeLabel = styled.span`
   margin: 0 1rem;
   padding: 10px;
   border: 1px solid black;
@@ -20,7 +20,7 @@ const SizeLabel = styled.span`
   }
 `;
 
-const InputSizeContainer = styled.div`
+export const InputSizeContainer = styled.div`
   margin-top: 2rem;
   display: flex;
   align-items: center;

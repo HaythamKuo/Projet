@@ -1,18 +1,23 @@
-import { createSlice, current } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { addGoods } from "../thunks/addGoods";
 import { fetchGoods } from "../thunks/fetchGoods";
 import { deleteGood } from "../thunks/deleteGood";
 import { logout } from "./authSlice";
 
 const initialState = {
-  items: [],
+  cart: {
+    _id: null,
+    userId: null,
+    items: [],
+    totalPrice: 0,
+  },
   isLoading: false,
   isOpen: false,
   error: null,
 };
 
 export const selectCartItems = (state) =>
-  Array.isArray(state.cart.items?.items) ? state.cart.items.items : [];
+  Array.isArray(state.cart.cart.items) ? state.cart.cart.items : [];
 
 const cartSlice = createSlice({
   name: "cart",
@@ -28,65 +33,84 @@ const cartSlice = createSlice({
       state.isOpen = !state.isOpen;
     },
     removeItem: (state, action) => {
-      //console.log("state.items: " + JSON.stringify(current(state.items)));
-      //console.log("action.payload: " + JSON.stringify(current(action.payload)));
-      //console.log(action.payload);
-
-      state.items.items = state.items?.items.filter(
+      state.cart.items = state.cart.items.filter(
         (item) => item.productId._id !== action.payload
       );
     },
-    //roll back
     restoreItem: (state, action) => {
-      const exists = state.items.find(
-        (item) => item.productId._id === action.payload._id
+      const exists = state.cart.items.find(
+        (item) => item.productId._id === action.payload.productId._id
       );
-
-      if (!exists) state.items.push(action.payload);
+      if (!exists) {
+        state.cart.items.push(action.payload);
+      }
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchGoods.pending, (state) => {
-      state.isLoading = true;
-      state.error = null;
-    });
-    builder.addCase(fetchGoods.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.items = action.payload;
-    });
-    builder.addCase(fetchGoods.rejected, (state, action) => {
-      state.isLoading = false;
-      state.error =
-        action.payload || action.error?.message || "無法取得購物車內的資料";
-    });
+    builder
+      .addCase(fetchGoods.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchGoods.fulfilled, (state, action) => {
+        state.isLoading = false;
 
-    //delete something
-    builder.addCase(deleteGood.pending, (state) => {
-      state.isLoading = true;
-      state.error = null;
-    });
-    builder.addCase(deleteGood.fulfilled, (state, action) => {
-      console.log(action.payload);
+        state.cart = action.payload;
+      })
+      .addCase(fetchGoods.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error =
+          action.payload || action.error?.message || "無法取得購物車內的資料";
+      })
 
-      state.isLoading = false;
-      state.items = action.payload.items ?? action.payload;
-    });
-    builder.addCase(deleteGood.rejected, (state, action) => {
-      state.isLoading = false;
-      state.error =
-        action.payload || action.error?.message || "無法刪除購物車內的產品";
-    });
+      .addCase(addGoods.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(addGoods.fulfilled, (state, action) => {
+        state.isLoading = false;
 
-    //登出
-    builder.addCase(logout, (state) => {
-      state.items = [];
-      state.isLoading = false;
-      state.isOpen = false;
-      state.error = null;
-    });
+        state.cart = action.payload;
+      })
+      .addCase(addGoods.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error =
+          action.payload || action.error?.message || "加入購物車失敗";
+      })
+
+      .addCase(deleteGood.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(deleteGood.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.cart = action.payload ?? {
+          _id: null,
+          userId: null,
+          items: [],
+          totalPrice: 0,
+        };
+      })
+      .addCase(deleteGood.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error =
+          action.payload || action.error?.message || "刪除購物車產品失敗";
+      })
+
+      .addCase(logout, (state) => {
+        state.cart = {
+          _id: null,
+          userId: null,
+          items: [],
+          totalPrice: 0,
+        };
+        state.isLoading = false;
+        state.isOpen = false;
+        state.error = null;
+      });
   },
 });
 
 export const { openCart, closeCart, toggleCart, removeItem, restoreItem } =
   cartSlice.actions;
+
 export default cartSlice.reducer;

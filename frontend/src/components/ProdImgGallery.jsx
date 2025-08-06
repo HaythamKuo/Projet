@@ -1,5 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+
 import {
   Gallery,
   ThumbnailList,
@@ -28,7 +31,11 @@ import {
   MinorDes,
   BottomContainer,
   DefaultImg,
+  SizeContainer,
+  SizeSpan,
+  InputSizeBox,
 } from "../styles/ProdImgGallery.style";
+
 import HighLightSection from "../styles/UI/HighLightSection";
 import {
   MdDeliveryDining,
@@ -38,13 +45,9 @@ import {
 import { TbTruckDelivery, TbBuildingFactory2, TbBox } from "react-icons/tb";
 
 import { useFetchSpecificProdQuery } from "../store/apis/prodApiSlice";
+import { addGoods } from "../store/thunks/addGoods";
 
 function ProdImgGallery({ thumbnailSize = 100 }) {
-  const datas = [
-    { title: "Delivery & Returns", content: "在此填入配送與退貨的說明…" },
-    { title: "How This Was Made", content: "在此填入商品製作方式說明…" },
-  ];
-
   const InfoData = [
     {
       title: "免費且速速的運輸",
@@ -63,19 +66,29 @@ function ProdImgGallery({ thumbnailSize = 100 }) {
     },
   ];
 
+  const dispatch = useDispatch();
   const [selectIndex, setSelectIndex] = useState(0);
-  const [count, setCount] = useState(0);
-
-  //起始為空 因為不知道哪一個panel被開啟
-  const [open, setOpen] = useState(null);
-  const [staticOpen, setStaticOpen] = useState(false);
+  const [count, setCount] = useState({
+    S: 0,
+    M: 0,
+    L: 0,
+  });
 
   const { prodid } = useParams();
 
   //控制數量
-  function minusCount() {
-    if (count <= 0) return;
-    setCount((preCount) => preCount - 1);
+  function minusCount(size) {
+    setCount((preCount) => ({
+      ...preCount,
+      [size]: Math.max(preCount[size] - 1, 0),
+    }));
+  }
+
+  function plusCount(size) {
+    setCount((preCount) => ({
+      ...preCount,
+      [size]: preCount[size] + 1,
+    }));
   }
 
   const {
@@ -84,6 +97,31 @@ function ProdImgGallery({ thumbnailSize = 100 }) {
     isError,
     error,
   } = useFetchSpecificProdQuery(prodid);
+
+  async function addToCart() {
+    const sum = Object.values(count).reduce((acc, size) => acc + size, 0);
+    if (sum === 0) {
+      toast.error("至少選擇一尺寸且數量不能為0");
+      return;
+    }
+
+    try {
+      await dispatch(
+        addGoods({
+          productId: prodid,
+          selectedSizes: count,
+          unitPrice: prod.price,
+        })
+      ).unwrap();
+      toast.success("加進購物車成功");
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.message || "加入購物車失敗");
+    } finally {
+      setCount({ S: 0, M: 0, L: 0 });
+      toast.success("成功加入購物車，數量已重置");
+    }
+  }
 
   if (isLoading) {
     return <p>載入中....</p>;
@@ -105,8 +143,6 @@ function ProdImgGallery({ thumbnailSize = 100 }) {
       isPlaceholder: true,
     })),
   ];
-
-  //img={url:'', alt:'飯粒圖片'}
 
   function getHightlightImgs(images = []) {
     const filledImgs = [...images];
@@ -157,17 +193,21 @@ function ProdImgGallery({ thumbnailSize = 100 }) {
           <Top>
             <h1 className="prodTitle">{prod.name}</h1>
             <span className="prodPrice">$ {prod.price}</span>
-            <ControlAmounts>
-              <button onClick={minusCount}>
-                <Minus />
-              </button>
-              <span>{count}</span>
-              <button onClick={() => setCount((preCount) => preCount + 1)}>
-                <Plus />
-              </button>
-            </ControlAmounts>
+
+            {["S", "M", "L"].map((size) => (
+              <ControlAmounts key={size}>
+                <button onClick={() => minusCount(size)}>
+                  <Minus />
+                </button>
+                <span>{count[size]}</span>
+                <button onClick={() => plusCount(size)}>
+                  <Plus />
+                </button>
+              </ControlAmounts>
+            ))}
+
             <SubmitBox>
-              <SubmitBtn>加入購物車</SubmitBtn>
+              <SubmitBtn onClick={() => addToCart()}>加入購物車</SubmitBtn>
               <SubmitBtn>直接購買</SubmitBtn>
             </SubmitBox>
           </Top>
@@ -185,32 +225,6 @@ function ProdImgGallery({ thumbnailSize = 100 }) {
               <span>降低碳足跡排放</span>
             </div>
           </Center>
-          <Section>
-            {datas.map((content, i) => {
-              // 表有沒有按到同一個panel
-              const isOpen = open === i;
-
-              return (
-                <Item key={content.title}>
-                  <HeaderBtn onClick={() => setOpen(isOpen ? null : i)}>
-                    {content.title}
-                    <Icon open={isOpen}>+</Icon>
-                  </HeaderBtn>
-                  <AccordionContent open={isOpen}>
-                    {content.content}
-                  </AccordionContent>
-                </Item>
-              );
-            })}
-
-            <Item>
-              <HeaderBtn onClick={() => setStaticOpen((pre) => !pre)}>
-                我是title
-                <Icon open={staticOpen}>+</Icon>
-              </HeaderBtn>
-              <AccordionContent open={staticOpen}>yyyy</AccordionContent>
-            </Item>
-          </Section>
         </InfoPanel>
       </Gallery>
 

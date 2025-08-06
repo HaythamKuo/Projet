@@ -87,6 +87,7 @@ function CartDrawer() {
       document.body.style.overflow = "";
     };
   }, [dispatch, isOpen]);
+
   useEffect(() => {
     if (!isLogined || !isOpen) return; // 只有登入才 fetch
     const fetchData = async () => {
@@ -153,47 +154,6 @@ function CartDrawer() {
                 </>
               )}
             </DefaultBox>
-            {/* {isLogined
-              ? prods?.items?.map((item) => (
-                  <ItemsContainer key={item._id}>
-                    <div className="thumbNailWrapper">
-                      <img
-                        src={item.productId.images[0].url}
-                        alt={item.productId.images[0].alt}
-                      />
-                    </div>
-                    <div className="influxInfo">
-                      <div className="influxInfo-top">
-                        <span>{item.productId.name}</span>
-                        <span>{item.unitPrice}</span>
-                      </div>
-                      <div className="influxInfo-center">
-                        <IconBtn
-                          onClick={() => handleDelete(item.productId)}
-                          disabled={isLoading}
-                        >
-                          <DeleteCart />
-                        </IconBtn>
-
-                        <IconBtn disabled={isLoading}>
-                          <CartToSave />
-                        </IconBtn>
-                      </div>
-                      <div className="influxInfo-bottom">
-                        <span className="influxInfo-bottom_span">
-                          S x {item.selectedSizes["S"]}
-                        </span>
-                        <span className="influxInfo-bottom_span">
-                          M x {item.selectedSizes["M"]}
-                        </span>
-                        <span className="influxInfo-bottom_span">
-                          L x {item.selectedSizes["L"]}
-                        </span>
-                      </div>
-                    </div>
-                  </ItemsContainer>
-                ))
-              : ""} */}
 
             {isLogined &&
               items.map((item) => (

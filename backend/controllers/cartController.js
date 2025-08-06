@@ -27,32 +27,11 @@ export const addOrUpdateCartItem = asyncHandler(async (req, res) => {
   let cart = await cartModel.findOne({ userId });
   if (!cart) cart = new cartModel({ userId, items: [], totalPrice: 0 });
 
-  // function compareSize(a, b) {
-  //   const keyA = Object.keys(a);
-  //   const keyB = Object.keys(b);
-
-  //   if (keyA.length !== keyB.length) return false;
-
-  //   return keyA.every((key) => b.hasOwnProperty(key) && a[key] === b[key]);
-  // }
-
   const existingItem = cart.items.find(
     (item) => item.productId.toString() === productId.toString()
   );
 
   if (existingItem) {
-    // for (const [size, qty] of Object.entries(selectedSizes)) {
-    //   existingItem.selectedSizes[size] =
-    //     (existingItem.selectedSizes[size] || 0) + qty;
-    // }
-
-    // existingItem.quantity = Object.values(existingItem.selectedSizes).reduce(
-    //   (acc, size) => acc + size,
-    //   0
-    // );
-
-    // existingItem.unitPrice = unitPrice;
-
     existingItem.selectedSizes = { ...selectedSizes };
     existingItem.quantity = quantities;
   } else {
@@ -71,7 +50,9 @@ export const addOrUpdateCartItem = asyncHandler(async (req, res) => {
 
   try {
     await cart.save();
+    await cart.populate("items.productId");
     res.status(200).json(cart);
+    console.log(cart);
   } catch (error) {
     res.status(500);
     throw new Error(error);
