@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 import { addGoods } from "../thunks/addGoods";
 import { fetchGoods } from "../thunks/fetchGoods";
 import { deleteGood } from "../thunks/deleteGood";
@@ -19,12 +19,23 @@ const initialState = {
 export const selectCartItems = (state) =>
   Array.isArray(state.cart.cart.items) ? state.cart.cart.items : [];
 
-export const cartTotalPrice = (state) =>
-  state.cart.cart.items.reduce((sum, item) => {
-    const size = item.selectedSizes || {};
-    const qty = size.S || 0 + size.M || 0 + size.L || 0;
-    return sum + qty * item.unitPrice;
-  }, 0);
+// export const cartTotalPrice = (state) =>
+//   state.cart.cart.items.reduce((sum, item) => {
+//     const quantity =
+//       item.quantity ??
+//       Object.values(item.selectedSizes || {}).reduce(
+//         (acc, size) => acc + size,
+//         0
+//       );
+//     return sum + quantity * item.unitPrice;
+//   }, 0);
+
+export const cartTotalPrice = (state) => {
+  return state.cart.cart.items.reduce(
+    (sum, item) => sum + item.quantity * item.unitPrice,
+    0
+  );
+};
 
 const cartSlice = createSlice({
   name: "cart",
@@ -62,7 +73,11 @@ const cartSlice = createSlice({
       .addCase(fetchGoods.fulfilled, (state, action) => {
         state.isLoading = false;
 
-        state.cart = action.payload;
+        console.log("這裡是state.cart ", current(state.cart));
+        console.log("這裡是action.payload", action.payload);
+
+        //state.cart = action.payload;
+        Object.assign(state.cart, action.payload);
       })
       .addCase(fetchGoods.rejected, (state, action) => {
         state.isLoading = false;
@@ -76,7 +91,8 @@ const cartSlice = createSlice({
       .addCase(addGoods.fulfilled, (state, action) => {
         state.isLoading = false;
 
-        state.cart = action.payload;
+        //state.cart = action.payload;
+        Object.assign(state.cart, action.payload);
       })
       .addCase(addGoods.rejected, (state, action) => {
         state.isLoading = false;
@@ -92,10 +108,9 @@ const cartSlice = createSlice({
       .addCase(deleteGood.fulfilled, (state, action) => {
         state.isLoading = false;
 
-        // if (action.payload) {
-        //   state.cart.items = action.payload.items;
-        //   state.cart.totalPrice = action.payload.totalPrice;
-        // }
+        if (action.payload) {
+          Object.assign(state.cart, action.payload);
+        }
       })
       .addCase(deleteGood.rejected, (state, action) => {
         state.isLoading = false;

@@ -43,6 +43,8 @@ export const addOrUpdateCartItem = asyncHandler(async (req, res) => {
     });
   }
 
+  //cart.items.reduce
+
   cart.totalPrice = cart.items.reduce(
     (acc, item) => acc + item.quantity * item.unitPrice,
     0
@@ -142,6 +144,7 @@ export const removeCart = asyncHandler(async (req, res) => {
   }
 
   await cart.save();
+  await cart.populate("item.productId");
 
   res.status(201).json(cart);
 });
