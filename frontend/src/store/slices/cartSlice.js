@@ -34,12 +34,12 @@ const cartSlice = createSlice({
     },
     removeItem: (state, action) => {
       state.cart.items = state.cart.items.filter(
-        (item) => item.productId._id !== action.payload
+        (item) => item._id !== action.payload
       );
     },
     restoreItem: (state, action) => {
       const exists = state.cart.items.find(
-        (item) => item.productId._id === action.payload.productId._id
+        (item) => item._id === action.payload._id
       );
       if (!exists) {
         state.cart.items.push(action.payload);
@@ -77,18 +77,18 @@ const cartSlice = createSlice({
           action.payload || action.error?.message || "加入購物車失敗";
       })
 
+      // 刪除購物車內商品
       .addCase(deleteGood.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
       .addCase(deleteGood.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.cart = action.payload ?? {
-          _id: null,
-          userId: null,
-          items: [],
-          totalPrice: 0,
-        };
+
+        // if (action.payload) {
+        //   state.cart.items = action.payload.items;
+        //   state.cart.totalPrice = action.payload.totalPrice;
+        // }
       })
       .addCase(deleteGood.rejected, (state, action) => {
         state.isLoading = false;

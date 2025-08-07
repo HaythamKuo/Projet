@@ -135,16 +135,14 @@ export const removeCart = asyncHandler(async (req, res) => {
 
   const originLen = cart.items.length;
 
-  cart.items = cart.items.filter(
-    (item) => item.productId.toString() !== productId
-  );
+  cart.items = cart.items.filter((item) => item._id.toString() !== productId);
 
   if (cart.items.length === originLen) {
     res.status(404);
     throw new Error("該商品不在購物車裡");
   }
 
-  //await cart.save();
+  await cart.save();
 
   res.status(201).json(cart);
 });

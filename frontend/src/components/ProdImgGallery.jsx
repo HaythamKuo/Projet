@@ -41,7 +41,7 @@ import { TbTruckDelivery, TbBuildingFactory2, TbBox } from "react-icons/tb";
 import { useFetchSpecificProdQuery } from "../store/apis/prodApiSlice";
 import { addGoods } from "../store/thunks/addGoods";
 
-function ProdImgGallery({ thumbnailSize = 100 }) {
+function ProdImgGallery() {
   const InfoData = [
     {
       title: "免費且速速的運輸",

@@ -53,14 +53,15 @@ function CartDrawer() {
   };
 
   //處理刪除
-  const handleDelete = async (productId) => {
-    dispatch(removeItem(productId._id));
+  const handleDelete = async (item) => {
+    dispatch(removeItem(item._id));
+    console.log(item._id);
 
     try {
-      await dispatch(deleteGood(productId._id)).unwrap();
+      await dispatch(deleteGood(item._id)).unwrap();
       toast.success("刪除成功");
     } catch (error) {
-      dispatch(restoreItem(productId));
+      dispatch(restoreItem(item));
       console.log(error);
       toast.error("刪除失敗");
     }
@@ -171,7 +172,7 @@ function CartDrawer() {
                     </div>
                     <div className="influxInfo-center">
                       <IconBtn
-                        onClick={() => handleDelete(item.productId)}
+                        onClick={() => handleDelete(item)}
                         disabled={isLoading}
                       >
                         <DeleteCart />

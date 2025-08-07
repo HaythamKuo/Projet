@@ -11,7 +11,7 @@ export const deleteGood = createAsyncThunk(
           withCredentials: true,
         }
       );
-
+      console.log(productId);
       return res.data;
     } catch (err) {
       console.log("刪除失敗", err);

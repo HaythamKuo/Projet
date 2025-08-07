@@ -123,7 +123,7 @@ export const Top = styled.div`
 `;
 
 export const ControlAmounts = styled.div`
-  margin-top: 2rem;
+  margin-top: 1rem;
   display: flex;
   flex-direction: column;
 
