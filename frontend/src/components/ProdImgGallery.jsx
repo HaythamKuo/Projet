@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
@@ -18,11 +18,6 @@ import {
   Minus,
   SubmitBox,
   SubmitBtn,
-  Section,
-  Item,
-  HeaderBtn,
-  Icon,
-  AccordionContent,
   GalleryContainer,
   HighlightSectionContainer,
   BottomWrapper,
@@ -31,9 +26,8 @@ import {
   MinorDes,
   BottomContainer,
   DefaultImg,
-  SizeContainer,
-  SizeSpan,
-  InputSizeBox,
+  TopAmount,
+  BottomAmount,
 } from "../styles/ProdImgGallery.style";
 
 import HighLightSection from "../styles/UI/HighLightSection";
@@ -119,7 +113,6 @@ function ProdImgGallery({ thumbnailSize = 100 }) {
       toast.error(error?.message || "加入購物車失敗");
     } finally {
       setCount({ S: 0, M: 0, L: 0 });
-      toast.success("成功加入購物車，數量已重置");
     }
   }
 
@@ -196,13 +189,18 @@ function ProdImgGallery({ thumbnailSize = 100 }) {
 
             {["S", "M", "L"].map((size) => (
               <ControlAmounts key={size}>
-                <button onClick={() => minusCount(size)}>
-                  <Minus />
-                </button>
-                <span>{count[size]}</span>
-                <button onClick={() => plusCount(size)}>
-                  <Plus />
-                </button>
+                <TopAmount>
+                  <p>{size}</p>
+                </TopAmount>
+                <BottomAmount>
+                  <button onClick={() => minusCount(size)}>
+                    <Minus />
+                  </button>
+                  <span>{count[size]}</span>
+                  <button onClick={() => plusCount(size)}>
+                    <Plus />
+                  </button>
+                </BottomAmount>
               </ControlAmounts>
             ))}
 

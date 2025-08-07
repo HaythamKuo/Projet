@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import styled from "styled-components";
+import { imgBasicStyle } from "../theme";
 
 //大容器裡有兩個小容器 根據版面不同有不同排序
 
@@ -36,10 +37,7 @@ const ImgWrapper = styled.div`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 
   img {
-    display: block;
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
+    ${imgBasicStyle}
   }
 `;
 

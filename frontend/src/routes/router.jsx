@@ -1,4 +1,5 @@
 import { createBrowserRouter, Outlet } from "react-router-dom";
+
 import App from "../App";
 import HomePage from "./HomePage";
 import AuthLayout from "./AuthLayout";

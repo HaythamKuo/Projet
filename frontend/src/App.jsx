@@ -24,7 +24,6 @@ function App({ toggleTheme }) {
         pauseOnHover // 滑鼠移至通知時是否暫停計時
         theme="colored" // 佈景：light, dark, colored
       />
-
       <LayoutWrapper>
         <Navbar onClick={toggleTheme} />
 

@@ -79,3 +79,11 @@ export const flexCenter = css`
   justify-content: center;
   align-items: center;
 `;
+
+// 圖片固定格式
+export const imgBasicStyle = css`
+  display: block;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+`;
