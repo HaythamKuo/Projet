@@ -52,7 +52,6 @@ export const addOrUpdateCartItem = asyncHandler(async (req, res) => {
     await cart.save();
     await cart.populate("items.productId");
     res.status(200).json(cart);
-    console.log(cart);
   } catch (error) {
     res.status(500);
     throw new Error(error);

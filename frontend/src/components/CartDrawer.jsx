@@ -33,6 +33,7 @@ import {
   removeItem,
   restoreItem,
   selectCartItems,
+  cartTotalPrice,
 } from "../store/slices/cartSlice";
 
 function CartDrawer() {
@@ -43,6 +44,7 @@ function CartDrawer() {
   const { isOpen, isLoading, error: err } = useSelector((state) => state.cart);
 
   const items = useSelector(selectCartItems);
+  const totalPrice = useSelector(cartTotalPrice);
 
   const { userInfo } = useSelector((state) => state.auth);
   const isLogined = !!userInfo?._id;
@@ -55,7 +57,6 @@ function CartDrawer() {
   //處理刪除
   const handleDelete = async (item) => {
     dispatch(removeItem(item._id));
-    console.log(item._id);
 
     try {
       await dispatch(deleteGood(item._id)).unwrap();
@@ -202,7 +203,7 @@ function CartDrawer() {
             <div className="check">
               <div className="check-subtotal">
                 <span>總計</span>
-                <span>$0</span>
+                <span>$ {totalPrice}</span>
               </div>
 
               <CheckBtn>結帳</CheckBtn>

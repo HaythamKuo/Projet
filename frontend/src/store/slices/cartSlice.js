@@ -19,6 +19,13 @@ const initialState = {
 export const selectCartItems = (state) =>
   Array.isArray(state.cart.cart.items) ? state.cart.cart.items : [];
 
+export const cartTotalPrice = (state) =>
+  state.cart.cart.items.reduce((sum, item) => {
+    const size = item.selectedSizes || {};
+    const qty = size.S || 0 + size.M || 0 + size.L || 0;
+    return sum + qty * item.unitPrice;
+  }, 0);
+
 const cartSlice = createSlice({
   name: "cart",
   initialState,
