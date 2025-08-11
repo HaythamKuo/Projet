@@ -32,7 +32,13 @@ export const addOrUpdateCartItem = asyncHandler(async (req, res) => {
   );
 
   if (existingItem) {
-    existingItem.selectedSizes = { ...selectedSizes };
+    // existingItem.selectedSizes = { ...selectedSizes };
+
+    existingItem.selectedSizes = {
+      S: existingItem.selectedSizes.S || 0 + selectedSizes.S || 0,
+      M: existingItem.selectedSizes.M || 0 + selectedSizes.M || 0,
+      L: existingItem.selectedSizes.L || 0 + selectedSizes.L || 0,
+    };
     existingItem.quantity = quantities;
   } else {
     cart.items.push({

@@ -1,4 +1,4 @@
-import { createSlice, current } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { addGoods } from "../thunks/addGoods";
 import { fetchGoods } from "../thunks/fetchGoods";
 import { deleteGood } from "../thunks/deleteGood";
@@ -63,6 +63,29 @@ const cartSlice = createSlice({
         state.cart.items.push(action.payload);
       }
     },
+    increaseItem: (state, action) => {
+      const { prodid, size } = action.payload;
+
+      const item = state.cart.items.find(
+        (prod) => prod.productId._id === prodid
+      );
+      if (!item || !item.selectedSizes) return;
+
+      item.selectedSizes[size]++;
+    },
+    decreaseItem: (state, action) => {
+      const { prodid, size } = action.payload;
+
+      const item = state.cart.items.find(
+        (prod) => prod.productId._id === prodid
+      );
+
+      if (!item || !item.selectedSizes) return;
+
+      if (item.selectedSizes[size] <= 0) return;
+
+      item.selectCartItems[size]--;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -73,10 +96,9 @@ const cartSlice = createSlice({
       .addCase(fetchGoods.fulfilled, (state, action) => {
         state.isLoading = false;
 
-        console.log("這裡是state.cart ", current(state.cart));
-        console.log("這裡是action.payload", action.payload);
+        // console.log("這裡是state.cart ", current(state.cart));
+        // console.log("這裡是action.payload", action.payload);
 
-        //state.cart = action.payload;
         Object.assign(state.cart, action.payload);
       })
       .addCase(fetchGoods.rejected, (state, action) => {
@@ -91,7 +113,6 @@ const cartSlice = createSlice({
       .addCase(addGoods.fulfilled, (state, action) => {
         state.isLoading = false;
 
-        //state.cart = action.payload;
         Object.assign(state.cart, action.payload);
       })
       .addCase(addGoods.rejected, (state, action) => {
@@ -132,7 +153,14 @@ const cartSlice = createSlice({
   },
 });
 
-export const { openCart, closeCart, toggleCart, removeItem, restoreItem } =
-  cartSlice.actions;
+export const {
+  openCart,
+  closeCart,
+  toggleCart,
+  removeItem,
+  restoreItem,
+  increaseItem,
+  decreaseItem,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;

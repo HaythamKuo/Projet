@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 import {
@@ -38,8 +38,14 @@ import {
 } from "react-icons/md";
 import { TbTruckDelivery, TbBuildingFactory2, TbBox } from "react-icons/tb";
 
+import { fetchGoods } from "../store/thunks/fetchGoods";
 import { useFetchSpecificProdQuery } from "../store/apis/prodApiSlice";
 import { addGoods } from "../store/thunks/addGoods";
+import {
+  selectCartItems,
+  increaseItem,
+  decreaseItem,
+} from "../store/slices/cartSlice";
 
 function ProdImgGallery() {
   const InfoData = [
@@ -60,29 +66,24 @@ function ProdImgGallery() {
     },
   ];
 
-  const dispatch = useDispatch();
-  const [selectIndex, setSelectIndex] = useState(0);
-  const [count, setCount] = useState({
-    S: 0,
-    M: 0,
-    L: 0,
+  const { prodid } = useParams();
+  const cartItems = useSelector((state) => {
+    const items = selectCartItems(state);
+    return items.find((item) => item.productId._id === prodid);
   });
 
-  const { prodid } = useParams();
+  const dispatch = useDispatch();
+  const [selectIndex, setSelectIndex] = useState(0);
+
+  //console.log(cartItems);
 
   //控制數量
   function minusCount(size) {
-    setCount((preCount) => ({
-      ...preCount,
-      [size]: Math.max(preCount[size] - 1, 0),
-    }));
+    dispatch(decreaseItem({ prodid, size }));
   }
 
   function plusCount(size) {
-    setCount((preCount) => ({
-      ...preCount,
-      [size]: preCount[size] + 1,
-    }));
+    dispatch(increaseItem({ prodid, size }));
   }
 
   const {
@@ -92,29 +93,34 @@ function ProdImgGallery() {
     error,
   } = useFetchSpecificProdQuery(prodid);
 
+  //實際加入購物車的 action
   async function addToCart() {
-    const sum = Object.values(count).reduce((acc, size) => acc + size, 0);
-    if (sum === 0) {
-      toast.error("至少選擇一尺寸且數量不能為0");
-      return;
-    }
-
-    try {
-      await dispatch(
-        addGoods({
-          productId: prodid,
-          selectedSizes: count,
-          unitPrice: prod.price,
-        })
-      ).unwrap();
-      toast.success("加進購物車成功");
-    } catch (error) {
-      console.log(error);
-      toast.error(error?.message || "加入購物車失敗");
-    } finally {
-      setCount({ S: 0, M: 0, L: 0 });
-    }
+    // const sum = Object.values(count).reduce((acc, size) => acc + size, 0);
+    // if (sum === 0) {
+    //   toast.error("至少選擇一尺寸且數量不能為0");
+    //   return;
+    // }
+    // try {
+    //   await dispatch(
+    //     addGoods({
+    //       productId: prodid,
+    //       selectedSizes: count,
+    //       unitPrice: prod.price,
+    //     })
+    //   ).unwrap();
+    //   toast.success("加進購物車成功");
+    // } catch (error) {
+    //   console.log(error);
+    //   toast.error(error?.message || "加入購物車失敗");
+    // } finally {
+    //   //setCount({ S: 0, M: 0, L: 0 });
+    //   console.log("進到此步驟");
+    // }
   }
+
+  useEffect(() => {
+    dispatch(fetchGoods());
+  }, [dispatch]);
 
   if (isLoading) {
     return <p>載入中....</p>;
@@ -193,12 +199,12 @@ function ProdImgGallery() {
                   <p>{size}</p>
                 </TopAmount>
                 <BottomAmount>
-                  <button onClick={() => minusCount(size)}>
-                    <Minus />
+                  <button>
+                    <Minus onClick={() => minusCount(size)} />
                   </button>
-                  <span>{count[size]}</span>
-                  <button onClick={() => plusCount(size)}>
-                    <Plus />
+                  <span>{cartItems?.selectedSizes?.[size] ?? 0}</span>
+                  <button>
+                    <Plus onClick={() => plusCount(size)} />
                   </button>
                 </BottomAmount>
               </ControlAmounts>
