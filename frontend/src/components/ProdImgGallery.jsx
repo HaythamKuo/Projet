@@ -88,18 +88,32 @@ function ProdImgGallery() {
       : 0;
 
     if (previousSum === 0) {
-      console.log("做工");
-
       setFirstItem((pre) => ({ ...pre, [size]: (pre[size] || 0) + 1 }));
     } else {
-      console.log("reducer介入");
-
       dispatch(increaseItem({ prodid, size }));
     }
   }
 
   function minusCount(size) {
-    dispatch(decreaseItem({ prodid, size }));
+    //先算當前數量
+    const previousSum = cartItems?.selectedSizes
+      ? Object.values(cartItems.selectedSizes).reduce(
+          (acc, item) => acc + item,
+          0
+        )
+      : 0;
+
+    if (previousSum === 0) {
+      setFirstItem((pre) => {
+        if (pre[size] === 0) {
+          return pre;
+        } else {
+          return { ...pre, [size]: (pre[size] || 0) - 1 };
+        }
+      });
+    } else {
+      dispatch(decreaseItem({ prodid, size }));
+    }
   }
   const isFirstAdd = !cartItems?.productId;
 
@@ -127,6 +141,7 @@ function ProdImgGallery() {
       toast.error("至少選擇一尺寸且數量不能為0");
       return;
     }
+
     try {
       await dispatch(
         addGoods({
@@ -141,7 +156,7 @@ function ProdImgGallery() {
       toast.error(error?.message || "加入購物車失敗");
     } finally {
       //setCount({ S: 0, M: 0, L: 0 });
-      //console.log("進到此步驟");
+      console.log("進到此步驟");
     }
   }
 

@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 import { addGoods } from "../thunks/addGoods";
 import { fetchGoods } from "../thunks/fetchGoods";
 import { deleteGood } from "../thunks/deleteGood";
@@ -67,7 +67,7 @@ const cartSlice = createSlice({
       const { prodid, size } = action.payload;
 
       const item = state.cart.items.find(
-        (prod) => prod.productId._id.toString() === prodid
+        (prod) => prod.productId._id === prodid
       );
 
       //console.log(item);
@@ -84,14 +84,20 @@ const cartSlice = createSlice({
       const { prodid, size } = action.payload;
 
       const item = state.cart.items.find(
-        (prod) => prod.productId._id === prodid
+        (prod) =>
+          prod.productId._id === prodid &&
+          prod.selectedSizes[size] !== undefined
       );
 
       if (!item || !item.selectedSizes) return;
 
       if (!item.selectedSizes[size] || item.selectedSizes[size] <= 0) return;
+      //item.selectedSizes[size]--;
 
       item.selectedSizes[size]--;
+      if (item.selectedSizes[size] <= 0) {
+        delete item.selectedSizes[size];
+      }
     },
   },
   extraReducers: (builder) => {
@@ -121,12 +127,7 @@ const cartSlice = createSlice({
       .addCase(addGoods.fulfilled, (state, action) => {
         state.isLoading = false;
 
-        Object.assign(state.cart, action.payload);
-
-        //         state.cart = {
-        //   ...state.cart,
-        //   ...action.payload,
-        // };
+        state.cart.items = mergeCart(action.payload.items, state.cart.items);
       })
       .addCase(addGoods.rejected, (state, action) => {
         state.isLoading = false;
@@ -165,6 +166,36 @@ const cartSlice = createSlice({
       });
   },
 });
+
+function mergeCart(localItems, remoteItems) {
+  const mergeItems = [...localItems];
+
+  remoteItems.forEach((remoteItem) => {
+    const index = mergeItems.findIndex(
+      (i) => i.productId._id === remoteItem.productId._id
+    );
+
+    if (index === -1) {
+      mergeItems.push(remoteItem);
+      console.log("新的");
+    } else {
+      //將會被變更
+      const localSize = mergeItems[index].selectedSizes || {};
+      //現有
+      const remoteSize = remoteItem.selectedSizes || {};
+
+      const mergeSize = { ...localSize, ...remoteSize };
+
+      mergeItems[index] = {
+        ...mergeItems[index],
+        ...remoteItem,
+        selectedSizes: mergeSize,
+      };
+    }
+  });
+
+  return mergeItems;
+}
 
 export const {
   openCart,
