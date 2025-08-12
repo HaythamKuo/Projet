@@ -66,6 +66,7 @@ function ProdImgGallery() {
     },
   ];
 
+  const [firstItem, setFirstItem] = useState({ S: 0, M: 0, L: 0 });
   const { prodid } = useParams();
   const cartItems = useSelector((state) => {
     const items = selectCartItems(state);
@@ -78,13 +79,29 @@ function ProdImgGallery() {
   //console.log(cartItems);
 
   //控制數量
+  function plusCount(size) {
+    const previousSum = cartItems?.selectedSizes
+      ? Object.values(cartItems.selectedSizes).reduce(
+          (acc, item) => acc + item,
+          0
+        )
+      : 0;
+
+    if (previousSum === 0) {
+      console.log("做工");
+
+      setFirstItem((pre) => ({ ...pre, [size]: (pre[size] || 0) + 1 }));
+    } else {
+      console.log("reducer介入");
+
+      dispatch(increaseItem({ prodid, size }));
+    }
+  }
+
   function minusCount(size) {
     dispatch(decreaseItem({ prodid, size }));
   }
-
-  function plusCount(size) {
-    dispatch(increaseItem({ prodid, size }));
-  }
+  const isFirstAdd = !cartItems?.productId;
 
   const {
     data: prod,
@@ -95,27 +112,37 @@ function ProdImgGallery() {
 
   //實際加入購物車的 action
   async function addToCart() {
-    // const sum = Object.values(count).reduce((acc, size) => acc + size, 0);
-    // if (sum === 0) {
-    //   toast.error("至少選擇一尺寸且數量不能為0");
-    //   return;
-    // }
-    // try {
-    //   await dispatch(
-    //     addGoods({
-    //       productId: prodid,
-    //       selectedSizes: count,
-    //       unitPrice: prod.price,
-    //     })
-    //   ).unwrap();
-    //   toast.success("加進購物車成功");
-    // } catch (error) {
-    //   console.log(error);
-    //   toast.error(error?.message || "加入購物車失敗");
-    // } finally {
-    //   //setCount({ S: 0, M: 0, L: 0 });
-    //   console.log("進到此步驟");
-    // }
+    let sum;
+
+    if (isFirstAdd) {
+      sum = Object.values(firstItem).reduce((acc, size) => acc + size, 0);
+    } else {
+      sum = Object.values(cartItems.selectedSizes).reduce(
+        (acc, size) => acc + size,
+        0
+      );
+    }
+
+    if (sum === 0) {
+      toast.error("至少選擇一尺寸且數量不能為0");
+      return;
+    }
+    try {
+      await dispatch(
+        addGoods({
+          productId: prodid,
+          selectedSizes: isFirstAdd ? firstItem : cartItems.selectedSizes,
+          unitPrice: prod.price,
+        })
+      ).unwrap();
+      toast.success("加進購物車成功");
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.message || "加入購物車失敗");
+    } finally {
+      //setCount({ S: 0, M: 0, L: 0 });
+      //console.log("進到此步驟");
+    }
   }
 
   useEffect(() => {
@@ -202,7 +229,11 @@ function ProdImgGallery() {
                   <button>
                     <Minus onClick={() => minusCount(size)} />
                   </button>
-                  <span>{cartItems?.selectedSizes?.[size] ?? 0}</span>
+                  <span>
+                    {isFirstAdd
+                      ? firstItem[size] ?? 0
+                      : cartItems?.selectedSizes?.[size] ?? 0}
+                  </span>
                   <button>
                     <Plus onClick={() => plusCount(size)} />
                   </button>

@@ -67,9 +67,16 @@ const cartSlice = createSlice({
       const { prodid, size } = action.payload;
 
       const item = state.cart.items.find(
-        (prod) => prod.productId._id === prodid
+        (prod) => prod.productId._id.toString() === prodid
       );
+
+      //console.log(item);
+
       if (!item || !item.selectedSizes) return;
+
+      if (!item.selectedSizes[size]) {
+        item.selectedSizes[size] = 0;
+      }
 
       item.selectedSizes[size]++;
     },
@@ -82,9 +89,9 @@ const cartSlice = createSlice({
 
       if (!item || !item.selectedSizes) return;
 
-      if (item.selectedSizes[size] <= 0) return;
+      if (!item.selectedSizes[size] || item.selectedSizes[size] <= 0) return;
 
-      item.selectCartItems[size]--;
+      item.selectedSizes[size]--;
     },
   },
   extraReducers: (builder) => {
@@ -107,6 +114,7 @@ const cartSlice = createSlice({
           action.payload || action.error?.message || "無法取得購物車內的資料";
       })
 
+      //新增至購物車
       .addCase(addGoods.pending, (state) => {
         state.isLoading = true;
       })
@@ -114,6 +122,11 @@ const cartSlice = createSlice({
         state.isLoading = false;
 
         Object.assign(state.cart, action.payload);
+
+        //         state.cart = {
+        //   ...state.cart,
+        //   ...action.payload,
+        // };
       })
       .addCase(addGoods.rejected, (state, action) => {
         state.isLoading = false;
