@@ -123,6 +123,8 @@ function LoginPage() {
             <OptText>沒有帳號嗎？立刻註冊</OptText>
           </Link>
         </FormContainer>
+
+        <a href="http://localhost:5001/api/google/auth/google">google</a>
       </Container>
     </>
   );

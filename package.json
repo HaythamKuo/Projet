@@ -23,7 +23,9 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.11.0",
     "multer": "^2.0.1",
-    "multer-cloud-storage": "^4.1.0"
+    "multer-cloud-storage": "^4.1.0",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"
