@@ -73,11 +73,17 @@ function RegisterPage() {
 
     //非同步處理註冊資料
     try {
+      //跟後端溝通建立資料
       const res = await userRegister({
         name: userName,
         email: email,
         password: password,
       }).unwrap();
+
+      //如果資料有驗證成功 跳出一個Modal來告訴使用者資料已成功串連
+      console.log(res);
+
+      //將cookie放在local storage
       dispatch(setCredentials({ ...res }));
       setErrs({ userName: "", email: "", password: "", confirmPassword: "" });
       e.target.reset();

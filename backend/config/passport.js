@@ -1,6 +1,7 @@
 import passport from "passport";
 //import {Stratgy as GoogleStrategy} from 'passport-google-oauth20'
 import { Strategy } from "passport-google-oauth20";
+import userModel from "../models/userModel.js";
 
 const clientOptions = {
   callbackURL: "http://localhost:5001/api/google/auth/google/callback",
@@ -8,8 +9,8 @@ const clientOptions = {
   clientSecret: process.env.CLIENT_SECRET,
 };
 
-function verifyCallback(accessToken, refreshToken, profile, done) {
-  console.log("google profile", profile);
+async function verifyCallback(accessToken, refreshToken, profile, done) {
+  //console.log("google profile", profile);
   done(null, profile);
 }
 

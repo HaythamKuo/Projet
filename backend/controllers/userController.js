@@ -19,10 +19,30 @@ export const registerUser = asyncHandler(async (req, res) => {
     throw new Error(error.details[0].message);
   }
 
+  //console.log(value);
+
   const existUser = await userModel.findOne({ email: value.email });
   if (existUser) {
-    res.status(400);
-    throw new Error("此信箱已被註冊過");
+    if (
+      existUser.authProvider.includes("google") &&
+      !existUser.authProvider.includes("local")
+    ) {
+      //{ name: '夭壽讚', email: 's04130025@go.thu.edu.tw', password: '654987' } 要解決資料重複的問題
+      existUser.name = value.name;
+      existUser.password = value.password;
+      existUser.authProvider = "local+google";
+      await existUser.save();
+      res
+        .status(201)
+        .json({
+          success: true,
+          message: "本地帳號已綁定 Google 使用者，完成密碼設定",
+        });
+      return;
+    } else {
+      res.status(400);
+      throw new Error("此信箱已被註冊過");
+    }
   }
 
   const newUser = await userModel.create({

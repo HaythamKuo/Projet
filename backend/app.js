@@ -13,6 +13,7 @@ import prodRouter from "./routes/prodRoute.js";
 import cartRouter from "./routes/cartRoute.js";
 
 import googleAuthRouter from "./routes/googleAuthRoute.js";
+import { protect } from "./middlewares/authMiddle.js";
 
 const app = express();
 
@@ -24,6 +25,14 @@ app.use(express.urlencoded({ extended: true }));
 //passport
 app.use(passport.initialize());
 app.use("/api/google", googleAuthRouter);
+
+//test
+app.get("/", (req, res) => {
+  return res.status(201).send("這裡是夭壽讚");
+});
+app.get("/api/protected", protect, (req, res) => {
+  res.json({ message: "驗證成功", user: req.user });
+});
 
 // 路由 (示例)
 app.use("/api/goals", router);

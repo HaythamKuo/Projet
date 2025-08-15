@@ -16,10 +16,16 @@ const userSchema = Schema(
     },
     password: {
       type: String,
-      required: [true, "請輸入密碼"],
-      maxLength: 20,
-      minLength: 6,
-      match: [/^[a-zA-Z0-9]+$/, "密碼只能包含英文字母與數字，不得含特殊符號"],
+      // required: [true, "請輸入密碼"],
+      // maxLength: 20,
+      // minLength: 6,
+      // match: [/^[a-zA-Z0-9]+$/, "密碼只能包含英文字母與數字，不得含特殊符號"],
+    },
+    googleId: { type: String, unique: true, sparse: true },
+    authProvider: {
+      type: String,
+      enum: ["local", "google", "local+google"],
+      default: "local",
     },
   },
   { timestamps: true }
