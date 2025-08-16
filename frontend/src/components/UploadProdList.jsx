@@ -10,6 +10,7 @@ import {
   PromptProd,
   PromptTitle,
 } from "../styles/UploadProdList.style";
+
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
@@ -29,31 +30,34 @@ function UploadProdList() {
   const { data, isLoading, isError } = useFetchMyProdsQuery();
   const [remove, { isLoading: deleting }] = useDeleteMyProdMutation();
 
+  const [isOpen, setIsOpen] = useState(false);
   const [isScroll, setIsScroll] = useState(false);
   const dialogRef = useRef();
 
+  //叫出Modal 二次確認是否要刪除產品
   function handleModal(target) {
     if (dialogRef.current && !dialogRef.current.open) {
       setTarget(target);
-      dialogRef.current.showModal();
+      setIsOpen(true);
+      //dialogRef.current.showModal();
       setIsScroll(true);
     }
   }
 
   async function removeTargetDeed() {
-    if (target) {
-      dialogRef.current?.close();
-      setIsScroll(false);
-
-      try {
-        const res = await remove(target).unwrap();
-
-        console.log(res);
-      } catch (error) {
-        console.log(error?.data?.message || error);
-      }
-    } else {
+    if (!target) {
       toast.warn("刪除函數接收的 target 無效");
+      return;
+    }
+    setIsOpen(false);
+
+    try {
+      const res = await remove(target).unwrap();
+      console.log(res);
+    } catch (error) {
+      console.log(error?.data?.message || error);
+    } finally {
+      setTarget(null);
     }
   }
 
@@ -106,10 +110,19 @@ function UploadProdList() {
     ));
   }
 
+  //父要如何監控 Modal 關閉或是開啟
   return (
     <>
       {deleting && <ProcessLoader />}
-      <Modal ref={dialogRef} onConfirm={removeTargetDeed} />
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} ref={dialogRef}>
+        <h1>這是彈跳式視窗</h1>
+        <p>確定要刪除嗎</p>
+
+        <button type="button" onClick={removeTargetDeed}>
+          確定
+        </button>
+        <button onClick={() => setIsOpen(false)}>取消</button>
+      </Modal>
       <ProdListContainer>{content || "哈哈是我啦"}</ProdListContainer>
     </>
   );
