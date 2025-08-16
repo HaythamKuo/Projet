@@ -3,12 +3,12 @@ import { useDispatch } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import FormField from "../components/FormField";
 import { Container, FormContainer, OptText } from "../styles/form.style";
-import { setCredentials } from "../store/slices/authSlice";
 import { closeCart } from "../store/slices/cartSlice";
 import { useLoginMutation } from "../store/apis/apiSlice";
 import { toast } from "react-toastify";
-import { OverLay } from "../styles/CartDrawer.style";
-import Loader from "../styles/UI/Loader";
+// import { OverLay } from "../styles/CartDrawer.style";
+// import Loader from "../styles/UI/Loader";
+import ProcessLoader from "../styles/UI/ProcessLoader";
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -48,12 +48,10 @@ function LoginPage() {
 
     if (emailHasError || passwordHasError) return;
     try {
-      const res = await login({
+      await login({
         email: enterValue.email,
         password: enterValue.password,
       }).unwrap();
-
-      dispatch(setCredentials({ ...res }));
 
       setEnterValue({ email: "", password: "" });
       setTouched({ email: false, password: false });
@@ -82,11 +80,12 @@ function LoginPage() {
 
   return (
     <>
-      {isLoading && (
-        <OverLay>
-          <Loader $heightlight={1000} />
-        </OverLay>
-      )}
+      {
+        isLoading && <ProcessLoader />
+        // <OverLay>
+        //   <Loader $heightlight={1000} />
+        // </OverLay>
+      }
 
       <Container>
         <h1>登入你的帳戶</h1>

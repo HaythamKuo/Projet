@@ -51,7 +51,7 @@ googleAuthRouter.get(
     }
 
     generateToken(res, user._id);
-    res.redirect("/");
+    res.redirect("http://localhost:5173");
   }
 );
 

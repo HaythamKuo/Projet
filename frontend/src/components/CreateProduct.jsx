@@ -3,13 +3,14 @@ import { toast } from "react-toastify";
 import { useUploadProdsMutation } from "../store/apis/prodApiSlice";
 import UploadButton from "../styles/UI/UploadBtn";
 import FormField from "./FormField";
-import { OverLay } from "../styles/CartDrawer.style";
-import Loader from "../styles/UI/Loader";
+// import { OverLay } from "../styles/CartDrawer.style";
+// import Loader from "../styles/UI/Loader";
 import { validateForm } from "../utils/validation";
 import { FormContainer, FormBtn } from "../styles/createProduct.style";
 import SplitText from "./reactBit/SplitText";
 import SelectOption from "./SelectOption";
 import ProdSize from "./ProdSize";
+import ProcessLoader from "../styles/UI/ProcessLoader";
 
 function CreateProduct() {
   const [imgs, setImg] = useState([]);
@@ -89,9 +90,10 @@ function CreateProduct() {
   return (
     <>
       {isLoading && (
-        <OverLay>
-          <Loader $heightlight={1000} />
-        </OverLay>
+        // <OverLay>
+        //   <Loader $heightlight={1000} />
+        // </OverLay>
+        <ProcessLoader />
       )}
 
       <FormContainer onSubmit={handleForm}>

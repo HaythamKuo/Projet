@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Link, useNavigate, Navigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   IconContainer,
   UserIcon,
@@ -12,10 +12,15 @@ import {
   UserState,
   StateBox,
 } from "../styles/loginDropDown.style";
-import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../store/slices/authSlice";
-import { useLogoutUserMutation } from "../store/apis/apiSlice";
+import { useDispatch } from "react-redux";
+//import { logout } from "../store/slices/authSlice";
+import { clearCart } from "../store/slices/cartSlice";
+import {
+  useLogoutUserMutation,
+  useGetProfileQuery,
+} from "../store/apis/apiSlice";
 import { toast } from "react-toastify";
+import ProcessLoader from "../styles/UI/ProcessLoader";
 
 function LoginDropDown() {
   const [openUser, setOpenUser] = useState(false);
@@ -24,8 +29,9 @@ function LoginDropDown() {
 
   const navigate = useNavigate();
 
-  const { userInfo } = useSelector((state) => state.auth);
+  //const { userInfo } = useSelector((state) => state.auth);
   const [callLogoutApi] = useLogoutUserMutation();
+  const { data: profile, isLoading } = useGetProfileQuery();
 
   useEffect(() => {
     const clearTimeRef = closeTimeOut.current;
@@ -45,7 +51,8 @@ function LoginDropDown() {
 
   function handleMouseLeave() {
     if (closeTimeOut.current) {
-      closeTimeOut(closeTimeOut.current);
+      //closeTimeOut(closeTimeOut.current);
+      clearTimeout(closeTimeOut.current);
     }
 
     closeTimeOut.current = setTimeout(() => {
@@ -57,11 +64,20 @@ function LoginDropDown() {
   async function handleLogout() {
     try {
       await callLogoutApi().unwrap();
-      dispatch(logout());
+      dispatch(clearCart());
       navigate("/");
     } catch (error) {
       toast.error(error);
     }
+  }
+
+  let profileState;
+  if (isLoading) {
+    profileState = <ProcessLoader />;
+  } else if (profile) {
+    profileState = "Sign out";
+  } else {
+    profileState = "Sign in";
   }
 
   return (
@@ -72,7 +88,8 @@ function LoginDropDown() {
       <StateBox>
         <UserIcon />
         {/* <UserState>{isUser}</UserState> */}
-        <UserState>{userInfo ? "Sign out" : "Sign in"}</UserState>
+        {/* <UserState>{profile ? "Sign out" : "Sign in"}</UserState> */}
+        <UserState>{profileState}</UserState>
       </StateBox>
 
       <DropDownMenu $isOpen={openUser}>
@@ -88,7 +105,7 @@ function LoginDropDown() {
         </MenuSection>
 
         <BtnWrapper>
-          {userInfo ? (
+          {profile ? (
             <SignInButton onClick={handleLogout}>登出</SignInButton>
           ) : (
             <Link to="auth">

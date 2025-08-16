@@ -32,12 +32,10 @@ export const registerUser = asyncHandler(async (req, res) => {
       existUser.password = value.password;
       existUser.authProvider = "local+google";
       await existUser.save();
-      res
-        .status(201)
-        .json({
-          success: true,
-          message: "本地帳號已綁定 Google 使用者，完成密碼設定",
-        });
+      res.status(201).json({
+        success: true,
+        message: "本地帳號已綁定 Google 使用者，完成密碼設定",
+      });
       return;
     } else {
       res.status(400);

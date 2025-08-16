@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useGetProfileQuery } from "../store/apis/apiSlice";
 import ProcessLoader from "../styles/UI/ProcessLoader";
 
 import {
@@ -41,13 +42,18 @@ function CartDrawer() {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const { data: profile } = useGetProfileQuery();
+
   const { isOpen, isLoading, error: err } = useSelector((state) => state.cart);
 
   const items = useSelector(selectCartItems);
   const totalPrice = useSelector(cartTotalPrice);
 
-  const { userInfo } = useSelector((state) => state.auth);
-  const isLogined = !!userInfo?._id;
+  //const { userInfo } = useSelector((state) => state.auth);
+  //const isLogined = !!profile?.name;
+  const isLogined = !!profile;
+
+  //console.log(items);
 
   const handleLogin = () => {
     dispatch(closeCart());

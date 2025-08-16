@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+//import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { useRegisterMutation } from "../store/apis/apiSlice";
-import { setCredentials } from "../store/slices/authSlice";
+//import { setCredentials } from "../store/slices/authSlice";
 import FormField from "../components/FormField";
 import { OptText, Container, FormContainer } from "../styles/form.style";
 import {
@@ -11,11 +11,12 @@ import {
   validateMail,
   validateUserName,
 } from "../utils/validation";
-import { OverLay } from "../styles/CartDrawer.style";
-import Loader from "../styles/UI/Loader";
+import ProcessLoader from "../styles/UI/ProcessLoader";
+// import { OverLay } from "../styles/CartDrawer.style";
+// import Loader from "../styles/UI/Loader";
 
 function RegisterPage() {
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
 
   const [userRegister, { isLoading }] = useRegisterMutation();
 
@@ -74,17 +75,17 @@ function RegisterPage() {
     //非同步處理註冊資料
     try {
       //跟後端溝通建立資料
-      const res = await userRegister({
+      await userRegister({
         name: userName,
         email: email,
         password: password,
       }).unwrap();
 
       //如果資料有驗證成功 跳出一個Modal來告訴使用者資料已成功串連
-      console.log(res);
+      //console.log(res);
 
       //將cookie放在local storage
-      dispatch(setCredentials({ ...res }));
+
       setErrs({ userName: "", email: "", password: "", confirmPassword: "" });
       e.target.reset();
       navigate("/");
@@ -97,9 +98,10 @@ function RegisterPage() {
   return (
     <>
       {isLoading && (
-        <OverLay>
-          <Loader $heightlight={1000} />
-        </OverLay>
+        <ProcessLoader />
+        // <OverLay>
+        //   <Loader $heightlight={1000} />
+        // </OverLay>
       )}
       <Container>
         <h1>註冊你的帳戶</h1>

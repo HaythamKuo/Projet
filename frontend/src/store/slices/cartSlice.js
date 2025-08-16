@@ -2,7 +2,7 @@ import { createSlice, current } from "@reduxjs/toolkit";
 import { addGoods } from "../thunks/addGoods";
 import { fetchGoods } from "../thunks/fetchGoods";
 import { deleteGood } from "../thunks/deleteGood";
-import { logout } from "./authSlice";
+//import { logout } from "./authSlice";
 
 const initialState = {
   cart: {
@@ -63,6 +63,7 @@ const cartSlice = createSlice({
         state.cart.items.push(action.payload);
       }
     },
+    clearCart: () => initialState,
     increaseItem: (state, action) => {
       const { prodid, size } = action.payload;
 
@@ -151,19 +152,19 @@ const cartSlice = createSlice({
         state.isLoading = false;
         state.error =
           action.payload || action.error?.message || "刪除購物車產品失敗";
-      })
-
-      .addCase(logout, (state) => {
-        state.cart = {
-          _id: null,
-          userId: null,
-          items: [],
-          totalPrice: 0,
-        };
-        state.isLoading = false;
-        state.isOpen = false;
-        state.error = null;
       });
+
+    // .addCase(logout, (state) => {
+    //   state.cart = {
+    //     _id: null,
+    //     userId: null,
+    //     items: [],
+    //     totalPrice: 0,
+    //   };
+    //   state.isLoading = false;
+    //   state.isOpen = false;
+    //   state.error = null;
+    // });
   },
 });
 
@@ -205,6 +206,7 @@ export const {
   restoreItem,
   increaseItem,
   decreaseItem,
+  clearCart,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

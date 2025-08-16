@@ -7,7 +7,6 @@ import Image from "./Image";
 import Switch from "../styles/UI/Switch";
 import NavBtn from "../styles/UI/NavBtn";
 import SplitText from "./reactBit/SplitText";
-//import { useCart } from "../hooks/testCart";
 import LoginDropDown from "./loginDropDown";
 import { useDispatch } from "react-redux";
 import { toggleCart } from "../store/slices/cartSlice";

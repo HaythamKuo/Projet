@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useGetProfileQuery } from "../store/apis/apiSlice";
 import {
   ProfileOptions,
   ProfileContainer,
@@ -21,6 +22,18 @@ import Collections from "../components/Collections";
 function Profile() {
   const [type, setType] = useState("created");
 
+  const { data, isLoading, isError, error } = useGetProfileQuery();
+
+  let profile;
+  if (isLoading) {
+    profile = <ProcessLoader />;
+  } else if (isError) {
+    profile = error;
+  } else {
+    console.log(data);
+    profile = data;
+  }
+
   return (
     <>
       <ProfileContainer>
@@ -28,8 +41,9 @@ function Profile() {
           <UserPhoto src="/golden-2.jpg" />
         </ImgWrapper>
         <UserName>John</UserName>
+        {profile.name}
         <UserMail>這邊放email</UserMail>
-
+        {profile.email}
         <UserInteractionBox>
           <Link to="/create-product">
             <InfoUpload />

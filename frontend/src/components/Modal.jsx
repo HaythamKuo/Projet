@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { forwardRef, useEffect, useRef } from "react";
+import { forwardRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 
 const DialogContainer = styled.dialog`
@@ -66,8 +66,6 @@ const Modal = forwardRef(function Modal(
   { isOpen, children, onClose, height, width },
   ref
 ) {
-  //const dialogRef = useRef(null);
-
   //控制dialog開關
   useEffect(() => {
     const dialog = ref.current;
