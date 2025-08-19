@@ -1,15 +1,25 @@
+import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import { useDispatch } from "react-redux";
+import Navbar from "./components/Navbar";
 import CartDrawer from "./components/CartDrawer";
 import Footer from "./components/Footer";
-
-//import { ContentContainer } from "./styles/nav.style";
-import { ContentContainer, LayoutWrapper, MainContent } from "./styles/index";
-
-import Navbar from "./components/Navbar";
 import { CopyRight, CopyRightContainer } from "./styles/Footer.style";
-import { ToastContainer } from "react-toastify";
+import { ContentContainer, LayoutWrapper, MainContent } from "./styles/index";
+import { useGetProfileQuery } from "./store/apis/apiSlice";
+import { setCredentials } from "./store/slices/authSlice";
 
 function App({ toggleTheme }) {
+  const dispatch = useDispatch();
+  const { data } = useGetProfileQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
+
+  useEffect(() => {
+    if (data) dispatch(setCredentials(data));
+  }, [data, dispatch]);
+
   return (
     <>
       <ToastContainer

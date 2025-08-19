@@ -67,28 +67,6 @@ function LoginDropDown() {
     }
   }
 
-  // let profileState;
-  // if (profileLoading) {
-  //   profileState = <ProcessLoader />;
-  // } else if (profile) {
-  //   profileState = "Sign out";
-  // } else {
-  //   profileState = "Sign in";
-  // }
-
-  // let profileState;
-  // if (profileLoading) {
-  //   profileState = <ProcessLoader />;
-  // } else if (profile) {
-  //   profileState = "Sign out";
-  // } else if (profileErr?.status === 401) {
-  //   profileState = "Sign in"; // 未登入
-  // } else {
-  //   profileState = "Error"; // 其他錯誤 (500, network...)
-  // }
-
-  //console.log(openUser);
-
   return (
     <IconContainer
       onMouseEnter={handleMouseEnter}
@@ -96,9 +74,7 @@ function LoginDropDown() {
     >
       <StateBox>
         <UserIcon />
-        {/* <UserState>{isUser}</UserState> */}
         <UserState>{userInfo ? "Sign out" : "Sign in"}</UserState>
-        {/* <UserState>{profileState}</UserState> */}
       </StateBox>
 
       <DropDownMenu $isOpen={openUser}>
