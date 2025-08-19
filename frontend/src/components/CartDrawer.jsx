@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useGetProfileQuery } from "../store/apis/apiSlice";
+
 import ProcessLoader from "../styles/UI/ProcessLoader";
 
 import {
@@ -42,16 +42,16 @@ function CartDrawer() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { data: profile } = useGetProfileQuery();
+  //const { data: profile, isLoading: fetching, isError } = useGetProfileQuery();
 
   const { isOpen, isLoading, error: err } = useSelector((state) => state.cart);
 
+  const { userInfo } = useSelector((state) => state.auth);
   const items = useSelector(selectCartItems);
   const totalPrice = useSelector(cartTotalPrice);
 
-  //const { userInfo } = useSelector((state) => state.auth);
-  //const isLogined = !!profile?.name;
-  const isLogined = !!profile;
+  //const isLogined = !!profile && !fetching && !isError;
+  //const isLogined = !!profile;
 
   //console.log(items);
 
@@ -97,7 +97,7 @@ function CartDrawer() {
   }, [dispatch, isOpen]);
 
   useEffect(() => {
-    if (!isLogined || !isOpen) return; // 只有登入才 fetch
+    if (!userInfo || !isOpen) return; // 只有登入才 fetch
     const fetchData = async () => {
       try {
         await dispatch(fetchGoods()).unwrap();
@@ -106,10 +106,11 @@ function CartDrawer() {
       }
     };
     fetchData();
-  }, [dispatch, isLogined, isOpen]);
+  }, [dispatch, userInfo, isOpen]);
 
   useEffect(() => {
     if (isOpen && location.pathname.startsWith("/auth")) {
+      toast.warn("請先登入再開啟購物車喔");
       dispatch(closeCart());
     }
   }, [dispatch, isOpen, location.pathname]);
@@ -142,7 +143,7 @@ function CartDrawer() {
             <CloseBtn onClick={() => dispatch(closeCart())} />
           </CartTop>
           <CartCenter>
-            <DefaultBox $isFlex={isLogined}>
+            <DefaultBox $isFlex={!!userInfo}>
               {Array.isArray(items) && items.length === 0 && (
                 <>
                   <NoProd />
@@ -150,7 +151,7 @@ function CartDrawer() {
                 </>
               )}
 
-              {!isLogined && (
+              {!userInfo && (
                 <>
                   <RemindToLoginSpan>
                     如果要購物請先登入會員喔！
@@ -163,7 +164,7 @@ function CartDrawer() {
               )}
             </DefaultBox>
 
-            {isLogined &&
+            {userInfo &&
               items.map((item) => (
                 <ItemsContainer key={item._id}>
                   <div className="thumbNailWrapper">

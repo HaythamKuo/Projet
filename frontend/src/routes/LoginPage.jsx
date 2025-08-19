@@ -5,9 +5,8 @@ import FormField from "../components/FormField";
 import { Container, FormContainer, OptText } from "../styles/form.style";
 import { closeCart } from "../store/slices/cartSlice";
 import { useLoginMutation } from "../store/apis/apiSlice";
+import { setCredentials } from "../store/slices/authSlice";
 import { toast } from "react-toastify";
-// import { OverLay } from "../styles/CartDrawer.style";
-// import Loader from "../styles/UI/Loader";
 import ProcessLoader from "../styles/UI/ProcessLoader";
 
 function LoginPage() {
@@ -40,7 +39,7 @@ function LoginPage() {
 
   //非同步登入處理
 
-  //  const { userInfo } = useSelector((state) => state.auth);
+  // const { userInfo } = useSelector((state) => state.auth);
 
   //處理登入function與拋出錯誤
   async function handleSubmit(e) {
@@ -48,11 +47,12 @@ function LoginPage() {
 
     if (emailHasError || passwordHasError) return;
     try {
-      await login({
+      const res = await login({
         email: enterValue.email,
         password: enterValue.password,
       }).unwrap();
 
+      dispatch(setCredentials(res));
       setEnterValue({ email: "", password: "" });
       setTouched({ email: false, password: false });
       toast.success("登入成功!");
@@ -80,12 +80,7 @@ function LoginPage() {
 
   return (
     <>
-      {
-        isLoading && <ProcessLoader />
-        // <OverLay>
-        //   <Loader $heightlight={1000} />
-        // </OverLay>
-      }
+      {isLoading && <ProcessLoader />}
 
       <Container>
         <h1>登入你的帳戶</h1>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+
 import { useGetProfileQuery } from "../store/apis/apiSlice";
 import {
   ProfileOptions,
@@ -30,7 +31,6 @@ function Profile() {
   } else if (isError) {
     profile = error;
   } else {
-    console.log(data);
     profile = data;
   }
 

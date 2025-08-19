@@ -12,13 +12,10 @@ import {
   UserState,
   StateBox,
 } from "../styles/loginDropDown.style";
-import { useDispatch } from "react-redux";
-//import { logout } from "../store/slices/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../store/slices/authSlice";
 import { clearCart } from "../store/slices/cartSlice";
-import {
-  useLogoutUserMutation,
-  useGetProfileQuery,
-} from "../store/apis/apiSlice";
+import { useLogoutUserMutation } from "../store/apis/apiSlice";
 import { toast } from "react-toastify";
 import ProcessLoader from "../styles/UI/ProcessLoader";
 
@@ -29,14 +26,12 @@ function LoginDropDown() {
 
   const navigate = useNavigate();
 
-  //const { userInfo } = useSelector((state) => state.auth);
+  const { userInfo } = useSelector((state) => state.auth);
   const [callLogoutApi] = useLogoutUserMutation();
-  const { data: profile, isLoading } = useGetProfileQuery();
 
   useEffect(() => {
-    const clearTimeRef = closeTimeOut.current;
     return () => {
-      if (clearTimeRef) clearTimeout(clearTimeRef);
+      if (closeTimeOut.current) clearTimeout(closeTimeOut.current);
     };
   }, []);
 
@@ -51,7 +46,6 @@ function LoginDropDown() {
 
   function handleMouseLeave() {
     if (closeTimeOut.current) {
-      //closeTimeOut(closeTimeOut.current);
       clearTimeout(closeTimeOut.current);
     }
 
@@ -65,20 +59,35 @@ function LoginDropDown() {
     try {
       await callLogoutApi().unwrap();
       dispatch(clearCart());
+      dispatch(logout());
+      toast.success("成功登出");
       navigate("/");
     } catch (error) {
-      toast.error(error);
+      toast.error(error?.data?.message || "登出失敗");
     }
   }
 
-  let profileState;
-  if (isLoading) {
-    profileState = <ProcessLoader />;
-  } else if (profile) {
-    profileState = "Sign out";
-  } else {
-    profileState = "Sign in";
-  }
+  // let profileState;
+  // if (profileLoading) {
+  //   profileState = <ProcessLoader />;
+  // } else if (profile) {
+  //   profileState = "Sign out";
+  // } else {
+  //   profileState = "Sign in";
+  // }
+
+  // let profileState;
+  // if (profileLoading) {
+  //   profileState = <ProcessLoader />;
+  // } else if (profile) {
+  //   profileState = "Sign out";
+  // } else if (profileErr?.status === 401) {
+  //   profileState = "Sign in"; // 未登入
+  // } else {
+  //   profileState = "Error"; // 其他錯誤 (500, network...)
+  // }
+
+  //console.log(openUser);
 
   return (
     <IconContainer
@@ -88,8 +97,8 @@ function LoginDropDown() {
       <StateBox>
         <UserIcon />
         {/* <UserState>{isUser}</UserState> */}
-        {/* <UserState>{profile ? "Sign out" : "Sign in"}</UserState> */}
-        <UserState>{profileState}</UserState>
+        <UserState>{userInfo ? "Sign out" : "Sign in"}</UserState>
+        {/* <UserState>{profileState}</UserState> */}
       </StateBox>
 
       <DropDownMenu $isOpen={openUser}>
@@ -105,7 +114,7 @@ function LoginDropDown() {
         </MenuSection>
 
         <BtnWrapper>
-          {profile ? (
+          {userInfo ? (
             <SignInButton onClick={handleLogout}>登出</SignInButton>
           ) : (
             <Link to="auth">

@@ -7,7 +7,8 @@ import Image from "./Image";
 import Switch from "../styles/UI/Switch";
 import NavBtn from "../styles/UI/NavBtn";
 import SplitText from "./reactBit/SplitText";
-import LoginDropDown from "./loginDropDown";
+
+import LoginDropDown from "./LoginDropDown";
 import { useDispatch } from "react-redux";
 import { toggleCart } from "../store/slices/cartSlice";
 
@@ -55,9 +56,6 @@ function Navbar({ onClick }) {
           <Link to="products">
             <NavBtn name={"全部產品"} />
           </Link>
-          {/* <Link to="auth">
-            <NavBtn name={"登入/註冊"} />
-          </Link> */}
 
           <LoginDropDown />
 
