@@ -5,6 +5,10 @@ const usersApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:5001",
     credentials: "include",
+    // prepareHeaders: (headers) => {
+    //   headers.set("Cache-Control", "no-cache");
+    //   return headers;
+    // },
   }),
   tagTypes: ["User"],
   endpoints(builder) {

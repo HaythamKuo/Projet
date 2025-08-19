@@ -1,4 +1,4 @@
-import { createSlice, current } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { addGoods } from "../thunks/addGoods";
 import { fetchGoods } from "../thunks/fetchGoods";
 import { deleteGood } from "../thunks/deleteGood";

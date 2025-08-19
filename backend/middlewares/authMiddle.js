@@ -13,6 +13,7 @@ export const protect = asyncHandler(async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     // 把 userId 放到 req.user 裡，下游 route 可以直接拿
+
     req.user = await userModel.findById(decoded.userId).select("-password");
     next();
   } catch (error) {

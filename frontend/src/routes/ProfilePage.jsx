@@ -25,6 +25,8 @@ function Profile() {
 
   const { data, isLoading, isError, error } = useGetProfileQuery();
 
+  //  console.log(data);
+
   let profile;
   if (isLoading) {
     profile = <ProcessLoader />;
