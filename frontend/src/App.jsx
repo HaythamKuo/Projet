@@ -12,6 +12,8 @@ import { setCredentials } from "./store/slices/authSlice";
 
 function App({ toggleTheme }) {
   const dispatch = useDispatch();
+
+  //為何要這樣寫
   const { data } = useGetProfileQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });

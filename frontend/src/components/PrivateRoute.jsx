@@ -8,35 +8,37 @@ import { toast } from "react-toastify";
 
 function PrivateRoute() {
   const location = useLocation();
-  //const dispatch = useDispatch();
   const [showDirect, setShowDirect] = useState(false);
-
-  //  const { data, isLoading } = useGetProfileQuery();
+  const [showToast, setShowToast] = useState(false);
 
   //由userInfo來主導驗證
   const { userInfo } = useSelector((state) => state.auth);
 
-  // useEffect(() => {
-  //   if (!userInfo && data) dispatch(setCredentials(data));
-  // }, [data, dispatch, userInfo]);
-
   useEffect(() => {
     if (!userInfo) {
+      const timer = setTimeout(() => {
+        setShowDirect(true);
+        setShowToast(true);
+      }, 500);
+
+      return () => clearTimeout(timer);
+    } else {
+      setShowDirect(false);
+      setShowToast(false);
+    }
+  }, [userInfo]);
+
+  useEffect(() => {
+    if (showToast && !userInfo) {
       toast.warn("請先登入帳戶", {
         toastId: "login-required",
         position: "top-center",
       });
-
-      const timer = setTimeout(() => {
-        setShowDirect(true);
-      }, 500);
-
-      return () => clearTimeout(timer);
+      setShowToast(false);
     }
-  }, [userInfo]);
+  }, [showToast, userInfo]);
 
-  //if (isLoading || (!userInfo && !showDirect)) return <ProcessLoader />;
-
+  if (!userInfo && !showDirect) return <ProcessLoader />;
   // 如果沒有 userInfo，導向登入
   if (!userInfo && showDirect)
     return <Navigate to="/auth" replace state={{ from: location }} />;
