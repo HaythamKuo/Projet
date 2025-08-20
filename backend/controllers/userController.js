@@ -117,5 +117,10 @@ export const getUserProfile = asyncHandler(async (req, res) => {
     throw new Error("這是getUserProfile的錯誤");
   }
 
-  res.status(200).json({ _id: user._id, name: user.name, email: user.email });
+  res.status(200).json({
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    googleId: user?.googleId || null,
+  });
 });

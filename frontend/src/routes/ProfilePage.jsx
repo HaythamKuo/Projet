@@ -1,5 +1,7 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+
+import { toast } from "react-toastify";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 
 import { useGetProfileQuery } from "../store/apis/apiSlice";
 import {
@@ -19,13 +21,36 @@ import ProcessLoader from "../styles/UI/ProcessLoader";
 
 import UploadProdList from "../components/UploadProdList";
 import Collections from "../components/Collections";
+import BindAcc from "../components/BindAcc";
 
 function Profile() {
   const [type, setType] = useState("created");
 
+  const location = useLocation();
+  const navigate = useNavigate();
   const { data, isLoading, isError, error } = useGetProfileQuery();
 
-  //  console.log(data);
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+
+    if (params.get("bind") === "success") {
+      setType("third-party");
+
+      toast.success("✅ Google 綁定成功！");
+
+      // 清掉 query，避免重複觸發
+      navigate("/profile", { replace: true });
+    }
+  }, [location, navigate]);
+
+  let content;
+  if (type === "created") {
+    content = <UploadProdList />;
+  } else if (type === "saved") {
+    content = <Collections />;
+  } else if (type === "third-party") {
+    content = <BindAcc googleId={data?.googleId} />;
+  }
 
   let profile;
   if (isLoading) {
@@ -69,8 +94,14 @@ function Profile() {
           >
             saved
           </ProfileOption>
+          <ProfileOption
+            active={type === "third-party"}
+            onClick={() => setType("third-party")}
+          >
+            綁定
+          </ProfileOption>
         </ProfileOptions>
-        {type === "created" ? <UploadProdList /> : <Collections />}
+        {content}
       </ProfileContainer>
     </>
   );

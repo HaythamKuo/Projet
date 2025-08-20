@@ -14,6 +14,15 @@ function PrivateRoute() {
   //由userInfo來主導驗證
   const { userInfo } = useSelector((state) => state.auth);
 
+  /**
+   * @description
+   * 監聽 userInfo 變化，控制延遲導向與 toast flag
+   * 流程：
+   * 1. 如果未登入，設置 0.5 秒的延遲定時器：
+   *    - showDirect 設為 true → 控制 Navigate
+   *    - showToast 設為 true → 控制 toast
+   * 2. 如果 userInfo 有資料（登入成功），重置 showDirect 和 showToast
+   */
   useEffect(() => {
     if (!userInfo) {
       const timer = setTimeout(() => {
@@ -28,6 +37,11 @@ function PrivateRoute() {
     }
   }, [userInfo]);
 
+  /**
+   * @description
+   * 監聽 showToast flag，僅在 flag 為 true 且未登入時顯示 toast
+   * 顯示後立即重置 flag，防止多次觸發
+   */
   useEffect(() => {
     if (showToast && !userInfo) {
       toast.warn("請先登入帳戶", {
@@ -38,8 +52,10 @@ function PrivateRoute() {
     }
   }, [showToast, userInfo]);
 
+  // 還在延遲期間，顯示 Loader
   if (!userInfo && !showDirect) return <ProcessLoader />;
-  // 如果沒有 userInfo，導向登入
+
+  // 延遲結束，仍未登入 → 導向登入頁
   if (!userInfo && showDirect)
     return <Navigate to="/auth" replace state={{ from: location }} />;
 
