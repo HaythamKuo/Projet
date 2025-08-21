@@ -47,12 +47,13 @@ export default function BindAcc({ googleId }) {
             綁定至Google
           </a>
         </BindDesc> */}
+        {/* <a href="http://localhost:5001/api/google/auth/google">綁定至Google</a> */}
 
         {googleId ? (
           <BindSuccess>成功綁定</BindSuccess>
         ) : (
           <BindDesc>
-            <a href="http://localhost:5001/api/google/auth/google">
+            <a href="http://localhost:5001/api/google/auth/google/bind">
               綁定至Google
             </a>
           </BindDesc>
