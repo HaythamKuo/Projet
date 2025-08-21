@@ -25,6 +25,7 @@ import BindAcc from "../components/BindAcc";
 
 function Profile() {
   const [type, setType] = useState("created");
+  const [handleToast, setHandleToast] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -33,15 +34,21 @@ function Profile() {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
 
-    if (params.get("bind") === "success") {
-      setType("third-party");
+    if (params.get("bind") === "success" && !handleToast) {
+      // setType("third-party");
 
-      toast.success("✅ Google 綁定成功！");
+      // toast.success("✅ Google 綁定成功！");
 
-      // 清掉 query，避免重複觸發
+      // // 清掉 query，避免重複觸發
+      // navigate("/profile", { replace: true });
+
+      //待修正
       navigate("/profile", { replace: true });
+      toast.success("✅ Google 綁定成功！");
+      setHandleToast(true);
+      setType("third-party");
     }
-  }, [location, navigate]);
+  }, [location, navigate, handleToast]);
 
   let content;
   if (type === "created") {

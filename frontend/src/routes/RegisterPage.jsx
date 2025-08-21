@@ -31,7 +31,6 @@ function RegisterPage() {
     e.preventDefault();
 
     const data = new FormData(e.target);
-    //const fd = Object.fromEntries(data);
 
     const userName = data.get("userName")?.trim() || "";
     const email = data.get("email")?.trim() || "";
@@ -81,13 +80,17 @@ function RegisterPage() {
 
       dispatch(setCredentials(res));
 
-      //如果資料有驗證成功 跳出一個Modal來告訴使用者資料已成功串連
       //console.log(res);
 
       setErrs({ userName: "", email: "", password: "", confirmPassword: "" });
       e.target.reset();
       navigate("/");
-      toast.success("註冊成功!!");
+
+      if (res.message) {
+        toast.success(res.message);
+      } else {
+        toast.success("註冊成功!!");
+      }
     } catch (error) {
       toast.error(error?.data?.message || error.error);
     }
@@ -95,12 +98,7 @@ function RegisterPage() {
 
   return (
     <>
-      {isLoading && (
-        <ProcessLoader />
-        // <OverLay>
-        //   <Loader $heightlight={1000} />
-        // </OverLay>
-      )}
+      {isLoading && <ProcessLoader />}
       <Container>
         <h1>註冊你的帳戶</h1>
 
