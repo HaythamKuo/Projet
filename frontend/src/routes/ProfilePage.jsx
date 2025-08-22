@@ -74,10 +74,10 @@ function Profile() {
         <ImgWrapper>
           <UserPhoto src="/golden-2.jpg" />
         </ImgWrapper>
-        <UserName>John</UserName>
-        {profile.name}
-        <UserMail>這邊放email</UserMail>
-        {profile.email}
+        {/* <UserName>John</UserName> */}
+        <UserName>{profile.name}</UserName>
+        {/* <UserMail>這邊放email</UserMail> */}
+        <UserMail>{profile.email}</UserMail>
         <UserInteractionBox>
           <Link to="/create-product">
             <InfoUpload />

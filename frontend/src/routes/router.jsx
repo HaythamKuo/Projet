@@ -11,12 +11,14 @@ import PrivateRoute from "../components/PrivateRoute";
 import Profile from "./ProfilePage";
 import CreateProduct from "../components/CreateProduct";
 import EditProduct from "../components/EditProduct";
+import ErrPage from "./ErrPage";
 
 export const createRouter = (toggleTheme) => {
   return createBrowserRouter([
     {
       path: "/",
       element: <App toggleTheme={toggleTheme} />,
+      errorElement: <ErrPage text="404 🥲 NOT 🥲 FOUND 🥲 " />,
       children: [
         {
           index: true,

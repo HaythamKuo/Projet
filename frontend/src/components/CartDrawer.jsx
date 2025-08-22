@@ -53,7 +53,7 @@ function CartDrawer() {
   //const isLogined = !!profile && !fetching && !isError;
   //const isLogined = !!profile;
 
-  //console.log(items);
+  console.log(items);
 
   const handleLogin = () => {
     dispatch(closeCart());
@@ -138,7 +138,7 @@ function CartDrawer() {
           <CartTop>
             <CartQuantity>
               <h3>你的購物車</h3>
-              <span>0</span>
+              <span>{items.length || 0}</span>
             </CartQuantity>
             <CloseBtn onClick={() => dispatch(closeCart())} />
           </CartTop>
