@@ -40,17 +40,25 @@ export const FormGroup = styled.div`
   gap: 8px;
   padding: 10px;
 
-  &:first-child {
-    padding: 10px 10px 10px 0;
-  }
+  align-items: ${(props) => (props.$isCenter ? "center" : "")};
+
+  ${(props) =>
+    props.$firstPadding &&
+    `&:first-child {
+      padding: 10px 10px 10px 0;
+    }`}
 
   label {
-    font-size: 14px;
+    font-size: 1rem;
+    font-weight: bold;
   }
   input {
     padding: 1rem;
     border: 2px solid grey;
     border-radius: 1rem;
+
+    //起始為0
+    width: 35rem;
   }
 `;
 

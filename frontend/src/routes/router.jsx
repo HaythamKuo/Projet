@@ -12,6 +12,7 @@ import Profile from "./ProfilePage";
 import CreateProduct from "../components/CreateProduct";
 import EditProduct from "../components/EditProduct";
 import ErrPage from "./ErrPage";
+import Checkout from "../components/CheckOut";
 
 export const createRouter = (toggleTheme) => {
   return createBrowserRouter([
@@ -48,6 +49,10 @@ export const createRouter = (toggleTheme) => {
             {
               path: "profile",
               element: <Profile />,
+            },
+            {
+              path: "checkout",
+              element: <Checkout />,
             },
             {
               path: "create-product",

@@ -125,3 +125,21 @@ export const getUserProfile = asyncHandler(async (req, res) => {
     googleId: user?.googleId || null,
   });
 });
+
+export const editAddress = asyncHandler(async (req, res) => {
+  const { address } = req.body;
+  const userId = req.user._id;
+
+  if (!userId) {
+    res.status(404);
+    throw new Error("無此使用者");
+  }
+
+  await userModel.findByIdAndUpdate(
+    userId,
+    { $set: { address } },
+    { new: true, runValidators: true }
+  );
+
+  res.status(200).json("儲存成功");
+});

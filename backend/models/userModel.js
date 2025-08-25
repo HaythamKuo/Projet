@@ -19,8 +19,9 @@ const userSchema = Schema(
       // required: [true, "請輸入密碼"],
       // maxLength: 20,
       // minLength: 6,
-      // match: [/^[a-zA-Z0-9]+$/, "密碼只能包含英文字母與數字，不得含特殊符號"],
+      //match: [/^[a-zA-Z0-9]+$/, "密碼只能包含英文字母與數字，不得含特殊符號"],
     },
+    address: { type: String },
     googleId: { type: String, unique: true, sparse: true },
     authProvider: {
       type: String,

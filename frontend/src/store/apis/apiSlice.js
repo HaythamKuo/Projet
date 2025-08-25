@@ -5,10 +5,6 @@ const usersApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:5001",
     credentials: "include",
-    // prepareHeaders: (headers) => {
-    //   headers.set("Cache-Control", "no-cache");
-    //   return headers;
-    // },
   }),
   tagTypes: ["User"],
   endpoints(builder) {
@@ -46,6 +42,13 @@ const usersApi = createApi({
         }),
         providesTags: ["User"],
       }),
+      changeAddress: builder.mutation({
+        query: (address) => ({
+          method: "PUT",
+          url: "/api/users/editaddress",
+          body: address,
+        }),
+      }),
     };
   },
 });
@@ -54,5 +57,6 @@ export const {
   useGetProfileQuery,
   useLogoutUserMutation,
   useRegisterMutation,
+  useChangeAddressMutation,
 } = usersApi;
 export { usersApi };

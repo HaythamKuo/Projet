@@ -6,11 +6,13 @@ function FormField({
   name,
   placeholder,
   mes = "錯誤, 請重新輸入",
+  $isCenter,
+  $firstPadding,
   err,
   ...rest
 }) {
   return (
-    <FormGroup>
+    <FormGroup $isCenter={$isCenter} $firstPadding={$firstPadding}>
       <label htmlFor={name}>{label}</label>
       <input
         type={type}

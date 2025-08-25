@@ -196,6 +196,14 @@ export const SubmitBtn = styled.button`
     transform: scale(0.97);
   }
 `;
+export const CancelBtn = styled(SubmitBtn)`
+  background-color: ${({ theme }) => theme.card.backGround};
+  color: ${({ theme }) => theme.colors.default};
+
+  &:hover {
+    background-color: ${({ theme }) => theme.spotLight.backGround};
+  }
+`;
 
 export const Center = styled.div`
   margin-top: 2rem;

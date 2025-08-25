@@ -6,14 +6,16 @@ import {
   specificUser,
   getUserProfile,
   logoutUser,
+  editAddress,
 } from "../controllers/userController.js";
 
 const userRouter = Router();
 
 userRouter.route("/profile").get(protect, getUserProfile);
+userRouter.route("/:id").get(protect, specificUser);
+userRouter.route("/editaddress").put(protect, editAddress);
 userRouter.route("/logout").post(logoutUser);
 userRouter.route("/login").post(loginUser);
-userRouter.route("/:id").get(specificUser);
 userRouter.route("/register").post(registerUser);
 
 export default userRouter;
