@@ -46,6 +46,8 @@ export const addOrUpdateCartItem = asyncHandler(async (req, res) => {
       unitPrice,
       selectedSizes,
       productId,
+
+      //productId: new mongoose.Types.ObjectId(productId),
     });
   }
 
@@ -75,6 +77,10 @@ export const getCart = asyncHandler(async (req, res) => {
   //   res.status(404);
   //   throw new Error("找不到購物車裡的資料");
   // }
+
+  console.log(userId);
+
+  //console.log(cartData);
 
   if (!cartData) {
     return res.json({

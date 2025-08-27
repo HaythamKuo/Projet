@@ -123,6 +123,7 @@ export const getUserProfile = asyncHandler(async (req, res) => {
     name: user.name,
     email: user.email,
     googleId: user?.googleId || null,
+    address: user?.address || "",
   });
 });
 
@@ -141,5 +142,5 @@ export const editAddress = asyncHandler(async (req, res) => {
     { new: true, runValidators: true }
   );
 
-  res.status(200).json("儲存成功");
+  res.status(200).json({ message: "儲存成功", newAddress: address });
 });

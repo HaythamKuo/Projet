@@ -30,7 +30,7 @@ const SelectSpan = styled.span`
   font-size: 1.25rem;
 `;
 
-const Arrow = styled(MdOutlineKeyboardArrowRight)`
+export const Arrow = styled(MdOutlineKeyboardArrowRight)`
   transition: transform 0.25s ease;
   transform-origin: center;
   transform: rotate(${(p) => (p.$rottate ? "90deg" : "0deg")});

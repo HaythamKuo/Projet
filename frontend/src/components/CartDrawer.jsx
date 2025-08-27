@@ -53,7 +53,7 @@ function CartDrawer() {
   //const isLogined = !!profile && !fetching && !isError;
   //const isLogined = !!profile;
 
-  console.log(items);
+  //console.log(items);
 
   const handleLogin = () => {
     dispatch(closeCart());

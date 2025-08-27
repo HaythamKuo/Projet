@@ -110,9 +110,6 @@ const cartSlice = createSlice({
       .addCase(fetchGoods.fulfilled, (state, action) => {
         state.isLoading = false;
 
-        // console.log("這裡是state.cart ", current(state.cart));
-        // console.log("這裡是action.payload", action.payload);
-
         Object.assign(state.cart, action.payload);
       })
       .addCase(fetchGoods.rejected, (state, action) => {
@@ -159,18 +156,6 @@ const cartSlice = createSlice({
         state.isOpen = false;
         state.error = null;
       });
-
-    // .addCase(logout, (state) => {
-    //   state.cart = {
-    //     _id: null,
-    //     userId: null,
-    //     items: [],
-    //     totalPrice: 0,
-    //   };
-    //   state.isLoading = false;
-    //   state.isOpen = false;
-    //   state.error = null;
-    // });
   },
 });
 
