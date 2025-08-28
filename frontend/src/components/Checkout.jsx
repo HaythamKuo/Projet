@@ -107,7 +107,7 @@ function Checkout() {
 
   let paymentMethod = "credit_card";
 
-  console.log(items);
+  //console.log(items);
   async function setOrder(e) {
     e.preventDefault();
 
@@ -137,22 +137,6 @@ function Checkout() {
       paymentMethod: cleanValue.paymentMethod,
     });
 
-    // const payload = {
-    //   address,
-    //   totalAmount: items?.length,
-    //   items: items.map((item) => ({
-    //     product: item.productId._id,
-    //     prodName: item.productId.name,
-    //     quantity: item.quantity,
-    //     price: item.unitPrice,
-    //   })),
-    //   totalPrice: items.reduce(
-    //     (acc, item) => acc + item.unitPrice * item.quantity,
-    //     0
-    //   ),
-    //   paymentMethod: "credit_card",
-    // };
-
     try {
       const res = await createOrder(payload).unwrap();
       console.log(res);
@@ -161,7 +145,6 @@ function Checkout() {
     }
   }
 
-  // console.log(address);
   return (
     <>
       {isLoading && <ProcessLoader />}

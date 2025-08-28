@@ -94,3 +94,51 @@ const createProdSchema = Joi.object({
 
 export const createProdSchemaFn = (data) =>
   createProdSchema.validate(data, { abortEarly: false });
+
+// --分隔線-- //
+
+//驗證訂單
+const createOrderSchema = Joi.object({
+  address: Joi.string()
+    .trim()
+    .required()
+    .messages({ "string.empty": "取貨地點不能為空" }),
+
+  totalAmount: Joi.number().integer().min(1).required().messages({
+    "number.base": "品項數量應為正整數",
+    "number.min": "品項數量不能為0",
+  }),
+
+  items: Joi.array()
+    .items(
+      Joi.object({
+        product: Joi.string()
+          .required()
+          .messages({ "string.required": "後端缺少產品ID" }),
+        prodName: Joi.string()
+          .required()
+          .messages({ "string.required": "缺少產品名稱" }),
+        quantity: Joi.number().integer().required().min(1).messages({
+          "number.base": "產品細項應為正整數",
+          "number.min": "數量至少為1",
+        }),
+        price: Joi.number().min(0).required().messages({
+          "number.base": "價格應為正整數",
+          "number.min": "價格應大於0",
+        }),
+      })
+    )
+    .min(1)
+    .required(),
+  paymentMethod: Joi.string()
+    .valid("credit_card", "linepay")
+    .required()
+    .messages({ "any.only": "付款方式不合法" }),
+  totalPrice: Joi.number()
+    .required()
+    .min(0)
+    .messages({ "number.base": "總價應大於0" }),
+});
+
+export const createOrderSchemaFn = (data) =>
+  createOrderSchema.validate(data, { abortEarly: true });

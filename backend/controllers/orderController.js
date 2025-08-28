@@ -1,31 +1,38 @@
 import asyncHandler from "express-async-handler";
 import OrderModal from "../models/orderModel.js";
 
+import cartModel from "../models/cartModel.js";
+import { createOrderSchemaFn } from "../middlewares/joiValidation.js";
+
 export const setupOrder = asyncHandler(async (req, res) => {
-  //console.log(req.body);
-  //console.log(req.user._id);
+  const { error, value } = createOrderSchemaFn(req.body);
 
-  const { address, totalAmount, items, totalPrice, paymentMethod } = req.body;
+  const prodOfCart = await cartModel.findOne({ userId: req.user._id });
 
-  if (!address) {
-    throw new Error("請提供取貨地點");
+  if (value.totalPrice !== prodOfCart.totalPrice) {
+    res.status(400);
+    throw new Error("抓到你偷改前端資料");
+  }
+
+  if (error) {
+    res.status(400);
+    throw new Error(error.details.map((e) => e.message).join(", "));
   }
 
   try {
     const newOrder = await OrderModal.create({
       user: req.user._id,
-      orderItems: items.map((e) => ({
+      orderItems: value.items.map((e) => ({
         product: e.product,
         name: e.prodName,
         quantity: e.quantity,
         price: e.price,
       })),
-      shipAddress: address,
-      paymentMethod,
-      //itemPrice: items.map((e) => e.price),
+      shipAddress: value.address,
+      paymentMethod: value.paymentMethod,
+      totalAmount: value.totalAmount,
       shippingPrice: 0,
-      totalPrice,
-      totalAmount,
+      totalPrice: value.totalPrice,
     });
 
     //console.log(newOrder);

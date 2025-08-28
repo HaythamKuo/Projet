@@ -119,7 +119,7 @@ export const validateOrder = (address, items, paymentMethod) => {
     }
   }, 0);
 
-  if (!paymentMethod) errs.push("信用卡出錯");
+  if (!paymentMethod) errs.push("付款方式必填");
 
   return {
     isValid: errs.length === 0,
