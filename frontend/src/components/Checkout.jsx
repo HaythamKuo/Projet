@@ -31,6 +31,7 @@ import { fetchGoods } from "../store/thunks/fetchGoods";
 import { updateAddress } from "../store/slices/authSlice";
 import ProcessLoader from "../styles/UI/ProcessLoader";
 import { Arrow } from "./SelectOption";
+import { validateOrder } from "../utils/validation";
 function Checkout() {
   const dialogRef = useRef();
 
@@ -104,24 +105,53 @@ function Checkout() {
     });
   }
 
+  let paymentMethod = "credit_card";
+
+  console.log(items);
   async function setOrder(e) {
     e.preventDefault();
 
-    const payload = {
+    const { isValid, errs, cleanValue } = validateOrder(
+      address,
+      items,
+      paymentMethod
+    );
+
+    if (!isValid) {
+      errs.forEach((e) => toast.error(e));
+      return;
+    }
+
+    const payload = {};
+
+    Object.assign(payload, {
       address,
       totalAmount: items?.length,
-      items: items.map((item) => ({
+      items: cleanValue.items.map((item) => ({
         product: item.productId._id,
         prodName: item.productId.name,
         quantity: item.quantity,
         price: item.unitPrice,
       })),
-      totalPrice: items.reduce(
-        (acc, item) => acc + item.unitPrice * item.quantity,
-        0
-      ),
-      paymentMethod: "credit_card",
-    };
+      totalPrice: cleanValue.totalPrice,
+      paymentMethod: cleanValue.paymentMethod,
+    });
+
+    // const payload = {
+    //   address,
+    //   totalAmount: items?.length,
+    //   items: items.map((item) => ({
+    //     product: item.productId._id,
+    //     prodName: item.productId.name,
+    //     quantity: item.quantity,
+    //     price: item.unitPrice,
+    //   })),
+    //   totalPrice: items.reduce(
+    //     (acc, item) => acc + item.unitPrice * item.quantity,
+    //     0
+    //   ),
+    //   paymentMethod: "credit_card",
+    // };
 
     try {
       const res = await createOrder(payload).unwrap();

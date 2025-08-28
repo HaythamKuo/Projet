@@ -6,7 +6,6 @@ export const setupOrder = asyncHandler(async (req, res) => {
   //console.log(req.user._id);
 
   const { address, totalAmount, items, totalPrice, paymentMethod } = req.body;
-  console.log(items);
 
   if (!address) {
     throw new Error("請提供取貨地點");
@@ -29,7 +28,7 @@ export const setupOrder = asyncHandler(async (req, res) => {
       totalAmount,
     });
 
-    console.log(newOrder);
+    //console.log(newOrder);
 
     res.status(201).json("成功製作出訂單");
   } catch (error) {

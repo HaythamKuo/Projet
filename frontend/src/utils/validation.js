@@ -88,3 +88,42 @@ export const validateEditForm = (
     cleanValue: { ...cleanValue, oldImg, newImg },
   };
 };
+
+//驗證訂單
+export const validateOrder = (address, items, paymentMethod) => {
+  const errs = [];
+
+  if (!address || address.trim() === "") errs.push("取貨地點不能為空");
+  if (!items || items?.length === 0) errs.push("品項數量不能為0");
+
+  items.forEach((item) => {
+    if (!item.productId) {
+      errs.push("無產品ID，看來發生一些錯誤");
+    } else if (!item.productId.name) {
+      errs.push("無產品名稱");
+    } else if (!item.quantity) {
+      errs.push("無產品數量");
+    } else if (!item.unitPrice) {
+      errs.push("無產品價格");
+    }
+  });
+
+  //let totalPrice
+
+  const totalPrice = items.reduce((acc, item) => {
+    if (isNaN(item.unitPrice) || isNaN(item.quantity)) {
+      errs.push("是開發者的失誤 靜待修正");
+      return acc;
+    } else {
+      return acc + item.unitPrice * item.quantity;
+    }
+  }, 0);
+
+  if (!paymentMethod) errs.push("信用卡出錯");
+
+  return {
+    isValid: errs.length === 0,
+    errs,
+    cleanValue: { address, items, totalPrice, paymentMethod },
+  };
+};
