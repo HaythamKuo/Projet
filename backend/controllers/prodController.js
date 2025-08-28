@@ -228,7 +228,7 @@ export const editMyProd = asyncHandler(async (req, res) => {
   prod.subCategory = subCategory;
   prod.images = finalImgs;
 
-  console.log(prod);
+  //console.log(prod);
 
   await prod.save();
   res.status(200).json("編輯成功");

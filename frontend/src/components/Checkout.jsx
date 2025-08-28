@@ -26,6 +26,7 @@ import { SubmitBtn, CancelBtn } from "../styles/ProdImgGallery.style";
 import Modal from "./Modal";
 import FormField from "./FormField";
 import { useChangeAddressMutation } from "../store/apis/apiSlice";
+import { useCreateOrderMutation } from "../store/apis/orderAPi";
 import { fetchGoods } from "../store/thunks/fetchGoods";
 import { updateAddress } from "../store/slices/authSlice";
 import ProcessLoader from "../styles/UI/ProcessLoader";
@@ -38,13 +39,14 @@ function Checkout() {
 
   const [innards, setInnards] = useState("simple");
 
-  // const [content, setContent] = useState(null);
-
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.auth);
   const [address, setAddress] = useState(userInfo?.address || "");
 
   const [saveAddress, { isLoading }] = useChangeAddressMutation();
+
+  //訂單api via rtk query
+  const [createOrder, { isLoading: updatting }] = useCreateOrderMutation();
 
   //購物車產品
   const { items } = useSelector((state) => state.cart.cart);
@@ -102,16 +104,34 @@ function Checkout() {
     });
   }
 
-  function setOrder(e) {
+  async function setOrder(e) {
     e.preventDefault();
-    const data = new FormData();
 
-    data.append("address", address);
-    data.append("長度", items?.length);
+    const payload = {
+      address,
+      totalAmount: items?.length,
+      items: items.map((item) => ({
+        product: item.productId._id,
+        prodName: item.productId.name,
+        quantity: item.quantity,
+        price: item.unitPrice,
+      })),
+      totalPrice: items.reduce(
+        (acc, item) => acc + item.unitPrice * item.quantity,
+        0
+      ),
+      paymentMethod: "credit_card",
+    };
 
-    console.log(data);
+    try {
+      const res = await createOrder(payload).unwrap();
+      console.log(res);
+    } catch (error) {
+      console.log(error?.data?.message);
+    }
   }
 
+  // console.log(address);
   return (
     <>
       {isLoading && <ProcessLoader />}
@@ -242,7 +262,7 @@ function Checkout() {
         {/* <Link to="https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5">
           test
         </Link> */}
-        <button>哈哈是我啦</button>
+        <button>{updatting ? "生成中" : "哈哈是我啦"}</button>
       </CheckoutContainer>
     </>
   );

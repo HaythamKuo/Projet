@@ -78,7 +78,7 @@ export const getCart = asyncHandler(async (req, res) => {
   //   throw new Error("找不到購物車裡的資料");
   // }
 
-  console.log(userId);
+  //console.log(userId);
 
   //console.log(cartData);
 

@@ -11,9 +11,9 @@ import errHandler from "./middlewares/ErrMiddleware.js";
 import userRouter from "./routes/userRoute.js";
 import prodRouter from "./routes/prodRoute.js";
 import cartRouter from "./routes/cartRoute.js";
+import orderRouter from "./routes/orderRoute.js";
 
 import googleAuthRouter from "./routes/googleAuthRoute.js";
-import { protect } from "./middlewares/authMiddle.js";
 
 const app = express();
 
@@ -39,7 +39,19 @@ app.use("/api/goals", router);
 app.use("/api/users", userRouter);
 app.use("/api/prods", prodRouter);
 app.use("/api/cart", cartRouter);
+app.use("/api/order", orderRouter);
 
 app.use(errHandler);
 
 export default app;
+
+// {
+//   address: '台中市龍井區新興路51巷17號1樓603室',
+//   totalAmount: 2,
+//   items: [
+//     { prodName: 'vertity', quantity: 3, price: 12 },
+//     { prodName: 'happy dog', quantity: 3, price: 45 }
+//   ],
+//   totalPrice: 171,
+//   paymentMethod: 'credit_card'
+// }
