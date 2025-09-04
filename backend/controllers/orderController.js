@@ -37,7 +37,9 @@ export const setupOrder = asyncHandler(async (req, res) => {
 
     //console.log(newOrder);
 
-    res.status(201).json("成功製作出訂單");
+    res
+      .status(201)
+      .json({ success: true, message: "成功製作出訂單", newOrder });
   } catch (error) {
     res.status(500);
     throw new Error(error);

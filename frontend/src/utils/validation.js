@@ -94,7 +94,7 @@ export const validateOrder = (address, items, paymentMethod) => {
   const errs = [];
 
   if (!address || address.trim() === "") errs.push("取貨地點不能為空");
-  if (!items || items?.length === 0) errs.push("品項數量不能為0");
+  if (!items || items?.length === 0) errs.push("購物車內品項數量不能為0");
 
   items.forEach((item) => {
     if (!item.productId) {

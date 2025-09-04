@@ -16,9 +16,18 @@ const orderApi = createApi({
           body: data,
         }),
       }),
+
+      //綠界金流api
+      createEcPayment: builder.mutation({
+        query: (data) => ({
+          method: "POST",
+          url: "api/ecpay/create-payment",
+          body: data,
+        }),
+      }),
     };
   },
 });
 
-export const { useCreateOrderMutation } = orderApi;
+export const { useCreateEcPaymentMutation, useCreateOrderMutation } = orderApi;
 export { orderApi };

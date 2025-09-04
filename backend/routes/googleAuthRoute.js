@@ -69,7 +69,8 @@ googleAuthRouter.get(
 googleAuthRouter.get(
   "/auth/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "http://localhost:5173/products",
+    //failureRedirect: "http://localhost:5173/products",
+    failureRedirect: `${process.env.CLIENT_ROUTE_DEV}/products`,
     //successRedirect: "/",
     session: false,
   }),
@@ -91,10 +92,10 @@ googleAuthRouter.get(
       // 這裡才發 token
       generateToken(res, user._id);
 
-      return res.redirect("http://localhost:5173/profile");
+      return res.redirect(`${process.env.CLIENT_ROUTE_DEV}/profile`);
     } catch (err) {
       console.error("Google login error:", err);
-      return res.redirect("http://localhost:5173/products");
+      return res.redirect(`${process.env.CLIENT_ROUTE_DEV}/products`);
     }
   }
 );
@@ -103,13 +104,16 @@ googleAuthRouter.get(
   "/auth/google/bind/callback",
   passport.authenticate(
     "google",
-    { failureRedirect: "http://localhost:5173/products", session: false },
+    {
+      failureRedirect: `${process.env.CLIENT_ROUTE_DEV}/products`,
+      session: false,
+    },
     async (req, res) => {
       try {
         // 驗證 cookie → 找目前已登入的 user
         const token = req.cookies.jwt;
         if (!token) {
-          return res.redirect("http://localhost:5173/auth");
+          return res.redirect(`${process.env.CLIENT_ROUTE_DEV}/auth`);
         }
 
         const { userId } = jwt.verify(token, process.env.JWT_SECRET);
@@ -124,10 +128,10 @@ googleAuthRouter.get(
         localUser.authProvider = "local+google";
         await localUser.save();
 
-        return res.redirect("http://localhost:5173/profile");
+        return res.redirect(`${process.env.CLIENT_ROUTE_DEV}/profile`);
       } catch (err) {
         console.error("Google bind error:", err);
-        return res.redirect("http://localhost:5173/login");
+        return res.redirect(`${process.env.CLIENT_ROUTE_DEV}/login`);
       }
     }
   )

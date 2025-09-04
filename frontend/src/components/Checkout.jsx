@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -26,7 +26,10 @@ import { SubmitBtn, CancelBtn } from "../styles/ProdImgGallery.style";
 import Modal from "./Modal";
 import FormField from "./FormField";
 import { useChangeAddressMutation } from "../store/apis/apiSlice";
-import { useCreateOrderMutation } from "../store/apis/orderAPi";
+import {
+  useCreateOrderMutation,
+  useCreateEcPaymentMutation,
+} from "../store/apis/orderAPi";
 import { fetchGoods } from "../store/thunks/fetchGoods";
 import { updateAddress } from "../store/slices/authSlice";
 import ProcessLoader from "../styles/UI/ProcessLoader";
@@ -37,6 +40,7 @@ function Checkout() {
 
   const [isOpen, setIsOpen] = useState(false);
   const [isExtexnd, setIsExtend] = useState(false);
+  const [processOfPaying, setProcessOfPaying] = useState(false);
 
   const [innards, setInnards] = useState("simple");
 
@@ -49,30 +53,15 @@ function Checkout() {
   //訂單api via rtk query
   const [createOrder, { isLoading: updatting }] = useCreateOrderMutation();
 
+  const [createEcPayment, { isLoading: forwarding }] =
+    useCreateEcPaymentMutation();
+
   //購物車產品
   const { items } = useSelector((state) => state.cart.cart);
 
   useEffect(() => {
     dispatch(fetchGoods());
   }, [dispatch]);
-
-  // useEffect(() => {
-  //   if (items?.length > 0 && innards === "simple") {
-  //     setContent(
-  //       items.map((item) => (
-  //         <ImgWrapper key={item._id}>
-  //           <img
-  //             src={item.productId.images[0].url}
-  //             alt={item.productId.images[0].alt}
-  //           />
-  //           <p>X {item.quantity}</p>
-  //         </ImgWrapper>
-  //       ))
-  //     );
-  //   }else if(items?.length > 0 && innards === "flexibility"){
-  //     setContent('商品詳細資訊')
-  //   }
-  // }, [items, innards]);
 
   //  console.log(items[0]?.productId?.images[0]?.url);
 
@@ -105,11 +94,32 @@ function Checkout() {
     });
   }
 
+  //測試金流轉傳
+  function redirectToEcpay(paymentUrl, params) {
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = paymentUrl;
+    form.style.display = "none"; // 隱藏表單
+
+    Object.entries(params).forEach(([key, value]) => {
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = key;
+      input.value = value;
+      form.appendChild(input);
+    });
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+  }
+
   let paymentMethod = "credit_card";
 
   //console.log(items);
   async function setOrder(e) {
     e.preventDefault();
+
+    if (processOfPaying || updatting || forwarding) return;
 
     const { isValid, errs, cleanValue } = validateOrder(
       address,
@@ -121,6 +131,8 @@ function Checkout() {
       errs.forEach((e) => toast.error(e));
       return;
     }
+
+    setProcessOfPaying(true);
 
     const payload = {};
 
@@ -138,16 +150,48 @@ function Checkout() {
     });
 
     try {
+      toast.info("正在製作訂單", { autoClose: 2000 });
       const res = await createOrder(payload).unwrap();
-      console.log(res);
+      //console.log(res);
+      //toast.success(res?.message)
+      console.log("訂單建立成功");
+
+      const { _id: orderId, totalPrice, orderItems } = res.newOrder;
+
+      //console.log(orderId);
+
+      const paymentResult = await createEcPayment({
+        orderId,
+        totalAmount: totalPrice,
+        itemName: orderItems.map((item) => item.name).join("#"),
+        customerEmail: "qaz7954200@livemail.tw",
+      }).unwrap();
+
+      if (paymentResult.success) {
+        toast.success("訂單建立成功 即將導向付款介面", {
+          autoClose: 1000,
+        });
+        setTimeout(() => {
+          redirectToEcpay(paymentResult.paymentUrl, paymentResult.params);
+        }, 1000);
+      } else {
+        throw new Error("建立付款失敗");
+      }
     } catch (error) {
-      console.log(error?.data?.message);
+      console.log(error);
+
+      // 如果是付款階段失敗，給用戶明確的指示
+      if (error?.data?.step === "payment") {
+        toast.error("付款設置失敗，請稍後再試或聯繫客服");
+      }
+    } finally {
+      setProcessOfPaying(false);
     }
   }
 
   return (
     <>
-      {isLoading && <ProcessLoader />}
+      {(isLoading || processOfPaying) && <ProcessLoader />}
 
       <CheckoutContainer onSubmit={setOrder}>
         <Modal

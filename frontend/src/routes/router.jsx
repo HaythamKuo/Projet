@@ -13,6 +13,7 @@ import CreateProduct from "../components/CreateProduct";
 import EditProduct from "../components/EditProduct";
 import ErrPage from "./ErrPage";
 import Checkout from "../components/CheckOut";
+import Ecpay from "./Ecpay";
 
 export const createRouter = (toggleTheme) => {
   return createBrowserRouter([
@@ -40,6 +41,10 @@ export const createRouter = (toggleTheme) => {
             { index: true, element: <AllProductsPage /> },
             { path: ":prodid", element: <ProdPage /> },
           ],
+        },
+        {
+          path: "ectest",
+          element: <Ecpay />,
         },
         // { path: "profile", element: <Profile /> },
 

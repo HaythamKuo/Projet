@@ -37,11 +37,11 @@ const orderSchema = Schema(
     totalAmount: { type: Number, required: true },
     // isPaid: { type: Boolean, default: false },
     // paidAt: { type: Date },
-    // status: {
-    //   type: String,
-    //   enum: ["pending", "processing", "paid", "failed", "canceled"],
-    //   default: "pending",
-    // },
+    status: {
+      type: String,
+      enum: ["pending", "processing", "paid", "failed", "canceled"],
+      default: "pending",
+    },
   },
   { timestamps: true }
 );

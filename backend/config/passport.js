@@ -1,5 +1,4 @@
 import passport from "passport";
-//import {Stratgy as GoogleStrategy} from 'passport-google-oauth20'
 import { Strategy } from "passport-google-oauth20";
 import userModel from "../models/userModel.js";
 
