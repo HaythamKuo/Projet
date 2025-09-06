@@ -14,7 +14,6 @@
     "@imagekit/react": "^5.0.1",
     "@react-spring/web": "^9.7.5",
     "@reduxjs/toolkit": "^2.8.2",
-    "@vitejs/plugin-basic-ssl": "^2.1.0",
     "axios": "^1.11.0",
     "framer-motion": "^12.9.7",
     "imagekitio-react": "^4.3.0",

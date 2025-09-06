@@ -42,10 +42,7 @@ export const createRouter = (toggleTheme) => {
             { path: ":prodid", element: <ProdPage /> },
           ],
         },
-        {
-          path: "ectest",
-          element: <Ecpay />,
-        },
+
         // { path: "profile", element: <Profile /> },
 
         {
@@ -66,6 +63,10 @@ export const createRouter = (toggleTheme) => {
             {
               path: "edit-product/:prodid",
               element: <EditProduct />,
+            },
+            {
+              path: "ecpayresult",
+              element: <Ecpay />,
             },
           ],
         },

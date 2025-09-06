@@ -104,19 +104,18 @@ export const createEcPayment = asyncHandler(async (req, res) => {
 export const getECresNotify = asyncHandler(async (req, res) => {
   console.log("=== 使用者跳轉回來 ===", req.body);
 
-  //http://localhost:5173/ectest?status=success&orderId=68b96315eada72e8453fe2d2
   if (req.body.RtnCode === "1") {
     return res.redirect(
-      `${process.env.CLIENT_ROUTE_DEV}/ectest?status=success&orderId=${req.body.CustomField1}`
+      `${process.env.CLIENT_ROUTE_DEV}/ecpayresult?status=success&orderId=${req.body.CustomField1}`
     );
   } else {
     return res.redirect(
-      `${process.env.CLIENT_ROUTE_DEV}/ectest?status=failed&msg=${req.body.RtnMsg}`
+      `${process.env.CLIENT_ROUTE_DEV}/ecpayresult?status=failed&msg=${req.body.RtnMsg}`
     );
   }
 });
 
-//處理資料更新及回應1|0K
+//處理資料更新及回應1|0K 尚未捕捉錯誤
 export const getECresReturn = asyncHandler(async (req, res) => {
   console.log("=== 綠界 ReturnURL ===");
   console.log(req.body); // 付款結果參數
