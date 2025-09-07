@@ -43,6 +43,7 @@ const StyledShinyText = styled.div`
     `}
 
   font-size:3rem;
+  font-weight: bolder;
 `;
 
 const ShinyText = ({

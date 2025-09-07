@@ -16,6 +16,9 @@ const orderApi = createApi({
           body: data,
         }),
       }),
+      getOrder: builder.query({
+        query: () => ({ method: "GET", url: "/api/order/latest" }),
+      }),
 
       //綠界金流api
       createEcPayment: builder.mutation({
@@ -29,5 +32,9 @@ const orderApi = createApi({
   },
 });
 
-export const { useCreateEcPaymentMutation, useCreateOrderMutation } = orderApi;
+export const {
+  useGetOrderQuery,
+  useCreateEcPaymentMutation,
+  useCreateOrderMutation,
+} = orderApi;
 export { orderApi };

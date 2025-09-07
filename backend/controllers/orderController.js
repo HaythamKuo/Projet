@@ -45,3 +45,18 @@ export const setupOrder = asyncHandler(async (req, res) => {
     throw new Error(error);
   }
 });
+
+export const getOrderInfo = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+  const order = await OrderModal.findOne({ user: userId, status: "paid" }).sort(
+    {
+      createcAt: -1,
+    }
+  );
+
+  if (!order) {
+    res.status(404);
+    throw new Error("查無此訂單");
+  }
+  res.json(order);
+});

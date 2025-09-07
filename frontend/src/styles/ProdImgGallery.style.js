@@ -97,10 +97,6 @@ export const MainImgWrapper = styled.div`
 `;
 
 export const SingleImgCard = styled.img`
-  /* display: block;
-  height: 100%;
-  width: 100%;
-  object-fit: cover; */
   ${imgBasicStyle}
 `;
 
