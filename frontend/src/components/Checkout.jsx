@@ -47,7 +47,13 @@ function Checkout() {
   const [innards, setInnards] = useState("simple");
 
   const dispatch = useDispatch();
+
   const { userInfo } = useSelector((state) => state.auth);
+  const { items } = useSelector((state) => state.cart.cart);
+  const { isLoading: fetching, error: errMes } = useSelector(
+    (state) => state.cart
+  );
+
   const [address, setAddress] = useState(userInfo?.address || "");
 
   const [saveAddress, { isLoading }] = useChangeAddressMutation();
@@ -58,26 +64,33 @@ function Checkout() {
   const [createEcPayment, { isLoading: forwarding }] =
     useCreateEcPaymentMutation();
 
+  useEffect(() => {
+    if (!items || items.length === 0) {
+      dispatch(fetchGoods());
+    }
+  }, [dispatch, items]);
   //購物車產品
-  const { items } = useSelector((state) => state.cart.cart);
+  console.log(items);
 
   useEffect(() => {
+    if (fetching) return;
+
     if (!userInfo) {
       toast.error("請先登入再結帳");
       navigate("/auth", { replace: true });
       return;
     }
 
-    if (!items || items.length === 0) {
+    if (!errMes && !items && items.length === 0) {
       toast.error("購物車內沒有商品");
       navigate("/products", { replace: true });
       return;
     }
-  }, [userInfo, items, navigate]);
 
-  useEffect(() => {
-    dispatch(fetchGoods());
-  }, [dispatch]);
+    if (errMes) {
+      toast.error("無法讀取購物車內的商品");
+    }
+  }, [userInfo, items, navigate, fetching, errMes]);
 
   //  console.log(items[0]?.productId?.images[0]?.url);
 
