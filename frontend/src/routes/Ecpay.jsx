@@ -1,3 +1,4 @@
+import ErrPage from "./ErrPage";
 import styled from "styled-components";
 import { Link, useSearchParams } from "react-router-dom";
 import ShinyText from "../components/reactBit/ShinyText";
@@ -5,7 +6,6 @@ import { flexCenter, imgBasicStyle } from "../styles/theme";
 import { SubmitBtn, CancelBtn } from "../styles/ProdImgGallery.style";
 import { useGetOrderQuery } from "../store/apis/orderAPi";
 import ProcessLoader from "../styles/UI/ProcessLoader";
-import ErrPage from "./ErrPage";
 
 const Container = styled.div`
   flex-direction: column;
@@ -41,7 +41,7 @@ const OptionBtn = styled.div`
 `;
 
 function Ecpay() {
-  //http://localhost:5173/ectest?status=success&orderId=68b96315eada72e8453fe2d2
+  //http://localhost:5173/ecpayresult?status=success&orderId=68bd26099ae381247f4a2e19
 
   const [searchParam] = useSearchParams();
 
@@ -49,19 +49,31 @@ function Ecpay() {
   const orderId = searchParam.get("orderId");
 
   //獲取最新訂單狀態
-  const { data, isLoading } = useGetOrderQuery();
+  //const { data, isLoading } = useGetOrderQuery();
+  const query = useGetOrderQuery();
   //console.log(data);
+  if (query.isLoading) {
+    return <ProcessLoader />;
+  }
 
-  const { _id } = data;
-  if (!data || orderId !== _id) return <ErrPage />;
+  //訂單資料本身
+  const order = query?.data;
+  const apiOrderId = order?._id ?? null;
+  const apiOrderStatus = order?.status ?? null;
 
-  const isSuccess = status === "success" && data?.status === "paid";
-  const isFailed = status === "failed" && data?.status === "failed";
-  if (!isSuccess && !isFailed) return <ErrPage />;
+  if (!apiOrderId || apiOrderId !== orderId) {
+    return <ErrPage />;
+  }
+
+  const isSuccess = status === "success" && apiOrderStatus === "paid";
+  const isFailed = status === "failed" && apiOrderStatus === "failed";
+
+  if (!isSuccess && !isFailed) {
+    return <ErrPage />;
+  }
 
   return (
     <>
-      {isLoading && <ProcessLoader />}
       <Container>
         <ImgWrapper>
           <PayResSuccess

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
@@ -37,6 +38,7 @@ import { Arrow } from "./SelectOption";
 import { validateOrder } from "../utils/validation";
 function Checkout() {
   const dialogRef = useRef();
+  const navigate = useNavigate();
 
   const [isOpen, setIsOpen] = useState(false);
   const [isExtexnd, setIsExtend] = useState(false);
@@ -58,6 +60,20 @@ function Checkout() {
 
   //購物車產品
   const { items } = useSelector((state) => state.cart.cart);
+
+  useEffect(() => {
+    if (!userInfo) {
+      toast.error("請先登入再結帳");
+      navigate("/auth", { replace: true });
+      return;
+    }
+
+    if (!items || items.length === 0) {
+      toast.error("購物車內沒有商品");
+      navigate("/products", { replace: true });
+      return;
+    }
+  }, [userInfo, items, navigate]);
 
   useEffect(() => {
     dispatch(fetchGoods());
@@ -119,6 +135,16 @@ function Checkout() {
   async function setOrder(e) {
     e.preventDefault();
 
+    if (!userInfo) {
+      toast.error("請先登入再結帳");
+      return;
+    }
+
+    if (!items || items.length === 0) {
+      toast.error("購物車內沒有商品");
+      return;
+    }
+
     if (processOfPaying || updatting || forwarding) return;
 
     const { isValid, errs, cleanValue } = validateOrder(
@@ -150,7 +176,7 @@ function Checkout() {
     });
 
     try {
-      toast.info("正在製作訂單", { autoClose: 2000 });
+      toast.info("正在製作訂單", { autoClose: 1500 });
       const res = await createOrder(payload).unwrap();
       //console.log(res);
       //toast.success(res?.message)
@@ -316,9 +342,7 @@ function Checkout() {
           omnis vitae similique est cumque quis voluptate recusandae iure
           tempora lor
         </RightContainer>
-        {/* <Link to="https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5">
-          test
-        </Link> */}
+
         <button>{updatting ? "生成中" : "哈哈是我啦"}</button>
       </CheckoutContainer>
     </>
