@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addGoods } from "../thunks/addGoods";
+import { addGoods, emptiedCart } from "../thunks/addGoods";
 import { fetchGoods } from "../thunks/fetchGoods";
 import { deleteGood } from "../thunks/deleteGood";
 import { logout } from "./authSlice";
@@ -16,6 +16,7 @@ const initialState = {
   error: null,
 };
 
+//？？？
 export const selectCartItems = (state) =>
   Array.isArray(state.cart.cart.items) ? state.cart.cart.items : [];
 
@@ -64,6 +65,7 @@ const cartSlice = createSlice({
       }
     },
     clearCart: () => initialState,
+
     increaseItem: (state, action) => {
       const { prodid, size } = action.payload;
 
@@ -150,6 +152,21 @@ const cartSlice = createSlice({
         state.error =
           action.payload || action.error?.message || "刪除購物車產品失敗";
       })
+
+      .addCase(emptiedCart.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(emptiedCart.fulfilled, (state) => {
+        state.isLoading = false;
+
+        state.cart.items = [];
+        state.cart.totalPrice = 0;
+      })
+      .addCase(emptiedCart.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      //登出之後將資料清乾淨
       .addCase(logout, (state) => {
         state.cart = { _id: null, userId: null, items: [], totalPrice: 0 };
         state.isLoading = false;

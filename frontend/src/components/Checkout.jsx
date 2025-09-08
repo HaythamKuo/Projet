@@ -70,7 +70,7 @@ function Checkout() {
     }
   }, [dispatch, items]);
   //購物車產品
-  console.log(items);
+  //console.log(items);
 
   useEffect(() => {
     if (fetching) return;
@@ -191,13 +191,8 @@ function Checkout() {
     try {
       toast.info("正在製作訂單", { autoClose: 1500 });
       const res = await createOrder(payload).unwrap();
-      //console.log(res);
-      //toast.success(res?.message)
-      console.log("訂單建立成功");
 
       const { _id: orderId, totalPrice, orderItems } = res.newOrder;
-
-      //console.log(orderId);
 
       const paymentResult = await createEcPayment({
         orderId,

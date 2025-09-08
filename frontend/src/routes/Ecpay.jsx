@@ -1,11 +1,15 @@
+import { useEffect } from "react";
 import ErrPage from "./ErrPage";
 import styled from "styled-components";
 import { Link, useSearchParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import ShinyText from "../components/reactBit/ShinyText";
 import { flexCenter, imgBasicStyle } from "../styles/theme";
 import { SubmitBtn, CancelBtn } from "../styles/ProdImgGallery.style";
 import { useGetOrderQuery } from "../store/apis/orderAPi";
 import ProcessLoader from "../styles/UI/ProcessLoader";
+import { clearCart } from "../store/slices/cartSlice";
+import { emptiedCart } from "../store/thunks/addGoods";
 
 const Container = styled.div`
   flex-direction: column;
@@ -42,31 +46,43 @@ const OptionBtn = styled.div`
 
 function Ecpay() {
   //http://localhost:5173/ecpayresult?status=success&orderId=68bd26099ae381247f4a2e19
+  const dispatch = useDispatch();
 
+  //獲取最新訂單狀態
   const [searchParam] = useSearchParams();
+  const query = useGetOrderQuery();
 
   const status = searchParam.get("status");
   const orderId = searchParam.get("orderId");
 
-  //獲取最新訂單狀態
-  //const { data, isLoading } = useGetOrderQuery();
-  const query = useGetOrderQuery();
+  const order = query?.data;
+  const apiOrderId = order?._id ?? null;
+  const apiOrderStatus = order?.status ?? null;
+
+  const isSuccess = status === "success" && apiOrderStatus === "paid";
+  const isFailed = status === "failed" && apiOrderStatus === "failed";
+
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(clearCart());
+      console.log("作動");
+
+      dispatch(emptiedCart())
+        .unwrap()
+        .catch((e) => console.error("清空後端購物車失敗:", e));
+    }
+  }, [dispatch, isSuccess]);
+
   //console.log(data);
   if (query.isLoading) {
     return <ProcessLoader />;
   }
 
   //訂單資料本身
-  const order = query?.data;
-  const apiOrderId = order?._id ?? null;
-  const apiOrderStatus = order?.status ?? null;
 
   if (!apiOrderId || apiOrderId !== orderId) {
     return <ErrPage />;
   }
-
-  const isSuccess = status === "success" && apiOrderStatus === "paid";
-  const isFailed = status === "failed" && apiOrderStatus === "failed";
 
   if (!isSuccess && !isFailed) {
     return <ErrPage />;

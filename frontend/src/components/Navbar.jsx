@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 
 import { MobileNav, NavContainer } from "../styles/nav.style";
 import { FaAlignJustify, FaXmark } from "react-icons/fa6";
@@ -15,6 +15,9 @@ import { toggleCart } from "../store/slices/cartSlice";
 function Navbar({ onClick }) {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
+
+  const location = useLocation();
+  const isCheckout = location.pathname === "/checkout";
 
   /**
    * handleOpen
@@ -59,7 +62,9 @@ function Navbar({ onClick }) {
 
           <LoginDropDown />
 
-          <NavBtn name="購物車" onClick={() => dispatch(toggleCart())} />
+          {!isCheckout && (
+            <NavBtn name="購物車" onClick={() => dispatch(toggleCart())} />
+          )}
           <Switch onClick={onClick} />
         </div>
         {/* phone rwd mode */}
