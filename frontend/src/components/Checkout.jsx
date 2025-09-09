@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -25,6 +24,14 @@ import {
   PaymentMethod,
   CreditIcon,
   LineIcon,
+  RightTop,
+  RightCenter,
+  RightBottom,
+  OrderTitle,
+  OrderAmount,
+  SubtotalItems,
+  Total,
+  SubMit,
 } from "../styles/Checkout.style";
 import { SubmitBtn, CancelBtn } from "../styles/ProdImgGallery.style";
 import Modal from "./Modal";
@@ -36,9 +43,11 @@ import {
 } from "../store/apis/orderAPi";
 import { fetchGoods } from "../store/thunks/fetchGoods";
 import { updateAddress } from "../store/slices/authSlice";
+import { selectCartItems } from "../store/slices/cartSlice";
 import ProcessLoader from "../styles/UI/ProcessLoader";
 import { Arrow } from "./SelectOption";
 import { validateOrder } from "../utils/validation";
+import { useDeleteGood } from "../hooks/useDeleteGood";
 function Checkout() {
   const dialogRef = useRef();
   const navigate = useNavigate();
@@ -54,10 +63,12 @@ function Checkout() {
   const dispatch = useDispatch();
 
   const { userInfo } = useSelector((state) => state.auth);
-  const { items } = useSelector((state) => state.cart.cart);
-  const { isLoading: fetching, error: errMes } = useSelector(
-    (state) => state.cart
-  );
+  const items = useSelector(selectCartItems);
+  const {
+    cart,
+    isLoading: fetching,
+    error: errMes,
+  } = useSelector((state) => state.cart);
 
   const [address, setAddress] = useState(userInfo?.address || "");
 
@@ -69,13 +80,16 @@ function Checkout() {
   const [createEcPayment, { isLoading: forwarding }] =
     useCreateEcPaymentMutation();
 
+  //hook
+  const { handleDelete } = useDeleteGood();
+
   useEffect(() => {
     if (!items || items.length === 0) {
       dispatch(fetchGoods());
     }
   }, [dispatch, items]);
   //購物車產品
-  //console.log(items);
+  //console.log(cart);
 
   useEffect(() => {
     if (fetching) return;
@@ -278,7 +292,7 @@ function Checkout() {
               <span>付款方式</span>
               <PayQuote>💡 目前僅支援信用卡付款 請見諒</PayQuote>
               <PaymentMethod
-                isSelected={method === "credit_card"}
+                $isselected={method === "credit_card"}
                 onClick={() => setMethod("credit_card")}
               >
                 <CreditIcon />
@@ -329,11 +343,14 @@ function Checkout() {
                           <span>{item.unitPrice}</span>
                         </div>
                         <div className="influxInfo-center">
-                          <CkBtn>
+                          <CkBtn
+                            onClick={() => handleDelete(item)}
+                            disabled={fetching}
+                          >
                             <CkDelete />
                           </CkBtn>
 
-                          <CkBtn>
+                          <CkBtn disabled={fetching}>
                             <CkSave />
                           </CkBtn>
                         </div>
@@ -357,15 +374,31 @@ function Checkout() {
         </LeftContainer>
 
         <RightContainer>
-          right Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo
-          tempore aliquam velit saepe, necessitatibus excepturi corporis
-          blanditiis reiciendis, libero, ipsa labore nostrum quasi doloribus
-          accusantium nulla! Totam maiores perferendis nihil quas? Explicabo
-          omnis vitae similique est cumque quis voluptate recusandae iure
-          tempora lor
+          <RightTop>
+            <OrderTitle>訂單匯總</OrderTitle>
+            <OrderAmount>
+              <span>訂單價值</span>
+              <span>$ {cart.totalPrice}</span>
+            </OrderAmount>
+          </RightTop>
+          <RightCenter>
+            <SubtotalItems>
+              <p>小計</p>
+              <p>{cart.totalPrice}</p>
+            </SubtotalItems>
+            <SubtotalItems>
+              <p>運費</p>
+              <p>完全免費!</p>
+            </SubtotalItems>
+          </RightCenter>
+          <RightBottom>
+            <Total>
+              <p>總額</p>
+              <p>$ {cart.totalPrice}</p>
+            </Total>
+            <SubMit>{updatting ? "生成中" : "前往結帳"}</SubMit>
+          </RightBottom>
         </RightContainer>
-
-        <button>{updatting ? "生成中" : "哈哈是我啦"}</button>
       </CheckoutContainer>
     </>
   );

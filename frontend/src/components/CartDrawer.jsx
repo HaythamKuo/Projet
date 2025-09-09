@@ -30,14 +30,13 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 
 import { fetchGoods } from "../store/thunks/fetchGoods";
-import { deleteGood } from "../store/thunks/deleteGood";
+
 import {
   closeCart,
-  removeItem,
-  restoreItem,
   selectCartItems,
   cartTotalPrice,
 } from "../store/slices/cartSlice";
+import { useDeleteGood } from "../hooks/useDeleteGood";
 
 function CartDrawer() {
   const dispatch = useDispatch();
@@ -52,28 +51,14 @@ function CartDrawer() {
   const items = useSelector(selectCartItems);
   const totalPrice = useSelector(cartTotalPrice);
 
-  //const isLogined = !!profile && !fetching && !isError;
-  //const isLogined = !!profile;
+  //hook
+  const { handleDelete } = useDeleteGood();
 
   //console.log(items);
 
   const handleLogin = () => {
     dispatch(closeCart());
     navigate("/auth", { state: { from: location.pathname, fromCart: true } });
-  };
-
-  //處理刪除
-  const handleDelete = async (item) => {
-    dispatch(removeItem(item._id));
-
-    try {
-      await dispatch(deleteGood(item._id)).unwrap();
-      toast.success("刪除成功");
-    } catch (error) {
-      dispatch(restoreItem(item));
-      console.log(error);
-      toast.error("刪除失敗");
-    }
   };
 
   //導向結帳頁面與關閉購物車
