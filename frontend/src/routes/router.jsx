@@ -8,6 +8,7 @@ import RegisterPage from "./RegisterPage";
 import AllProductsPage from "./AllProductsPage";
 import ProdPage from "../components/ProdPage";
 import PrivateRoute from "../components/PrivateRoute";
+import CheckoutGuard from "../components/CheckoutGuard";
 import Profile from "./ProfilePage";
 import CreateProduct from "../components/CreateProduct";
 import EditProduct from "../components/EditProduct";
@@ -54,7 +55,11 @@ export const createRouter = (toggleTheme) => {
             },
             {
               path: "checkout",
-              element: <Checkout />,
+              element: (
+                <CheckoutGuard>
+                  <Checkout />
+                </CheckoutGuard>
+              ),
             },
             {
               path: "create-product",

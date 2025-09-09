@@ -206,7 +206,9 @@ function CartDrawer() {
                 <span>$ {totalPrice}</span>
               </div>
 
-              <CheckBtn onClick={goToCheckout}>結帳</CheckBtn>
+              <CheckBtn disabled={items.length === 0} onClick={goToCheckout}>
+                結帳
+              </CheckBtn>
             </div>
           </CartBottom>
         </CartContainer>

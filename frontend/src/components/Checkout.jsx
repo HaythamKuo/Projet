@@ -300,7 +300,7 @@ function Checkout() {
               </PaymentMethod>
               <PaymentMethod
                 disabled
-                isSelected={method === "linePay"}
+                $isselected={method === "linePay"}
                 onClick={() => setMethod("linePay")}
               >
                 <LineIcon />
@@ -310,66 +310,70 @@ function Checkout() {
           </PaymentBlock>
 
           <ItemBlock>
-            <PaddingCard>
-              <ItemTop>
-                <span>{items?.length}件商品 </span>
-                <Arrow $rottate={isExtexnd} onClick={() => extendPanel()} />
-              </ItemTop>
-              <ItemBottom $direction={innards}>
-                {innards === "simple" &&
-                  items?.length > 0 &&
-                  items.map((item) => (
-                    <ImgWrapper key={item._id}>
-                      <img
-                        src={item.productId.images[0].url}
-                        alt={item.productId.images[0].alt}
-                      />
-                      <p>X {item.quantity}</p>
-                    </ImgWrapper>
-                  ))}
-                {innards === "flexibility" &&
-                  items?.length > 0 &&
-                  items.map((item) => (
-                    <CkItemBox key={item._id}>
-                      <div className="thumbNailWrapper">
+            {items.length === 0 ? (
+              "哈哈是我啦"
+            ) : (
+              <PaddingCard>
+                <ItemTop>
+                  <span>{items?.length}件商品 </span>
+                  <Arrow $rottate={isExtexnd} onClick={() => extendPanel()} />
+                </ItemTop>
+                <ItemBottom $direction={innards}>
+                  {innards === "simple" &&
+                    items?.length > 0 &&
+                    items.map((item) => (
+                      <ImgWrapper key={item._id}>
                         <img
                           src={item.productId.images[0].url}
                           alt={item.productId.images[0].alt}
                         />
-                      </div>
-                      <div className="influxInfo">
-                        <div className="influxInfo-top">
-                          <span>{item.productId.name}</span>
-                          <span>{item.unitPrice}</span>
+                        <p>X {item.quantity}</p>
+                      </ImgWrapper>
+                    ))}
+                  {innards === "flexibility" &&
+                    items?.length > 0 &&
+                    items.map((item) => (
+                      <CkItemBox key={item._id}>
+                        <div className="thumbNailWrapper">
+                          <img
+                            src={item.productId.images[0].url}
+                            alt={item.productId.images[0].alt}
+                          />
                         </div>
-                        <div className="influxInfo-center">
-                          <CkBtn
-                            onClick={() => handleDelete(item)}
-                            disabled={fetching}
-                          >
-                            <CkDelete />
-                          </CkBtn>
+                        <div className="influxInfo">
+                          <div className="influxInfo-top">
+                            <span>{item.productId.name}</span>
+                            <span>{item.unitPrice}</span>
+                          </div>
+                          <div className="influxInfo-center">
+                            <CkBtn
+                              onClick={() => handleDelete(item)}
+                              disabled={fetching}
+                            >
+                              <CkDelete />
+                            </CkBtn>
 
-                          <CkBtn disabled={fetching}>
-                            <CkSave />
-                          </CkBtn>
+                            <CkBtn disabled={fetching}>
+                              <CkSave />
+                            </CkBtn>
+                          </div>
+                          <div className="influxInfo-bottom">
+                            <span className="influxInfo-bottom_span">
+                              S x {item.selectedSizes["S"]}
+                            </span>
+                            <span className="influxInfo-bottom_span">
+                              M x {item.selectedSizes["M"]}
+                            </span>
+                            <span className="influxInfo-bottom_span">
+                              L x {item.selectedSizes["L"]}
+                            </span>
+                          </div>
                         </div>
-                        <div className="influxInfo-bottom">
-                          <span className="influxInfo-bottom_span">
-                            S x {item.selectedSizes["S"]}
-                          </span>
-                          <span className="influxInfo-bottom_span">
-                            M x {item.selectedSizes["M"]}
-                          </span>
-                          <span className="influxInfo-bottom_span">
-                            L x {item.selectedSizes["L"]}
-                          </span>
-                        </div>
-                      </div>
-                    </CkItemBox>
-                  ))}
-              </ItemBottom>
-            </PaddingCard>
+                      </CkItemBox>
+                    ))}
+                </ItemBottom>
+              </PaddingCard>
+            )}
           </ItemBlock>
         </LeftContainer>
 

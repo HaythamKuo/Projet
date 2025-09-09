@@ -156,6 +156,11 @@ export const CartBottom = styled.div`
 
 export const CheckBtn = styled(Button)`
   font-size: 1rem;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
 `;
 
 export const DefaultBox = styled.div`
