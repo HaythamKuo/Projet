@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+
 import { toast } from "react-toastify";
 
 import ProcessLoader from "../styles/UI/ProcessLoader";
@@ -27,6 +28,7 @@ import {
 //import QuantityAmount from "../styles/UI/QuantityAmount";
 
 import { useSelector, useDispatch } from "react-redux";
+
 import { fetchGoods } from "../store/thunks/fetchGoods";
 import { deleteGood } from "../store/thunks/deleteGood";
 import {
@@ -73,6 +75,12 @@ function CartDrawer() {
       toast.error("刪除失敗");
     }
   };
+
+  //導向結帳頁面與關閉購物車
+  function goToCheckout() {
+    dispatch(closeCart());
+    navigate("/checkout");
+  }
 
   //用於esc and 點擊陰影就能消失的函式
   useEffect(() => {
@@ -213,7 +221,7 @@ function CartDrawer() {
                 <span>$ {totalPrice}</span>
               </div>
 
-              <CheckBtn>結帳</CheckBtn>
+              <CheckBtn onClick={goToCheckout}>結帳</CheckBtn>
             </div>
           </CartBottom>
         </CartContainer>

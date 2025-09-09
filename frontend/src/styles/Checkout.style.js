@@ -1,4 +1,5 @@
-import { MdEdit } from "react-icons/md";
+import { MdEdit, MdOutlineCreditScore } from "react-icons/md";
+import { BsLine } from "react-icons/bs";
 import styled from "styled-components";
 import { imgBasicStyle } from "./theme";
 import {
@@ -41,6 +42,44 @@ export const PickupBlock = styled.div`
 export const PaddingCard = styled.div`
   margin: 1rem;
 `;
+
+// export const PaymentMethod = styled.div`
+//   display: flex;
+//   align-items: center;
+//   background-color: red;
+//   padding: 1rem;
+//   margin: 1rem 0;
+//   border-radius: 0.25rem;
+//   gap: 1rem;
+// `;
+
+// styled-component
+export const PaymentMethod = styled.button.attrs({ type: "button" })`
+  display: flex;
+  align-items: center;
+  //background-color: red;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 0.25rem;
+  gap: 1rem;
+  border: 2px solid
+    ${({ isSelected }) => (isSelected ? "black" : "transparent")};
+  cursor: pointer;
+  width: 100%; /* 讓它像選項一樣佔滿可點擊區域 */
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+`;
+
+export const CreditIcon = styled(MdOutlineCreditScore)`
+  font-size: 1.5rem;
+`;
+export const LineIcon = styled(BsLine)`
+  font-size: 1.5rem;
+`;
+
 export const Top = styled.div`
   display: flex;
   justify-content: space-between;

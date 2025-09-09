@@ -22,6 +22,9 @@ import {
   CkBtn,
   CkSave,
   CkDelete,
+  PaymentMethod,
+  CreditIcon,
+  LineIcon,
 } from "../styles/Checkout.style";
 import { SubmitBtn, CancelBtn } from "../styles/ProdImgGallery.style";
 import Modal from "./Modal";
@@ -39,6 +42,8 @@ import { validateOrder } from "../utils/validation";
 function Checkout() {
   const dialogRef = useRef();
   const navigate = useNavigate();
+
+  const [method, setMethod] = useState("credit_card");
 
   const [isOpen, setIsOpen] = useState(false);
   const [isExtexnd, setIsExtend] = useState(false);
@@ -142,8 +147,6 @@ function Checkout() {
     document.body.removeChild(form);
   }
 
-  let paymentMethod = "credit_card";
-
   //console.log(items);
   async function setOrder(e) {
     e.preventDefault();
@@ -160,11 +163,7 @@ function Checkout() {
 
     if (processOfPaying || updatting || forwarding) return;
 
-    const { isValid, errs, cleanValue } = validateOrder(
-      address,
-      items,
-      paymentMethod
-    );
+    const { isValid, errs, cleanValue } = validateOrder(address, items, method);
 
     if (!isValid) {
       errs.forEach((e) => toast.error(e));
@@ -278,6 +277,21 @@ function Checkout() {
             <PaddingCard>
               <span>付款方式</span>
               <PayQuote>💡 目前僅支援信用卡付款 請見諒</PayQuote>
+              <PaymentMethod
+                isSelected={method === "credit_card"}
+                onClick={() => setMethod("credit_card")}
+              >
+                <CreditIcon />
+                信用卡付款
+              </PaymentMethod>
+              <PaymentMethod
+                disabled
+                isSelected={method === "linePay"}
+                onClick={() => setMethod("linePay")}
+              >
+                <LineIcon />
+                LINE PAY 付款(即將開放)
+              </PaymentMethod>
             </PaddingCard>
           </PaymentBlock>
 
