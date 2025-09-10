@@ -1,6 +1,6 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { flexCenter, flexContainer } from "./theme";
-import { LayoutContainer } from "./layout.style";
+import { FaSearch, FaShoppingCart } from "react-icons/fa";
 
 export const NavContainer = styled.nav`
   //ok?
@@ -28,8 +28,9 @@ export const NavContainer = styled.nav`
     padding: 0 clamp(1rem, 4vw, 4rem);
 
     display: flex;
-    justify-content: space-between;
     align-items: center;
+
+    flex: 1;
 
     height: 5rem;
 
@@ -65,7 +66,9 @@ export const NavContainer = styled.nav`
 
   .navLinks {
     ${flexCenter}
+    justify-content:flex-end;
     gap: 2rem;
+    flex: 2;
 
     ${({ theme }) => theme.media.md} {
       display: none;
@@ -108,4 +111,24 @@ export const MobileNav = styled.div`
   z-index: 1100;
   transform: ${({ open }) => (open ? "translateX(0)" : "translateX(100%)")};
   transition: transform 0.3s ease-in-out;
+`;
+
+export const IconContainer = styled.div`
+  width: 100%;
+  max-width: 200px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+`;
+const refactorIconStyle = css`
+  font-size: 1.25rem;
+  cursor: pointer;
+`;
+
+export const SearchIcon = styled(FaSearch)`
+  ${refactorIconStyle}
+`;
+export const CartIcon = styled(FaShoppingCart)`
+  ${refactorIconStyle}
 `;

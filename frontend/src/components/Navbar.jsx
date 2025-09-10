@@ -1,7 +1,13 @@
 import { useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 
-import { MobileNav, NavContainer } from "../styles/nav.style";
+import {
+  MobileNav,
+  NavContainer,
+  SearchIcon,
+  CartIcon,
+  IconContainer,
+} from "../styles/nav.style";
 import { FaAlignJustify, FaXmark } from "react-icons/fa6";
 import Image from "./Image";
 import Switch from "../styles/UI/Switch";
@@ -62,13 +68,17 @@ function Navbar({ onClick }) {
 
           <LoginDropDown />
 
-          {!isCheckout && (
+          {/* {!isCheckout && (
             <NavBtn name="購物車" onClick={() => dispatch(toggleCart())} />
-          )}
-          <Switch onClick={onClick} />
+          )} */}
+          <IconContainer>
+            <SearchIcon />
+            {!isCheckout && <CartIcon onClick={() => dispatch(toggleCart())} />}
+
+            <Switch onClick={onClick} />
+          </IconContainer>
         </div>
         {/* phone rwd mode */}
-
         <div className="mobile">
           {open ? (
             <FaXmark onClick={handleOpen} />
