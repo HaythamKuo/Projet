@@ -1,17 +1,14 @@
-import { useEffect } from "react";
 import { Navigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchGoods } from "../store/thunks/fetchGoods";
+import { useSelector } from "react-redux";
+
 import { selectCartItems } from "../store/slices/cartSlice";
+import ProcessLoader from "../styles/UI/ProcessLoader";
 
 function CheckoutGuard({ children }) {
-  const dispatch = useDispatch();
-
   const items = useSelector(selectCartItems);
+  const { isLoading } = useSelector((state) => state.cart);
 
-  useEffect(() => {
-    dispatch(fetchGoods());
-  }, [dispatch]);
+  if (isLoading) return <ProcessLoader />;
 
   if (!items || items.length === 0) {
     return <Navigate to="/products" replace />;

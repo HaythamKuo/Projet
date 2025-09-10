@@ -44,8 +44,6 @@ export const createRouter = (toggleTheme) => {
           ],
         },
 
-        // { path: "profile", element: <Profile /> },
-
         {
           element: <PrivateRoute />,
           children: [

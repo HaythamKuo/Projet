@@ -20,6 +20,21 @@ export const setupOrder = asyncHandler(async (req, res) => {
   }
 
   try {
+    let existingOrder = await OrderModal.findOne({
+      user: req.user._id,
+      status: "pending",
+    });
+
+    if (existingOrder) {
+      res.status(200).json({
+        success: true,
+        message: "已有待付款訂單，直接返回",
+        order: existingOrder,
+        reused: true,
+      });
+      throw new Error("發現一筆待付訂單");
+    }
+
     const newOrder = await OrderModal.create({
       user: req.user._id,
       orderItems: value.items.map((e) => ({
@@ -39,7 +54,7 @@ export const setupOrder = asyncHandler(async (req, res) => {
 
     res
       .status(201)
-      .json({ success: true, message: "成功製作出訂單", newOrder });
+      .json({ success: true, message: "成功製作出訂單", order: newOrder });
   } catch (error) {
     res.status(500);
     throw new Error(error);

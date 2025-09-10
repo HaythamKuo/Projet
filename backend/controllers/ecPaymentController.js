@@ -8,8 +8,9 @@ const ECPAY_CONFIG = {
   MerchantID: "3002599",
   HashKey: "spPjZn66i0OhqJsQ",
   HashIV: "hT5OJckN45isQTTs",
-  ReturnURL: " https://8ad836a8c395.ngrok-free.app/api/ecpay/ecpay-return", // 付款完成後導向
-  OrderResultURL: "https://8ad836a8c395.ngrok-free.app/api/ecpay/ecpay-notify",
+
+  ReturnURL: `${process.env.ECPAYRETURN_URL}/api/ecpay/ecpay-return`, // 付款完成後導向
+  OrderResultURL: `${process.env.ECPAYRETURN_URL}/api/ecpay/ecpay-notify`,
   ClientBackURL: `${process.env.CLIENT_ROUTE_DEV}/ectest`, // 前端結果頁面
   PaymentURL: "https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5", // 測試環境URL
 };

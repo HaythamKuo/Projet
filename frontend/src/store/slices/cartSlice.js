@@ -16,7 +16,6 @@ const initialState = {
   error: null,
 };
 
-//？？？
 export const selectCartItems = (state) =>
   Array.isArray(state.cart.cart.items) ? state.cart.cart.items : [];
 
