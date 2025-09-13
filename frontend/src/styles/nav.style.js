@@ -1,4 +1,5 @@
 import styled, { css } from "styled-components";
+
 import { flexCenter, flexContainer } from "./theme";
 import { FaSearch, FaShoppingCart } from "react-icons/fa";
 
@@ -120,15 +121,18 @@ export const IconContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
+
+  position: relative;
 `;
+
 const refactorIconStyle = css`
   font-size: 1.25rem;
   cursor: pointer;
 `;
-
-export const SearchIcon = styled(FaSearch)`
+export const CartIcon = styled(FaShoppingCart)`
   ${refactorIconStyle}
 `;
-export const CartIcon = styled(FaShoppingCart)`
+
+export const SearchIcon = styled(FaSearch)`
   ${refactorIconStyle}
 `;

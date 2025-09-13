@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
+
 import { useUploadProdsMutation } from "../store/apis/prodApiSlice";
 import UploadButton from "../styles/UI/UploadBtn";
 import FormField from "./FormField";
-// import { OverLay } from "../styles/CartDrawer.style";
-// import Loader from "../styles/UI/Loader";
+
 import { validateForm } from "../utils/validation";
 import { FormContainer, FormBtn } from "../styles/createProduct.style";
 import SplitText from "./reactBit/SplitText";
@@ -89,12 +89,7 @@ function CreateProduct() {
 
   return (
     <>
-      {isLoading && (
-        // <OverLay>
-        //   <Loader $heightlight={1000} />
-        // </OverLay>
-        <ProcessLoader />
-      )}
+      {isLoading && <ProcessLoader />}
 
       <FormContainer onSubmit={handleForm}>
         <SplitText text="創建你的娃娃" customStyles="font-size: 3rem;" />

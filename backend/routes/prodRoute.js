@@ -6,6 +6,7 @@ import {
   getMyProds,
   editMyProd,
   deleteMyProd,
+  searchProds,
 } from "../controllers/prodController.js";
 import upload from "../middlewares/multerConfig.js";
 import { protect } from "../middlewares/authMiddle.js";
@@ -13,6 +14,7 @@ import categoryData from "../utils/categories.json" assert { type: "json" };
 
 const prodRouter = Router();
 
+prodRouter.route("/search").get(searchProds);
 prodRouter
   .route("/createprod")
   .post(protect, upload.array("images", 3), uploadProd);

@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { AnimatePresence } from "framer-motion";
 
 import {
   MobileNav,
@@ -12,11 +14,15 @@ import { FaAlignJustify, FaXmark } from "react-icons/fa6";
 import Image from "./Image";
 import Switch from "../styles/UI/Switch";
 import NavBtn from "../styles/UI/NavBtn";
+import SearchQuery from "./SearchQuery";
+
 import SplitText from "./reactBit/SplitText";
 
 import LoginDropDown from "./LoginDropDown";
-import { useDispatch } from "react-redux";
+
 import { toggleCart } from "../store/slices/cartSlice";
+
+import useClickOutside from "../hooks/useClickOutside";
 
 function Navbar({ onClick }) {
   const [open, setOpen] = useState(false);
@@ -24,6 +30,13 @@ function Navbar({ onClick }) {
 
   const location = useLocation();
   const isCheckout = location.pathname === "/checkout";
+  //const isCreateProd = location.pathname === "/create-product";
+
+  //搜索
+  const [search, setSearch] = useState(false);
+  const controlSearch = useRef(null);
+
+  useClickOutside(controlSearch, () => setSearch(false));
 
   /**
    * handleOpen
@@ -58,22 +71,26 @@ function Navbar({ onClick }) {
           />
         </div>
         <div className="navLinks">
-          <Link to={"/"}>
-            <NavBtn name={"首頁"} />
+          <Link to="/">
+            <NavBtn name="首頁" />
           </Link>
-          <NavBtn name={"關於"} />
+          <NavBtn name="關於" />
           <Link to="products">
-            <NavBtn name={"全部產品"} />
+            <NavBtn name="全部產品" />
           </Link>
 
           <LoginDropDown />
 
-          {/* {!isCheckout && (
-            <NavBtn name="購物車" onClick={() => dispatch(toggleCart())} />
-          )} */}
           <IconContainer>
-            <SearchIcon />
-            {!isCheckout && <CartIcon onClick={() => dispatch(toggleCart())} />}
+            {!isCheckout && (
+              <>
+                <SearchIcon onClick={() => setSearch(true)} />
+                <AnimatePresence>
+                  {search && <SearchQuery ref={controlSearch} />}
+                </AnimatePresence>
+                <CartIcon onClick={() => dispatch(toggleCart())} />
+              </>
+            )}
 
             <Switch onClick={onClick} />
           </IconContainer>

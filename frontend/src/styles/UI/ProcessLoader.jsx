@@ -6,7 +6,7 @@ const fadeIn = keyframes`
   to { opacity: 1; }
 `;
 
-const OverLay = styled.div`
+export const OverLay = styled.div`
   inset: 0;
   position: fixed;
   background: rgba(0, 0, 0, 0.5);

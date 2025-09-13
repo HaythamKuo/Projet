@@ -282,3 +282,21 @@ export const deleteMyProd = asyncHandler(async (req, res) => {
 
   res.status(200).json("刪除成功");
 });
+
+export const searchProds = asyncHandler(async (req, res) => {
+  const { query } = req.query;
+
+  if (!query) {
+    throw new Error(看來沒有query);
+  }
+  try {
+    const result = await prodModel
+      .find({ $text: { $search: query } }, { score: { $meta: "textScore" } })
+      .sort({ score: { $meta: "textScore" } });
+
+    res.json(result);
+  } catch (error) {
+    res.status(500);
+    throw new Error("搜索時發生一些問題");
+  }
+});
