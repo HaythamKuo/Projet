@@ -91,6 +91,13 @@ const prodsApi = createApi({
           "MyProduct",
         ],
       }),
+      searchProd: builder.query({
+        query: (query) => ({
+          method: "GET",
+          url: `/api/prods/search?query=${query}`,
+        }),
+        providesTags: ["Product"],
+      }),
 
       fetchCategories: builder.query({
         query: () => ({
@@ -110,6 +117,7 @@ export const {
   useEditMyProdMutation,
   useDeleteMyProdMutation,
   useFetchCategoriesQuery,
+  useSearchProdQuery,
 } = prodsApi;
 
 export { prodsApi };

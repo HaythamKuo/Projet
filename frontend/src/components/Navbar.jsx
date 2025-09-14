@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AnimatePresence } from "framer-motion";
@@ -30,6 +30,7 @@ function Navbar({ onClick }) {
 
   const location = useLocation();
   const isCheckout = location.pathname === "/checkout";
+
   //const isCreateProd = location.pathname === "/create-product";
 
   //搜索
@@ -37,6 +38,10 @@ function Navbar({ onClick }) {
   const controlSearch = useRef(null);
 
   useClickOutside(controlSearch, () => setSearch(false));
+
+  useEffect(() => {
+    setSearch(false);
+  }, [location.pathname]);
 
   /**
    * handleOpen

@@ -332,3 +332,7 @@
 // });
 
 // module.exports = router;
+
+// const colors = ["red", "green", "blue"];
+
+// console.log(colors.slice(0, 5));

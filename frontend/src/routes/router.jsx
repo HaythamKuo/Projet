@@ -15,6 +15,7 @@ import EditProduct from "../components/EditProduct";
 import ErrPage from "./ErrPage";
 import Checkout from "../components/CheckOut";
 import Ecpay from "./Ecpay";
+import SearchRespage from "./SearchRespage";
 
 export const createRouter = (toggleTheme) => {
   return createBrowserRouter([
@@ -43,6 +44,7 @@ export const createRouter = (toggleTheme) => {
             { path: ":prodid", element: <ProdPage /> },
           ],
         },
+        { path: "search", element: <SearchRespage /> },
 
         {
           element: <PrivateRoute />,

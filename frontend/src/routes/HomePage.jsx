@@ -114,6 +114,7 @@ function HomePage() {
           direction="up"
           className=""
         />
+
         <ImgHoverBox>
           <ImgHoverWrapper>
             <ImgHover>Cat</ImgHover>
