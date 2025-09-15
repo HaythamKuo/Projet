@@ -69,6 +69,8 @@ export const addOrUpdateCartItem = asyncHandler(async (req, res) => {
 export const getCart = asyncHandler(async (req, res) => {
   const userId = req.user._id;
 
+  if (!userId) return;
+
   const cartData = await cartModel
     .findOne({ userId })
     .populate("items.productId");

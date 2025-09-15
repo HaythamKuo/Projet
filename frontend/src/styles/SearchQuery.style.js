@@ -85,6 +85,8 @@ export const ResItem = styled(Link)`
 
   transition: background 0.2s ease;
 
+  background-color: ${({ $isActive }) => $isActive && "#f5f5f5"};
+
   &:hover {
     background: #f5f5f5;
   }

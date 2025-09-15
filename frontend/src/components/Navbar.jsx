@@ -31,8 +31,6 @@ function Navbar({ onClick }) {
   const location = useLocation();
   const isCheckout = location.pathname === "/checkout";
 
-  //const isCreateProd = location.pathname === "/create-product";
-
   //搜索
   const [search, setSearch] = useState(false);
   const controlSearch = useRef(null);
