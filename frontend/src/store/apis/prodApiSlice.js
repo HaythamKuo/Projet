@@ -94,7 +94,7 @@ const prodsApi = createApi({
       searchProd: builder.query({
         query: (query) => ({
           method: "GET",
-          url: `/api/prods/search?query=${query}`,
+          url: `/api/prods/search?query=${encodeURIComponent(query)}`,
         }),
         providesTags: ["Product"],
       }),

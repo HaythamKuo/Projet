@@ -160,9 +160,9 @@ function ProdImgGallery() {
     }
   }
 
-  // useEffect(() => {
-  //   dispatch(fetchGoods());
-  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(fetchGoods());
+  }, [dispatch]);
 
   if (isLoading) {
     return <p>載入中....</p>;

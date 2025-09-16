@@ -1,4 +1,4 @@
-import { useEffect, useState, forwardRef, useCallback } from "react";
+import { useMemo, useEffect, useState, forwardRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSearchProdQuery } from "../store/apis/prodApiSlice";
 
@@ -10,20 +10,28 @@ import {
   SearchForSearch,
   SearchInput,
   ResItem,
+  DeleteIcon,
 } from "../styles/SearchQuery.style";
 
 const SearchQuery = forwardRef(function SearchQuery(_, ref) {
   const [keyword, setKeyword] = useState("");
   const [activeIndex, setActiveIndex] = useState(-1);
   const [debounced, setDebounced] = useState("");
+  const [isSearched, setIsSearched] = useState(false);
 
   const navigate = useNavigate();
 
-  const { data = [], isLoading } = useSearchProdQuery(debounced, {
+  const { data: rawData, isLoading } = useSearchProdQuery(debounced, {
     skip: debounced.trim() === "",
   });
 
+  const data = useMemo(
+    () => (Array.isArray(rawData) ? rawData : []),
+    [rawData]
+  );
+
   const sliceItems = data?.slice(0, 5);
+  const totalOptions = sliceItems.length + (data.length > 5 ? 1 : 0);
 
   //選項鍵盤事件
   const handleKeyDown = useCallback(
@@ -33,22 +41,32 @@ const SearchQuery = forwardRef(function SearchQuery(_, ref) {
       if (e.key === "ArrowDown") {
         e.preventDefault();
 
-        setActiveIndex((pre) => (pre < sliceItems.length - 1 ? pre + 1 : 0));
+        setActiveIndex((pre) => (pre < totalOptions - 1 ? pre + 1 : 0));
       } else if (e.key === "ArrowUp") {
         e.preventDefault();
 
-        setActiveIndex((pre) => (pre > 0 ? pre - 1 : sliceItems.length - 1));
+        setActiveIndex((pre) => (pre > 0 ? pre - 1 : totalOptions - 1));
       } else if (e.key === "Enter") {
         e.preventDefault();
-        if (activeIndex >= 0) {
-          const id = data[activeIndex]._id;
-          navigate(`/products/${id}`);
-        } else {
+
+        // 先處理「更多內容」：必須比 sliceItems 的判斷更優先
+        if (activeIndex === sliceItems.length && data.length > 5) {
           navigate(`/search?query=${encodeURIComponent(keyword)}`);
+          return;
         }
+
+        // 產品項目
+        if (activeIndex >= 0 && activeIndex < sliceItems.length) {
+          const id = sliceItems[activeIndex]._id; // **改用 sliceItems 而不是 data**
+          navigate(`/products/${id}`);
+          return;
+        }
+
+        // 沒有選任何項目
+        navigate(`/search?query=${encodeURIComponent(keyword)}`);
       }
     },
-    [data, activeIndex, keyword, navigate, sliceItems]
+    [data, activeIndex, keyword, navigate, sliceItems, totalOptions]
   );
 
   //設置Debounced
@@ -66,7 +84,24 @@ const SearchQuery = forwardRef(function SearchQuery(_, ref) {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
 
+  // 只要請求結束就把 isSearched 設為 true
+  useEffect(() => {
+    if (!isLoading && debounced.trim()) {
+      setIsSearched(true);
+    }
+  }, [isLoading, debounced]);
+
   //console.log(data);
+
+  //刪除字句且重置isSearched
+  function resetKeyWord() {
+    setIsSearched(false);
+    setKeyword("");
+  }
+
+  console.log(keyword);
+
+  console.log(debounced);
 
   function handleQuery(e) {
     e.preventDefault();
@@ -75,8 +110,6 @@ const SearchQuery = forwardRef(function SearchQuery(_, ref) {
       navigate(`/search?query=${encodeURIComponent(keyword)}`);
     }
   }
-
-  //console.log(keyword);
 
   return (
     <>
@@ -103,17 +136,20 @@ const SearchQuery = forwardRef(function SearchQuery(_, ref) {
               onChange={(e) => setKeyword(e.target.value)}
               value={keyword}
             />
+            {keyword && <DeleteIcon onClick={() => resetKeyWord()} />}
             {keyword && (
               <BriefRes>
                 {isLoading ? (
                   <ResItem>搜尋中</ResItem>
                 ) : (
                   <>
+                    {isSearched && sliceItems.length === 0 && "看來是沒有東西"}
                     {sliceItems.map((item, i) => (
                       <ResItem
                         onMouseEnter={() => setActiveIndex(i)}
                         key={item._id}
                         $isActive={activeIndex === i}
+                        to={`/products/${item._id}`}
                       >
                         {item.name}
                       </ResItem>
@@ -122,8 +158,8 @@ const SearchQuery = forwardRef(function SearchQuery(_, ref) {
                     {data.length > 5 && (
                       <ResItem
                         to={`/search?query=${encodeURIComponent(keyword)}`}
-                        // onMouseEnter={() => setActiveIndex(6)}
-                        // $isActive={activeIndex === sliceItems.length + 1}
+                        onMouseEnter={() => setActiveIndex(sliceItems.length)}
+                        $isActive={activeIndex === sliceItems.length}
                       >
                         更多內容...
                       </ResItem>

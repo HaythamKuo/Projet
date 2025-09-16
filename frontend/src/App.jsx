@@ -39,7 +39,7 @@ function App({ toggleTheme }) {
       <LayoutWrapper>
         <Navbar onClick={toggleTheme} />
 
-        <ContentContainer>
+        <ContentContainer id="page-content">
           <MainContent>
             <CartDrawer />
             <Outlet />

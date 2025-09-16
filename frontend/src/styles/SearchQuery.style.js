@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { flexCenter } from "./theme";
 import { OverLay } from "./UI/ProcessLoader";
 import { SearchIcon } from "./nav.style";
+import { TiDelete } from "react-icons/ti";
 
 export const SearchContainer = styled.div`
   ${flexCenter}
@@ -17,6 +18,11 @@ export const SearchForSearch = styled(SearchIcon)`
   //color: red;
   cursor: default;
   margin-right: 10px;
+`;
+export const DeleteIcon = styled(TiDelete)`
+  font-size: 2rem;
+  //background-color: ;
+  cursor: pointer;
 `;
 
 export const SearchBox = styled(motion.form)`

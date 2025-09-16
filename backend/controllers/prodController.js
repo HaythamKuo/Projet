@@ -286,13 +286,27 @@ export const deleteMyProd = asyncHandler(async (req, res) => {
 export const searchProds = asyncHandler(async (req, res) => {
   const { query } = req.query;
 
-  if (!query) {
+  if (query.startsWith("#") && !query) {
+    res.json([]);
     throw new Error(看來沒有query);
   }
+
   try {
-    const result = await prodModel
-      .find({ $text: { $search: query } }, { score: { $meta: "textScore" } })
-      .sort({ score: { $meta: "textScore" } });
+    let result;
+
+    if (query.startsWith("#")) {
+      const keyword = query.slice(1);
+
+      if (!keyword) throw new Error("請在#之後增加關鍵字");
+
+      result = await prodModel.find({
+        description: { $regex: keyword, $options: "i" },
+      });
+    } else {
+      result = await prodModel
+        .find({ $text: { $search: query } }, { score: { $meta: "textScore" } })
+        .sort({ score: { $meta: "textScore" } });
+    }
 
     res.json(result);
   } catch (error) {

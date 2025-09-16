@@ -41,6 +41,18 @@ function Navbar({ onClick }) {
     setSearch(false);
   }, [location.pathname]);
 
+  //try out inert attribute
+  useEffect(() => {
+    const main = document.getElementById("page-content");
+    if (!main) return;
+
+    if (search) {
+      main.setAttribute("inert", "");
+    } else {
+      main.removeAttribute("inert");
+    }
+  }, [search]);
+
   /**
    * handleOpen
    * @function 切換手機模式navbar
@@ -48,13 +60,6 @@ function Navbar({ onClick }) {
   function handleOpen() {
     setOpen((pre) => !pre);
   }
-
-  // 日夜模式切換
-  /**
-   * useCart
-   * 透過 @function {useCart} 切換購物車開關
-   * @returns {Boolean} true/false
-   */
 
   return (
     <NavContainer>
