@@ -1,31 +1,29 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-const NavBtn = ({ name, ismobile, onClick }) => {
+const NavBtn = ({ name, ismobile, address }) => {
   return (
-    <StyledWrapper $isMobile={ismobile}>
-      <button onClick={onClick}>{name}</button>
-    </StyledWrapper>
+    <Btn as={Link} to={address} $ismobile={ismobile}>
+      {name}
+    </Btn>
   );
 };
 
-const StyledWrapper = styled.div`
-  button {
-    cursor: pointer;
-    color: black;
-    text-decoration: none;
-    font-size: 20px;
-    font-size: ${({ isMobile }) => (isMobile ? "2rem" : "1rem")};
-    border: none;
-    background: none;
-    font-weight: 600;
-  }
+const Btn = styled.button`
+  cursor: pointer;
+  color: black;
+  text-decoration: none;
+  font-size: ${({ $ismobile }) => ($ismobile ? "2rem" : "1rem")};
+  border: none;
+  background: none;
+  font-weight: 600;
 
-  button::before {
+  &::before {
     margin-left: auto;
   }
 
-  button::after,
-  button::before {
+  &::after,
+  &::before {
     content: "";
     width: 0%;
     height: 2px;
@@ -34,8 +32,8 @@ const StyledWrapper = styled.div`
     transition: 0.5s;
   }
 
-  button:hover::after,
-  button:hover::before {
+  &:hover::after,
+  &:hover::before {
     width: 100%;
   }
 `;

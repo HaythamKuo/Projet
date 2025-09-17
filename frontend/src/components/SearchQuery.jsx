@@ -99,10 +99,6 @@ const SearchQuery = forwardRef(function SearchQuery(_, ref) {
     setKeyword("");
   }
 
-  console.log(keyword);
-
-  console.log(debounced);
-
   function handleQuery(e) {
     e.preventDefault();
 

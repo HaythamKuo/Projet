@@ -1,10 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { toast } from "react-toastify";
 
 import ProcessLoader from "../styles/UI/ProcessLoader";
-
+import useClickOutside from "../hooks/useClickOutside";
 import {
   Drawer,
   OverLay,
@@ -39,6 +39,8 @@ import {
 import { useDeleteGood } from "../hooks/useDeleteGood";
 
 function CartDrawer() {
+  const controlCart = useRef(null);
+
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
@@ -53,6 +55,7 @@ function CartDrawer() {
 
   //hook
   const { handleDelete } = useDeleteGood();
+  useClickOutside(controlCart, () => dispatch(closeCart()));
 
   //console.log(items);
 
@@ -77,17 +80,17 @@ function CartDrawer() {
 
     if (!isOpen) return;
 
-    const keyDown = (e) => {
-      if (e.key === "Escape") {
-        dispatch(closeCart());
-      }
-    };
-    window.addEventListener("keydown", keyDown);
+    // const keyDown = (e) => {
+    //   if (e.key === "Escape") {
+    //     dispatch(closeCart());
+    //   }
+    // };
+    // window.addEventListener("keydown", keyDown);
     return () => {
-      window.removeEventListener("keydown", keyDown);
+      //window.removeEventListener("keydown", keyDown);
       document.body.style.overflow = "";
     };
-  }, [dispatch, isOpen]);
+  }, [isOpen]);
 
   useEffect(() => {
     if (!userInfo || !isOpen) return; // 只有登入才 fetch
@@ -119,9 +122,9 @@ function CartDrawer() {
 
   return (
     <>
-      {isOpen && <OverLay onClick={() => dispatch(closeCart())} />}
+      {isOpen && <OverLay />}
 
-      <Drawer $open={isOpen}>
+      <Drawer $open={isOpen} ref={controlCart}>
         <CartContainer>
           {isLoading && (
             <>

@@ -69,6 +69,8 @@ function LoginDropDown() {
 
   return (
     <IconContainer
+      as={Link}
+      to="/auth"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >

@@ -11,7 +11,7 @@ export const SpecificTar = styled.span`
 `;
 export const FilterContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 1.5rem;
 `;
 

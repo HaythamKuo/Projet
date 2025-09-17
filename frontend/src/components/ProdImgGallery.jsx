@@ -68,6 +68,8 @@ function ProdImgGallery() {
 
   const [firstItem, setFirstItem] = useState({ S: 0, M: 0, L: 0 });
   const { prodid } = useParams();
+
+  const { userInfo } = useSelector((state) => state.auth);
   const cartItems = useSelector((state) => {
     const items = selectCartItems(state);
     return items.find((item) => item.productId._id === prodid);
@@ -156,13 +158,15 @@ function ProdImgGallery() {
       toast.error(error?.message || "加入購物車失敗");
     } finally {
       //setCount({ S: 0, M: 0, L: 0 });
-      console.log("進到此步驟");
+      console.log("可以刪掉了");
     }
   }
-
+  //?????
   useEffect(() => {
-    dispatch(fetchGoods());
-  }, [dispatch]);
+    if (userInfo) {
+      dispatch(fetchGoods());
+    }
+  }, [dispatch, userInfo]);
 
   if (isLoading) {
     return <p>載入中....</p>;

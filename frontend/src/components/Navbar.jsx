@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { useLocation, Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { AnimatePresence } from "framer-motion";
 
 import {
@@ -26,7 +26,9 @@ import useClickOutside from "../hooks/useClickOutside";
 
 function Navbar({ onClick }) {
   const [open, setOpen] = useState(false);
+
   const dispatch = useDispatch();
+  const { isOpen } = useSelector((state) => state.cart);
 
   const location = useLocation();
   const isCheckout = location.pathname === "/checkout";
@@ -46,12 +48,12 @@ function Navbar({ onClick }) {
     const main = document.getElementById("page-content");
     if (!main) return;
 
-    if (search) {
+    if (search || isOpen) {
       main.setAttribute("inert", "");
     } else {
       main.removeAttribute("inert");
     }
-  }, [search]);
+  }, [search, isOpen]);
 
   /**
    * handleOpen
@@ -79,13 +81,9 @@ function Navbar({ onClick }) {
           />
         </div>
         <div className="navLinks">
-          <Link to="/">
-            <NavBtn name="首頁" />
-          </Link>
-          <NavBtn name="關於" />
-          <Link to="products">
-            <NavBtn name="全部產品" />
-          </Link>
+          <NavBtn name="首頁" address="/" />
+          <NavBtn name="關於" address="" />
+          <NavBtn name="全部產品" address="products" />
 
           <LoginDropDown />
 

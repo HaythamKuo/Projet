@@ -1,5 +1,7 @@
-import { Link, useSearchParams } from "react-router-dom";
+import { useEffect } from "react";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { useSearchProdQuery } from "../store/apis/prodApiSlice";
+import { toast } from "react-toastify";
 
 import {
   SearchContainer,
@@ -20,12 +22,22 @@ import {
 import ProcessLoader from "../styles/UI/ProcessLoader";
 import StaRating from "../styles/UI/StarRating";
 function SearchRespage() {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   const query = searchParams.get("query");
+  const saftyQuery = query?.trim() || "";
   const { data: products = [], isLoading } = useSearchProdQuery(query, {
-    skip: query.trim() === "",
+    skip: saftyQuery === "",
   });
+
+  console.log(query);
+
+  useEffect(() => {
+    if (!query) navigate("/products");
+    return;
+    //toast.warn("誤入歧途，要有關鍵字才能進來", { autoClose: 1500 });
+  }, [navigate, query]);
 
   if (isLoading) return <ProcessLoader />;
 
