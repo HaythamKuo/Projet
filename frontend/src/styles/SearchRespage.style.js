@@ -1,7 +1,8 @@
 import styled from "styled-components";
-import { imgBasicStyle } from "./theme";
-import { SubmitBtn } from "./ProdImgGallery.style";
+import { flexCenter, imgBasicStyle } from "./theme";
+
 import { FaRegBookmark, FaCartShopping } from "react-icons/fa6";
+import { SubmitBtn, CancelBtn } from "./ProdImgGallery.style";
 
 export const SearchContainer = styled.div``;
 
@@ -69,7 +70,6 @@ export const IconBox = styled.div`
   align-items: center;
 
   flex: 2;
-  /* flex: 1; */
 `;
 
 export const Cart = styled(FaCartShopping)`
@@ -81,3 +81,23 @@ export const BookMark = styled(FaRegBookmark)`
   font-size: 1.5rem;
   cursor: pointer;
 `;
+
+export const Nothing = styled.div`
+  ${flexCenter}
+  flex-direction: column;
+  gap: 2rem;
+  //background-color: aqua;
+`;
+export const Wrapper = styled.div`
+  background-color: white;
+  border-radius: 50%;
+  padding: min(0.5em, 6%);
+`;
+export const RemindTitle = styled.h3`
+  color: black;
+  font-size: 2rem;
+  font-weight: bold;
+`;
+
+export const ProdPage = styled(SubmitBtn)``;
+export const HomePage = styled(CancelBtn)``;

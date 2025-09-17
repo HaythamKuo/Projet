@@ -69,12 +69,10 @@ function LoginDropDown() {
 
   return (
     <IconContainer
-      as={Link}
-      to="/auth"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <StateBox>
+      <StateBox as={Link} to="auth">
         <UserIcon />
         <UserState>{userInfo ? "Sign out" : "Sign in"}</UserState>
       </StateBox>
@@ -82,8 +80,8 @@ function LoginDropDown() {
       <DropDownMenu $isOpen={openUser}>
         <MenuSection>
           <MenuList>
-            <MenuItem>
-              <Link to="profile">我的帳戶</Link>
+            <MenuItem as={Link} to="profile">
+              我的帳戶
             </MenuItem>
             <MenuItem>我的清單</MenuItem>
             <MenuItem>我的訂單</MenuItem>
@@ -95,9 +93,9 @@ function LoginDropDown() {
           {userInfo ? (
             <SignInButton onClick={handleLogout}>登出</SignInButton>
           ) : (
-            <Link to="auth">
-              <SignInButton>登入</SignInButton>
-            </Link>
+            <SignInButton as={Link} to="auth">
+              登入
+            </SignInButton>
           )}
         </BtnWrapper>
       </DropDownMenu>

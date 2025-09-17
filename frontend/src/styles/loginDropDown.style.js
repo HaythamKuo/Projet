@@ -5,12 +5,12 @@ export const IconContainer = styled.div`
   position: relative;
   display: inline-block;
   cursor: pointer;
-  color: black;
 `;
 
 export const StateBox = styled.div`
   display: flex;
   justify-content: center;
+  color: black;
   gap: 7px;
 `;
 

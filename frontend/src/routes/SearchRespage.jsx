@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { useSearchProdQuery } from "../store/apis/prodApiSlice";
-import { toast } from "react-toastify";
 
 import {
   SearchContainer,
@@ -18,6 +17,11 @@ import {
   IconBox,
   Cart,
   BookMark,
+  Nothing,
+  Wrapper,
+  HomePage,
+  ProdPage,
+  RemindTitle,
 } from "../styles/SearchRespage.style";
 import ProcessLoader from "../styles/UI/ProcessLoader";
 import StaRating from "../styles/UI/StarRating";
@@ -31,7 +35,7 @@ function SearchRespage() {
     skip: saftyQuery === "",
   });
 
-  console.log(query);
+  //  console.log(query);
 
   useEffect(() => {
     if (!query) navigate("/products");
@@ -44,33 +48,49 @@ function SearchRespage() {
   return (
     <SearchContainer>
       搜尋結果" <SpecificTar>{query}</SpecificTar> "
-      <FilterContainer>
-        {products.length
-          ? products.map((prod) => (
-              <Card key={prod._id}>
-                <ImgWrapper>
-                  <Img src={prod.images[0].url} alt={prod.images[0].alt} />
-                </ImgWrapper>
-                <InfoContainer>
-                  <ProdName>{prod.name}</ProdName>
-                  <InfoCenter>
-                    <p>${prod.price}</p>
-                    <StaRating rating={3} />
-                  </InfoCenter>
-                  <InfoBottom>
-                    <GoIoProd as={Link} to={""}>
-                      更多資訊
-                    </GoIoProd>
-                    <IconBox>
-                      <Cart />
-                      <BookMark />
-                    </IconBox>
-                  </InfoBottom>
-                </InfoContainer>
-              </Card>
-            ))
-          : "看來是沒有東西"}
-      </FilterContainer>
+      {products.length ? (
+        <FilterContainer>
+          {products.map((prod) => (
+            <Card key={prod._id}>
+              <ImgWrapper>
+                <Img src={prod.images[0].url} alt={prod.images[0].alt} />
+              </ImgWrapper>
+
+              <InfoContainer>
+                <ProdName>{prod.name}</ProdName>
+                <InfoCenter>
+                  <p>${prod.price}</p>
+                  <StaRating rating={3} />
+                </InfoCenter>
+                <InfoBottom>
+                  <GoIoProd as={Link} to={`/products/${prod._id}`}>
+                    更多資訊
+                  </GoIoProd>
+                  <IconBox>
+                    <Cart />
+                    <BookMark />
+                  </IconBox>
+                </InfoBottom>
+              </InfoContainer>
+            </Card>
+          ))}
+        </FilterContainer>
+      ) : (
+        <Nothing>
+          <Wrapper>
+            <img src="/remake.png" alt="map" />
+          </Wrapper>
+          <RemindTitle>看來沒有找到你想要的娃娃或是換換關鍵字!</RemindTitle>
+          <div style={{ display: "flex", gap: "1rem" }}>
+            <ProdPage as={Link} to="/products">
+              商品頁面
+            </ProdPage>
+            <HomePage as={Link} to="/">
+              首頁
+            </HomePage>
+          </div>
+        </Nothing>
+      )}
     </SearchContainer>
   );
 }
