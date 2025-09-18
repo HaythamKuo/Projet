@@ -41,7 +41,6 @@ function App({ toggleTheme }) {
 
         <ContentContainer id="page-content">
           <MainContent>
-            <CartDrawer />
             <Outlet />
           </MainContent>
 
@@ -52,6 +51,7 @@ function App({ toggleTheme }) {
           </CopyRightContainer>
         </ContentContainer>
       </LayoutWrapper>
+      <CartDrawer />
     </>
   );
 }

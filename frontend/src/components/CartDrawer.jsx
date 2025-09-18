@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { toast } from "react-toastify";
@@ -71,26 +72,18 @@ function CartDrawer() {
   }
 
   //用於esc and 點擊陰影就能消失的函式
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+  // useEffect(() => {
+  //   if (isOpen) {
+  //     document.body.style.overflow = "hidden";
+  //   } else {
+  //     document.body.style.overflow = "";
+  //   }
 
-    if (!isOpen) return;
-
-    // const keyDown = (e) => {
-    //   if (e.key === "Escape") {
-    //     dispatch(closeCart());
-    //   }
-    // };
-    // window.addEventListener("keydown", keyDown);
-    return () => {
-      //window.removeEventListener("keydown", keyDown);
-      document.body.style.overflow = "";
-    };
-  }, [isOpen]);
+  //   if (!isOpen) return;
+  //   return () => {
+  //     document.body.style.overflow = "";
+  //   };
+  // }, [isOpen]);
 
   useEffect(() => {
     if (!userInfo || !isOpen) return; // 只有登入才 fetch
@@ -120,12 +113,12 @@ function CartDrawer() {
     }
   }, [err]);
 
-  return (
+  return createPortal(
     <>
       {isOpen && <OverLay />}
 
-      <Drawer $open={isOpen} ref={controlCart}>
-        <CartContainer>
+      <Drawer $open={isOpen} ref={controlCart} className="outter">
+        <CartContainer className="inner">
           {isLoading && (
             <>
               <ProcessLoader />
@@ -216,7 +209,8 @@ function CartDrawer() {
           </CartBottom>
         </CartContainer>
       </Drawer>
-    </>
+    </>,
+    document.body
   );
 }
 export default CartDrawer;

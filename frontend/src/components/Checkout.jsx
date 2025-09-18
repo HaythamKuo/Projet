@@ -89,8 +89,8 @@ function Checkout() {
       dispatch(fetchGoods());
     }
   }, [dispatch, items]);
-  //購物車產品
-  //console.log(cart);
+
+  // console.log(cart);
 
   useEffect(() => {
     if (fetching) return;

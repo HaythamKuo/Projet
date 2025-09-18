@@ -75,10 +75,10 @@ export const getCart = asyncHandler(async (req, res) => {
     .findOne({ userId })
     .populate("items.productId");
 
-  if (!cartData) {
-    res.status(404);
-    throw new Error("找不到購物車裡的資料");
-  }
+  // if (!cartData) {
+  //   res.status(404);
+  //   throw new Error("找不到購物車裡的資料");
+  // }
 
   //console.log(userId);
 

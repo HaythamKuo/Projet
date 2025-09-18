@@ -31,7 +31,7 @@ export const OverLay = styled.div`
   position: fixed;
   background: rgba(0, 0, 0, 0.5);
   animation: ${fadeIn} 0.4s ease;
-  z-index: 999;
+  z-index: 990;
 `;
 
 //從這邊開始為可重構內容
