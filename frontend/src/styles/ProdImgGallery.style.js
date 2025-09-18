@@ -33,18 +33,6 @@ export const ThumbnailWrapper = styled.div`
   height: 100px;
 `;
 
-// export const Thumbnail = styled(Image)`
-//   opacity: ${({ $isActive }) => ($isActive ? "1" : "0.7")};
-
-//   border: ${({ $isActive, theme }) =>
-//     $isActive ? `2px solid ${theme.colors.primary}` : "1px solid transparent"};
-//   transition: border 0.2s ease-out, opacity 0.2s ease;
-
-//   &:hover {
-//     opacity: 1;
-//   }
-// `;
-
 const jointStyledThumbnail = css`
   opacity: ${({ $isActive }) => ($isActive ? "1" : "0.7")};
 

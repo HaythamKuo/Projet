@@ -31,6 +31,7 @@ import {
 } from "../styles/ProdImgGallery.style";
 
 import HighLightSection from "../styles/UI/HighLightSection";
+import ProcessLoader from "../styles/UI/ProcessLoader";
 import {
   MdDeliveryDining,
   MdHomeRepairService,
@@ -156,12 +157,9 @@ function ProdImgGallery() {
     } catch (error) {
       console.log(error);
       toast.error(error?.message || "加入購物車失敗");
-    } finally {
-      //setCount({ S: 0, M: 0, L: 0 });
-      console.log("可以刪掉了");
     }
   }
-  //?????
+
   useEffect(() => {
     if (userInfo) {
       dispatch(fetchGoods());
@@ -169,10 +167,11 @@ function ProdImgGallery() {
   }, [dispatch, userInfo]);
 
   if (isLoading) {
-    return <p>載入中....</p>;
+    return <ProcessLoader />;
   }
   if (isError) {
-    return <p>{error?.data?.message || "發生錯誤"}</p>;
+    // return <p>{error?.data?.message || "發生錯誤"}</p>;
+    console.log(error);
   }
 
   let total = 4;
@@ -245,16 +244,16 @@ function ProdImgGallery() {
                   <p>{size}</p>
                 </TopAmount>
                 <BottomAmount>
-                  <button>
-                    <Minus onClick={() => minusCount(size)} />
+                  <button onClick={() => minusCount(size)}>
+                    <Minus />
                   </button>
                   <span>
                     {isFirstAdd
                       ? firstItem[size] ?? 0
                       : cartItems?.selectedSizes?.[size] ?? 0}
                   </span>
-                  <button>
-                    <Plus onClick={() => plusCount(size)} />
+                  <button onClick={() => plusCount(size)}>
+                    <Plus />
                   </button>
                 </BottomAmount>
               </ControlAmounts>

@@ -6,25 +6,15 @@ import {
   SearchContainer,
   SpecificTar,
   FilterContainer,
-  ImgWrapper,
-  Img,
-  Card,
-  InfoContainer,
-  InfoCenter,
-  ProdName,
-  InfoBottom,
-  GoIoProd,
-  IconBox,
-  Cart,
-  BookMark,
   Nothing,
   Wrapper,
   HomePage,
   ProdPage,
   RemindTitle,
 } from "../styles/SearchRespage.style";
+import RefactorCard from "../styles/UI/RefactorCard";
 import ProcessLoader from "../styles/UI/ProcessLoader";
-import StaRating from "../styles/UI/StarRating";
+
 function SearchRespage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -50,29 +40,16 @@ function SearchRespage() {
       搜尋結果" <SpecificTar>{query}</SpecificTar> "
       {products.length ? (
         <FilterContainer>
-          {products.map((prod) => (
-            <Card key={prod._id}>
-              <ImgWrapper>
-                <Img src={prod.images[0].url} alt={prod.images[0].alt} />
-              </ImgWrapper>
-
-              <InfoContainer>
-                <ProdName>{prod.name}</ProdName>
-                <InfoCenter>
-                  <p>${prod.price}</p>
-                  <StaRating rating={3} />
-                </InfoCenter>
-                <InfoBottom>
-                  <GoIoProd as={Link} to={`/products/${prod._id}`}>
-                    更多資訊
-                  </GoIoProd>
-                  <IconBox>
-                    <Cart />
-                    <BookMark />
-                  </IconBox>
-                </InfoBottom>
-              </InfoContainer>
-            </Card>
+          {products.map((item) => (
+            <RefactorCard
+              key={item._id}
+              id={item._id}
+              src={item?.images[0]?.url}
+              alt={item?.images[0]?.alt}
+              name={item.name}
+              price={item.price}
+              rating={item.rate}
+            />
           ))}
         </FilterContainer>
       ) : (

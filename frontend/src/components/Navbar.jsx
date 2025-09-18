@@ -32,6 +32,7 @@ function Navbar({ onClick }) {
 
   const location = useLocation();
   const isCheckout = location.pathname === "/checkout";
+  const isCreating = location.pathname === "/create-product";
 
   //搜索
   const [search, setSearch] = useState(false);
@@ -88,7 +89,7 @@ function Navbar({ onClick }) {
           <LoginDropDown />
 
           <IconContainer>
-            {!isCheckout && (
+            {!isCheckout && !isCreating && (
               <>
                 <SearchIcon onClick={() => setSearch(true)} />
                 <AnimatePresence>

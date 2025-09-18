@@ -1,7 +1,6 @@
-import styled from "styled-components";
-export const ProdPageContainer = styled.div``;
+// import styled from "styled-components";
 
-export const InputContainer = styled.div`
-  display: flex;
-  justify-content: center;
-`;
+// export const InputContainer = styled.div`
+//   display: flex;
+//   justify-content: center;
+// `;

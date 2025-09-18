@@ -1,42 +1,39 @@
-import {
-  CardsContainer,
-  Heading,
-  Cards,
-  CardItem,
-  Card,
-  ImageWrapper,
-  CardContent,
-  CardTitle,
-  CardText,
-  Button,
-  TextRatingBox,
-  Cart,
-  InfoCartMarkBox,
-  BookMark,
-  CartMarkBox,
-  TestImg,
-} from "../styles/ProdCard.style";
-import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
-import ImgContent from "./ImgContent";
+import RefactorCard from "../styles/UI/RefactorCard";
 
-import StarRating from "../styles/UI/StarRating";
 import { useFetchProdQuery } from "../store/apis/prodApiSlice";
 import Skeleton, { SkeletonCardItem } from "../styles/UI/Skeleton";
 
+const CardsContainer = styled.section`
+  margin: 0 auto;
+`;
+const Heading = styled.h1`
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1rem;
+`;
+
+const Cards = styled.div`
+  /* display: flex;
+  flex-wrap: wrap;
+
+  margin: 0;
+  padding: 0; */
+
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+`;
+
 function ProdCard() {
-  const navigate = useNavigate();
-
-  function handleDetailProd(id) {
-    navigate(id);
-  }
-
   const { data, isLoading, isError, error } = useFetchProdQuery();
 
   let contents;
 
   if (isLoading) {
-    contents = Array.from({ length: 6 }, (_, i) => (
+    contents = Array.from({ length: 12 }, (_, i) => (
       <SkeletonCardItem key={i}>
         <Skeleton />
       </SkeletonCardItem>
@@ -45,30 +42,39 @@ function ProdCard() {
     contents = <p>錯誤：{error?.data?.message || "發生錯誤"}</p>;
   } else if (data && data.length > 0) {
     contents = data.map((item) => (
-      <CardItem key={item._id}>
-        <Card>
-          <ImageWrapper>
-            <TestImg src={item.images[0].url} alt={item.name} />
-          </ImageWrapper>
+      // <CardItem key={item._id}>
+      //   <Card>
+      //     <ImageWrapper>
+      //       <TestImg src={item.images[0].url} alt={item.name} />
+      //     </ImageWrapper>
 
-          <CardContent>
-            <CardTitle>{item.name}</CardTitle>
-            <TextRatingBox>
-              <CardText>$ {item.price}</CardText>
-              <StarRating rating={item.rate} />
-            </TextRatingBox>
-            <InfoCartMarkBox>
-              <Button onClick={() => handleDetailProd(item._id)}>
-                更多資訊
-              </Button>
-              <CartMarkBox>
-                <BookMark />
-                <Cart />
-              </CartMarkBox>
-            </InfoCartMarkBox>
-          </CardContent>
-        </Card>
-      </CardItem>
+      //     <CardContent>
+      //       <CardTitle>{item.name}</CardTitle>
+      //       <TextRatingBox>
+      //         <CardText>$ {item.price}</CardText>
+      //         <StarRating rating={item.rate} />
+      //       </TextRatingBox>
+      //       <InfoCartMarkBox>
+      //         <Button onClick={() => handleDetailProd(item._id)}>
+      //           更多資訊
+      //         </Button>
+      //         <CartMarkBox>
+      //           <BookMark />
+      //           <Cart />
+      //         </CartMarkBox>
+      //       </InfoCartMarkBox>
+      //     </CardContent>
+      //   </Card>
+      // </CardItem>
+      <RefactorCard
+        key={item._id}
+        id={item._id}
+        src={item.images[0].url}
+        alt={item.name}
+        name={item.name}
+        price={item.price}
+        rating={item.rate}
+      />
     ));
   } else {
     contents = <p>目前尚無商品資料</p>;
@@ -77,6 +83,7 @@ function ProdCard() {
   return (
     <CardsContainer>
       <Heading>所有娃娃我都放在這了 去找吧!</Heading>
+
       <Cards>{contents}</Cards>
     </CardsContainer>
   );
