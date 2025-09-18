@@ -2,6 +2,7 @@
 import styled from "styled-components";
 
 import { FaGoogle } from "react-icons/fa";
+import { LineIcon } from "../styles/Checkout.style";
 //import { toast } from "react-toastify";
 
 const BindContainer = styled.div`
@@ -22,6 +23,7 @@ const BindBox = styled.div`
 `;
 const BindDesc = styled.button`
   border: none;
+  background-color: transparent;
 
   &:hover {
     background-color: none;
@@ -36,8 +38,6 @@ const BindSuccess = styled.span`
 `;
 
 export default function BindAcc({ googleId }) {
-  //console.log(disable);
-
   return (
     <BindContainer>
       <BindBox>
@@ -60,7 +60,11 @@ export default function BindAcc({ googleId }) {
         )}
       </BindBox>
 
-      <GoogleIcon />
+      <BindBox>
+        <LineIcon size="2.2rem" />
+        {/* <a href="">綁定至Line</a> */}
+        <BindDesc disabled>即將開放</BindDesc>
+      </BindBox>
     </BindContainer>
   );
 }

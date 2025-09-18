@@ -14,6 +14,8 @@ const userSchema = Schema(
       required: [true, "請輸入郵件"],
       unique: true,
     },
+    optionMail: { type: String },
+    optionName: { type: String },
     password: {
       type: String,
       // required: [true, "請輸入密碼"],

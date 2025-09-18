@@ -1,5 +1,5 @@
 import { MdEdit, MdOutlineCreditScore } from "react-icons/md";
-import { BsLine } from "react-icons/bs";
+import { FaLine } from "react-icons/fa";
 import styled from "styled-components";
 import { imgBasicStyle } from "./theme";
 import {
@@ -59,8 +59,8 @@ export const PaymentMethod = styled.button.attrs({ type: "button" })`
 export const CreditIcon = styled(MdOutlineCreditScore)`
   font-size: 1.5rem;
 `;
-export const LineIcon = styled(BsLine)`
-  font-size: 1.5rem;
+export const LineIcon = styled(FaLine)`
+  font-size: ${(props) => props.size || "1.5rem"};
 `;
 
 export const Top = styled.div`
