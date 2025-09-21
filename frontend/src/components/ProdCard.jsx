@@ -16,12 +16,6 @@ const Heading = styled.h1`
 `;
 
 const Cards = styled.div`
-  /* display: flex;
-  flex-wrap: wrap;
-
-  margin: 0;
-  padding: 0; */
-
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 1.5rem;
@@ -42,30 +36,6 @@ function ProdCard() {
     contents = <p>錯誤：{error?.data?.message || "發生錯誤"}</p>;
   } else if (data && data.length > 0) {
     contents = data.map((item) => (
-      // <CardItem key={item._id}>
-      //   <Card>
-      //     <ImageWrapper>
-      //       <TestImg src={item.images[0].url} alt={item.name} />
-      //     </ImageWrapper>
-
-      //     <CardContent>
-      //       <CardTitle>{item.name}</CardTitle>
-      //       <TextRatingBox>
-      //         <CardText>$ {item.price}</CardText>
-      //         <StarRating rating={item.rate} />
-      //       </TextRatingBox>
-      //       <InfoCartMarkBox>
-      //         <Button onClick={() => handleDetailProd(item._id)}>
-      //           更多資訊
-      //         </Button>
-      //         <CartMarkBox>
-      //           <BookMark />
-      //           <Cart />
-      //         </CartMarkBox>
-      //       </InfoCartMarkBox>
-      //     </CardContent>
-      //   </Card>
-      // </CardItem>
       <RefactorCard
         key={item._id}
         id={item._id}

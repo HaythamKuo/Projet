@@ -2,8 +2,7 @@ import styled from "styled-components";
 
 import ParallaxSection from "../styles/UI/ParallaxSection";
 import ProdCard from "../components/ProdCard";
-
-import StarRating from "../styles/UI/StarRating";
+import Breadcrumb from "../styles/UI/Breadcrumb";
 
 const ProdPageContainer = styled.div``;
 function AllProductsPage() {
@@ -16,6 +15,7 @@ function AllProductsPage() {
       {/* 條件 */}
       <div></div>
       {/* 圖片 */}
+      <Breadcrumb />
       <div>
         <ProdCard />
       </div>

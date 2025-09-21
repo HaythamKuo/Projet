@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
@@ -69,6 +69,7 @@ function ProdImgGallery() {
 
   const [firstItem, setFirstItem] = useState({ S: 0, M: 0, L: 0 });
   const { prodid } = useParams();
+  const location = useLocation();
 
   const { userInfo } = useSelector((state) => state.auth);
   const cartItems = useSelector((state) => {
@@ -170,7 +171,6 @@ function ProdImgGallery() {
     return <ProcessLoader />;
   }
   if (isError) {
-    // return <p>{error?.data?.message || "發生錯誤"}</p>;
     console.log(error);
   }
 

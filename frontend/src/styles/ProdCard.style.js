@@ -132,31 +132,32 @@
 // //     flex-direction: column;
 // //   }
 // // `;
+import styled from "styled-components";
 
-// // export const Button = styled.button.attrs((prop) => ({
-// //   type: prop.type || "button",
-// // }))`
-// //   background-color: ${({ theme }) => theme.spotLight.color};
-// //   border: 1px solid rgba(255, 255, 255, 0.2);
-// //   border-radius: 4px;
-// //   padding: 0.8rem;
-// //   font-size: 14px;
-// //   font-weight: bold;
-// //   text-transform: uppercase;
-// //   color: ${({ theme }) => theme.card.backGround};
-// //   cursor: pointer;
-// //   width: 100%;
-// //   //flex-grow: 2;
+export const Button = styled.button.attrs((prop) => ({
+  type: prop.type || "button",
+}))`
+  background-color: ${({ theme }) => theme.spotLight.color};
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  padding: 0.8rem;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: ${({ theme }) => theme.card.backGround};
+  cursor: pointer;
+  width: 100%;
+  //flex-grow: 2;
 
-// //   transition: transform 0.3s ease, box-shadow 0.2s ease;
+  transition: transform 0.3s ease, box-shadow 0.2s ease;
 
-// //   &:hover {
-// //     /* 向上移動 2px，可依需求調整距離 */
-// //     transform: translateY(-3px);
-// //     /* 如果想要加點陰影效果，可以同時加上 box-shadow */
-// //     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-// //   }
-// // `;
+  &:hover {
+    /* 向上移動 2px，可依需求調整距離 */
+    transform: translateY(-3px);
+    /* 如果想要加點陰影效果，可以同時加上 box-shadow */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+`;
 
 // // export const CartMarkBox = styled.div`
 // //   display: flex;

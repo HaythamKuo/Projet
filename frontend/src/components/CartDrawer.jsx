@@ -66,24 +66,10 @@ function CartDrawer() {
   };
 
   //導向結帳頁面與關閉購物車
-  function goToCheckout() {
-    dispatch(closeCart());
-    navigate("/checkout");
-  }
-
-  //用於esc and 點擊陰影就能消失的函式
-  // useEffect(() => {
-  //   if (isOpen) {
-  //     document.body.style.overflow = "hidden";
-  //   } else {
-  //     document.body.style.overflow = "";
-  //   }
-
-  //   if (!isOpen) return;
-  //   return () => {
-  //     document.body.style.overflow = "";
-  //   };
-  // }, [isOpen]);
+  // function goToCheckout() {
+  //   dispatch(closeCart());
+  //   navigate("/checkout");
+  // }
 
   useEffect(() => {
     if (!userInfo || !isOpen) return; // 只有登入才 fetch
@@ -202,7 +188,10 @@ function CartDrawer() {
                 <span>$ {totalPrice}</span>
               </div>
 
-              <CheckBtn disabled={items.length === 0} onClick={goToCheckout}>
+              <CheckBtn
+                disabled={items.length === 0}
+                onClick={() => navigate("/checkout")}
+              >
                 結帳
               </CheckBtn>
             </div>

@@ -57,6 +57,10 @@ export const SkeletonCardItem = styled.li`
   ${({ theme }) => theme?.media?.md} {
     flex: 0 0 100%;
   }
+
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
 `;
 
 // 骨架卡片本體（仿 Card）
@@ -72,7 +76,7 @@ export const SkeletonCard = styled.div`
 // Skeleton 卡片元件
 function Skeleton({ marginBottom }) {
   return (
-    <SkeletonCard>
+    <SkeletonCards>
       <SkeletonWrapper $marginBottom={marginBottom} height="200px">
         <Shimmer />
       </SkeletonWrapper>
@@ -87,7 +91,7 @@ function Skeleton({ marginBottom }) {
           <Shimmer />
         </SkeletonWrapper>
       </div>
-    </SkeletonCard>
+    </SkeletonCards>
   );
 }
 

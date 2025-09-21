@@ -14,6 +14,7 @@ import {
 } from "../styles/SearchRespage.style";
 import RefactorCard from "../styles/UI/RefactorCard";
 import ProcessLoader from "../styles/UI/ProcessLoader";
+import Breadcrumb from "../styles/UI/Breadcrumb";
 
 function SearchRespage() {
   const navigate = useNavigate();
@@ -25,8 +26,6 @@ function SearchRespage() {
     skip: saftyQuery === "",
   });
 
-  //  console.log(query);
-
   useEffect(() => {
     if (!query) navigate("/products");
     return;
@@ -37,6 +36,7 @@ function SearchRespage() {
 
   return (
     <SearchContainer>
+      <Breadcrumb />
       搜尋結果" <SpecificTar>{query}</SpecificTar> "
       {products.length ? (
         <FilterContainer>
@@ -49,6 +49,7 @@ function SearchRespage() {
               name={item.name}
               price={item.price}
               rating={item.rate}
+              query={query}
             />
           ))}
         </FilterContainer>

@@ -4,6 +4,7 @@ import { flexCenter, flexContainer } from "./theme";
 import { Button } from "./ProdCard.style";
 import noProdSvg from "../assets/noprodhere.svg?react";
 import { FaHeart, FaRegTrashCan } from "react-icons/fa6";
+import { SubmitBtn } from "./ProdImgGallery.style";
 
 //控制overlay淡出/淡入
 const fadeIn = keyframes`
@@ -154,12 +155,16 @@ export const CartBottom = styled.div`
   }
 `;
 
-export const CheckBtn = styled(Button)`
+export const CheckBtn = styled(SubmitBtn)`
   font-size: 1rem;
 
   &:disabled {
     cursor: not-allowed;
     opacity: 0.5;
+  }
+
+  &:active {
+    transform: none;
   }
 `;
 

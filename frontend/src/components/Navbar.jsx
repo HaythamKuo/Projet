@@ -30,9 +30,9 @@ function Navbar({ onClick }) {
   const dispatch = useDispatch();
   const { isOpen } = useSelector((state) => state.cart);
 
-  const location = useLocation();
-  const isCheckout = location.pathname === "/checkout";
-  const isCreating = location.pathname === "/create-product";
+  const { pathname } = useLocation();
+  const isCheckout = pathname === "/checkout";
+  const isCreating = pathname === "/create-product";
 
   //搜索
   const [search, setSearch] = useState(false);
@@ -42,7 +42,7 @@ function Navbar({ onClick }) {
 
   useEffect(() => {
     setSearch(false);
-  }, [location.pathname]);
+  }, [pathname]);
 
   //try out inert attribute
   useEffect(() => {

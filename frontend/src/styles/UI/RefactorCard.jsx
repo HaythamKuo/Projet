@@ -1,15 +1,9 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { imgBasicStyle } from "../theme";
-import { SubmitBtn, CancelBtn } from "../ProdImgGallery.style";
+import { SubmitBtn } from "../ProdImgGallery.style";
 import { FaRegBookmark, FaCartShopping } from "react-icons/fa6";
 import StarRating from "./StarRating";
-
-// const Container = styled.div`
-//   display: grid;
-//   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-//   gap: 1.5rem;
-// `;
 
 const Card = styled.div`
   border-radius: 8px;
@@ -79,7 +73,7 @@ const BookMark = styled(FaRegBookmark)`
   font-size: 1.5rem;
   cursor: pointer;
 `;
-function RefactorCard({ id, src, alt, name, price, rating }) {
+function RefactorCard({ id, src, alt, name, price, rating, query }) {
   return (
     <Card>
       <ImgWrapper>
@@ -89,12 +83,16 @@ function RefactorCard({ id, src, alt, name, price, rating }) {
       <InfoContainer>
         <ProdName>{name}</ProdName>
         <InfoCenter>
-          <p>${price}</p>
+          <p>$ {price}</p>
           <StarRating rating={rating} />
         </InfoCenter>
 
         <InfoBottom>
-          <GoIoProd as={Link} to={`/products/${id}`}>
+          <GoIoProd
+            as={Link}
+            to={`/products/${id}`}
+            state={{ fromQuery: query }}
+          >
             更多資訊
           </GoIoProd>
 

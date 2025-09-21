@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -43,7 +43,7 @@ import {
 } from "../store/apis/orderAPi";
 import { fetchGoods } from "../store/thunks/fetchGoods";
 import { updateAddress } from "../store/slices/authSlice";
-import { selectCartItems } from "../store/slices/cartSlice";
+import { closeCart, selectCartItems } from "../store/slices/cartSlice";
 
 import ProcessLoader from "../styles/UI/ProcessLoader";
 import { Arrow } from "./SelectOption";
@@ -52,6 +52,8 @@ import { useDeleteGood } from "../hooks/useDeleteGood";
 function Checkout() {
   const dialogRef = useRef();
   const navigate = useNavigate();
+  const location = useLocation();
+  const dispatch = useDispatch();
 
   const [method, setMethod] = useState("credit_card");
 
@@ -60,8 +62,6 @@ function Checkout() {
   const [processOfPaying, setProcessOfPaying] = useState(false);
 
   const [innards, setInnards] = useState("simple");
-
-  const dispatch = useDispatch();
 
   const { userInfo } = useSelector((state) => state.auth);
   const items = useSelector(selectCartItems);
@@ -91,6 +91,12 @@ function Checkout() {
   }, [dispatch, items]);
 
   // console.log(cart);
+
+  useEffect(() => {
+    if (location.pathname === "/checkout") {
+      dispatch(closeCart());
+    }
+  }, [dispatch, location.pathname]);
 
   useEffect(() => {
     if (fetching) return;
@@ -163,131 +169,6 @@ function Checkout() {
   }
 
   //console.log(items);
-  // async function setOrder(e) {
-  //   e.preventDefault();
-
-  //   if (!userInfo) {
-  //     toast.error("請先登入再結帳");
-  //     return;
-  //   }
-
-  //   if (!items || items.length === 0) {
-  //     toast.error("購物車內沒有商品");
-  //     return;
-  //   }
-
-  //   if (processOfPaying || updatting || forwarding) return;
-
-  //   //判斷有沒有待付的訂單
-
-  //   const { isValid, errs, cleanValue } = validateOrder(address, items, method);
-
-  //   if (!isValid) {
-  //     errs.forEach((e) => toast.error(e));
-  //     return;
-  //   }
-
-  //   setProcessOfPaying(true);
-
-  //   const payload = {};
-
-  //   Object.assign(payload, {
-  //     address,
-  //     totalAmount: items?.length,
-  //     items: cleanValue.items.map((item) => ({
-  //       product: item.productId._id,
-  //       prodName: item.productId.name,
-  //       quantity: item.quantity,
-  //       price: item.unitPrice,
-  //     })),
-  //     totalPrice: cleanValue.totalPrice,
-  //     paymentMethod: cleanValue.paymentMethod,
-  //   });
-
-  //   try {
-  //     toast.info("正在製作訂單", { autoClose: 1500 });
-  //     const res = await createOrder(payload).unwrap();
-
-  //     // const { _id: orderId, totalPrice, orderItems } = res.order;
-
-  //     // const paymentResult = await createEcPayment({
-  //     //   orderId,
-  //     //   totalAmount: totalPrice,
-  //     //   itemName: orderItems.map((item) => item.name).join("#"),
-  //     //   customerEmail: "qaz7954200@livemail.tw",
-  //     // }).unwrap();
-
-  //     // if (paymentResult.success) {
-  //     //   toast.success("訂單建立成功 即將導向付款介面", {
-  //     //     autoClose: 1000,
-  //     //   });
-
-  //     //   return setTimeout(() => {
-  //     //     redirectToEcpay(paymentResult.paymentUrl, paymentResult.params);
-  //     //   }, 1000);
-  //     // } else {
-  //     //   throw new Error("建立付款失敗");
-  //     // }
-
-  //     if (res.reused) {
-  //       if (res.order.status === "pending") {
-  //         toast.info("已有未付款的訂單，將導向付款頁面");
-
-  //         const paymentResult = await createEcPayment({
-  //           orderId: res.order._id,
-  //           totalAmount: res.order.totalPrice,
-  //           itemName: res.order.items.map((item) => item.name).join("#"),
-  //           customerEmail: userInfo.email,
-  //         }).unwrap();
-
-  //         if (paymentResult.success) {
-  //           return redirectToEcpay(
-  //             paymentResult.paymentUrl,
-  //             paymentResult.params
-  //           );
-  //         } else {
-  //           toast.error("付款建立失敗，請稍後再試");
-  //         }
-  //       }
-
-  //       if (res.order.status === "paid") {
-  //         toast.info("此訂單已完成付款，將導向訂單明細");
-  //         return navigate(`/orders/${res.order._id}`);
-  //       }
-
-  //       if (res.order.status === "canceled" || res.order.status === "failed") {
-  //         toast.error("先前訂單已失效，請重新建立");
-  //         // 繼續往下走建立新訂單的流程
-  //       }
-  //     }
-
-  //     const paymentResult = await createEcPayment({
-  //       orderId,
-  //       totalAmount: totalPrice,
-  //       itemName: orderItems.map((item) => item.name).join("#"),
-  //       customerEmail: "qaz7954200@livemail.tw",
-  //     }).unwrap();
-  //     if (paymentResult.success) {
-  //       toast.success("訂單建立成功 即將導向付款介面", {
-  //         autoClose: 1000,
-  //       });
-  //       return setTimeout(() => {
-  //         redirectToEcpay(paymentResult.paymentUrl, paymentResult.params);
-  //       }, 1000);
-  //     } else {
-  //       throw new Error("建立付款失敗");
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-
-  //     // 如果是付款階段失敗，給用戶明確的指示
-  //     if (error?.data?.step === "payment") {
-  //       toast.error("付款設置失敗，請稍後再試或聯繫客服");
-  //     }
-  //   } finally {
-  //     setProcessOfPaying(false);
-  //   }
-  // }
 
   async function setOrder(e) {
     e.preventDefault();
