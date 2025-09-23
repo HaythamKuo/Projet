@@ -82,14 +82,14 @@ function Breadcrumb() {
 
   const segments = pathname.split("/").filter(Boolean);
 
-  const testCrumbs = [{ path: "/", label: "首頁" }];
+  const routeCrumbs = [{ path: "/", label: "首頁" }];
 
   // if (segments.includes("products") && !fromQuery) {
-  //   testCrumbs.push({ path: "/products", label: breadcrumbMap["products"] });
+  //   routeCrumbs.push({ path: "/products", label: breadcrumbMap["products"] });
   // }
-
+  //如果進到搜尋路由加上原有的路由
   if (segments.includes("search") && fromQuery) {
-    testCrumbs.push({
+    routeCrumbs.push({
       path: `/search?query=${encodeURIComponent(fromQuery)}`,
       label: `搜尋結果:${fromQuery}`,
     });
@@ -97,17 +97,17 @@ function Breadcrumb() {
 
   // 如果有搜尋關鍵字，不論當前路由是 search 還是 products 都要加
   if (fromQuery && prodid) {
-    testCrumbs.push({
+    routeCrumbs.push({
       path: `/search?query=${encodeURIComponent(fromQuery)}`,
       label: fromQuery,
     });
   } else if (segments.includes("products")) {
     // 沒有搜尋時才顯示「全部商品」
-    testCrumbs.push({ path: "/products", label: breadcrumbMap["products"] });
+    routeCrumbs.push({ path: "/products", label: breadcrumbMap["products"] });
   }
 
   if (prodid) {
-    testCrumbs.push({
+    routeCrumbs.push({
       path: `/products/${prodid}`,
       label: prod?.name || (isLoading ? "載入中" : "未知商品"),
     });
@@ -129,7 +129,7 @@ function Breadcrumb() {
           style={{ background: "gray", padding: "1px", margin: "5px" }}
         ></div>
         <Right>
-          {testCrumbs.map(({ path, label }, index) => (
+          {routeCrumbs.map(({ path, label }, index) => (
             <Fragment key={path}>
               {index > 0 && <BreadRightArrow />}
               <Direct as={Link} to={path}>
