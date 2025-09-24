@@ -43,6 +43,7 @@ const orderSchema = Schema(
       enum: ["pending", "processing", "paid", "failed", "canceled"],
       default: "pending",
     },
+    createdAtFormatted: { type: Date },
   },
   { timestamps: true }
 );

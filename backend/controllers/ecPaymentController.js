@@ -1,3 +1,5 @@
+import dotenv from "dotenv";
+dotenv.config();
 import asyncHandler from "express-async-handler";
 import crypto from "crypto";
 import dayjs from "dayjs";

@@ -1,8 +1,14 @@
 import asyncHandler from "express-async-handler";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc.js";
+import timezone from "dayjs/plugin/timezone.js";
 import OrderModal from "../models/orderModel.js";
 
 import cartModel from "../models/cartModel.js";
 import { createOrderSchemaFn } from "../middlewares/joiValidation.js";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export const setupOrder = asyncHandler(async (req, res) => {
   const { error, value } = createOrderSchemaFn(req.body);
@@ -63,15 +69,20 @@ export const setupOrder = asyncHandler(async (req, res) => {
 
 export const getOrderInfo = asyncHandler(async (req, res) => {
   const userId = req.user._id;
-  const order = await OrderModal.findOne({ user: userId, status: "paid" }).sort(
-    {
-      createcAt: -1,
-    }
-  );
+  const order = await OrderModal.findOne({ user: userId, status: "paid" })
+    .sort({ createdAt: -1 })
+    .lean();
 
   if (!order) {
     res.status(404);
     throw new Error("查無此訂單");
   }
+
+  order.createdAtFormatted = dayjs(order.createdAt)
+    .tz("Asia/Taipei")
+    .format("YYYY/MM/DD HH:mm");
+
+  console.log(order);
+
   res.json(order);
 });

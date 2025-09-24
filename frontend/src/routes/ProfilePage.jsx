@@ -84,7 +84,10 @@ function Profile() {
           </Link>
           <ProfileBtns>
             <button>訊息</button>
-            <button>隨便一個</button>
+            {/* <button as={Link} to="/orders">
+              查看訂單
+            </button> */}
+            <Link to="orders">check</Link>
           </ProfileBtns>
           <InfoDelete />
         </UserInteractionBox>

@@ -12,6 +12,7 @@ const initialState = {
     totalPrice: 0,
   },
   isLoading: false,
+  hasFetched: false,
   isOpen: false,
   error: null,
 };
@@ -110,11 +111,14 @@ const cartSlice = createSlice({
       })
       .addCase(fetchGoods.fulfilled, (state, action) => {
         state.isLoading = false;
+        state.hasFetched = true;
 
         Object.assign(state.cart, action.payload);
       })
       .addCase(fetchGoods.rejected, (state, action) => {
         state.isLoading = false;
+        state.hasFetched = true;
+
         state.error =
           action.payload || action.error?.message || "無法取得購物車內的資料";
       })

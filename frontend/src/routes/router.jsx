@@ -13,9 +13,11 @@ import Profile from "./ProfilePage";
 import CreateProduct from "../components/CreateProduct";
 import EditProduct from "../components/EditProduct";
 import ErrPage from "./ErrPage";
-import Checkout from "../components/CheckOut";
+
+import Checkout from "../components/Checkout";
 import Ecpay from "./Ecpay";
 import SearchRespage from "./SearchRespage";
+import Order from "../components/Order";
 
 export const createRouter = (toggleTheme) => {
   return createBrowserRouter([
@@ -51,7 +53,11 @@ export const createRouter = (toggleTheme) => {
           children: [
             {
               path: "profile",
-              element: <Profile />,
+              element: <Outlet />,
+              children: [
+                { index: true, element: <Profile /> },
+                { path: "orders", element: <Order /> },
+              ],
             },
             {
               path: "checkout",

@@ -208,6 +208,8 @@ function Checkout() {
       totalPrice: cleanValue.totalPrice,
       paymentMethod: cleanValue.paymentMethod,
     });
+    console.log("cart.totalPrice", cart.totalPrice);
+    console.log("payload", payload);
 
     try {
       toast.info("正在製作訂單", { autoClose: 1500 });
@@ -257,6 +259,8 @@ function Checkout() {
         itemName: orderItems.map((item) => item.name).join("#"),
         customerEmail: userInfo.email,
       }).unwrap();
+
+      console.log(paymentResult);
 
       if (paymentResult.success) {
         toast.success("訂單建立成功，即將導向付款介面", { autoClose: 1000 });
