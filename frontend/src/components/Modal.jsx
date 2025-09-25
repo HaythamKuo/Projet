@@ -32,6 +32,9 @@ export const ContentBox = styled.div`
   width: 100%;
   //max-width: 500px;
   min-height: 200px;
+  //height: ${(prop) => prop.$minorHeight && "1000px"};
+  max-height: ${(prop) => prop.$minorHeight && prop.$minorHeight};
+  height: ${(prop) => prop.$minorHeight && prop.$minorHeight};
 
   background-color: bisque;
 
@@ -76,7 +79,7 @@ export const ContentBox = styled.div`
  */
 
 const Modal = forwardRef(function Modal(
-  { isOpen, children, onClose, height, width },
+  { isOpen, children, onClose, height, width, minorHeight },
   ref
 ) {
   const modalRoot = document.getElementById("modal");
@@ -97,7 +100,7 @@ const Modal = forwardRef(function Modal(
 
   return createPortal(
     <DialogContainer ref={ref} width={width} height={height} onClose={onClose}>
-      <ContentBox>{children}</ContentBox>
+      <ContentBox $minorHeight={minorHeight}>{children}</ContentBox>
     </DialogContainer>,
     modalRoot
   );

@@ -1,3 +1,28 @@
+/**
+ * CheckoutGuard Component
+ *
+ * React Route 守門元件，用於保護結帳頁面：
+ * 1. 進入頁面時自動 dispatch `fetchGoods` 以取得資料庫中的購物車內容。
+ * 2. 在資料讀取期間顯示載入動畫 (ProcessLoader)。
+ * 3. 若資料抓取完成且購物車為空，導向 `/products`。
+ * 4. 若購物車內有商品，渲染子元件 (通常是 <Checkout />)。
+ *
+ * @component
+ * @param {Object} props - 元件的屬性。
+ * @param {React.ReactNode} props.children - 需要受保護的頁面內容。
+ * @returns {JSX.Element} 如果符合條件則回傳子元件，否則回傳 Loader 或 Redirect。
+ *
+ * @example
+ * // routes/index.jsx
+ * {
+ *   path: "checkout",
+ *   element: (
+ *     <CheckoutGuard>
+ *       <Checkout />
+ *     </CheckoutGuard>
+ *   ),
+ * }
+ */
 import { useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,7 +37,6 @@ function CheckoutGuard({ children }) {
 
   const { isLoading, hasFetched } = useSelector((state) => state.cart);
 
-  // 首次進入就抓資料
   useEffect(() => {
     if (!hasFetched) {
       dispatch(fetchGoods());

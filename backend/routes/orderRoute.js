@@ -5,6 +5,6 @@ import { getOrderInfo, setupOrder } from "../controllers/orderController.js";
 const orderRouter = Router();
 
 orderRouter.route("/").post(protect, setupOrder);
-orderRouter.route("/latest").get(protect, getOrderInfo);
+orderRouter.route("/prodorders").get(protect, getOrderInfo);
 
 export default orderRouter;

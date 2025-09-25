@@ -67,22 +67,85 @@ export const setupOrder = asyncHandler(async (req, res) => {
   }
 });
 
+// export const getOrderInfo = asyncHandler(async (req, res) => {
+//   const userId = req.user._id;
+//   const order = await OrderModal.findOne({ user: userId, status: "paid" })
+//     .sort({ createdAt: -1 })
+//     .lean();
+
+//   if (!order) {
+//     res.status(404);
+//     throw new Error("查無此訂單");
+//   }
+
+//   order.createdAtFormatted = dayjs(order.createdAt)
+//     .tz("Asia/Taipei")
+//     .format("YYYY/MM/DD HH:mm");
+
+//   console.log(order);
+
+//   res.json(order);
+// });
+
 export const getOrderInfo = asyncHandler(async (req, res) => {
   const userId = req.user._id;
-  const order = await OrderModal.findOne({ user: userId, status: "paid" })
-    .sort({ createdAt: -1 })
-    .lean();
+  const { all, sort } = req.query;
 
-  if (!order) {
-    res.status(404);
-    throw new Error("查無此訂單");
+  const sortOrder = sort === "asc" ? 1 : -1;
+
+  let orders;
+
+  if (all === "true") {
+    orders = await OrderModal.find({ user: userId, status: "paid" })
+      .sort({ createdAt: sortOrder })
+      .lean();
+
+    if (!orders) {
+      res.status(404);
+      throw new Error("查無此訂單");
+    }
+
+    orders = await orders.map((item) => ({
+      ...item,
+      createdAtFormatted: dayjs(item.createdAt)
+        .tz("Asia/Taipei")
+        .format("YYYY/MM/DD HH:mm"),
+    }));
+    console.log("all", orders);
+    res.json(orders);
+  } else {
+    orders = await OrderModal.findOne({ user: userId, status: "paid" })
+      .sort({ createdAt: -1 })
+      .lean();
+
+    if (!orders) {
+      res.status(404);
+      throw new Error("查無此訂單");
+    }
+
+    orders.createdAtFormatted = dayjs(orders.createdAt)
+      .tz("Asia/Taipei")
+      .format("YYYY/MM/DD HH:mm");
+
+    console.log("single", orders);
+
+    res.json([orders]);
   }
 
-  order.createdAtFormatted = dayjs(order.createdAt)
-    .tz("Asia/Taipei")
-    .format("YYYY/MM/DD HH:mm");
+  // const order = await OrderModal.findOne({ user: userId, status: "paid" })
+  //   .sort({ createdAt: -1 })
+  //   .lean();
 
-  console.log(order);
+  // if (!order) {
+  //   res.status(404);
+  //   throw new Error("查無此訂單");
+  // }
 
-  res.json(order);
+  // order.createdAtFormatted = dayjs(order.createdAt)
+  //   .tz("Asia/Taipei")
+  //   .format("YYYY/MM/DD HH:mm");
+
+  // console.log(order);
+
+  // res.json(order);
 });
