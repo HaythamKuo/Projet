@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { useGetOrderQuery } from "../store/apis/orderAPi";
+import { useCreateReviewMutation } from "../store/apis/reviewSlice";
 
 import {
   Right,
@@ -30,13 +31,13 @@ function Order() {
   const [isOpen, setIsOpen] = useState(false);
   const [showAll, setShowAll] = useState(true);
   const [sortOrder, setSortOrder] = useState("desc");
+  const [orderIdentity, setOrderIdentity] = useState(null);
 
   const { data, isLoading } = useGetOrderQuery({
     all: showAll,
     sort: sortOrder,
   });
-
-  //console.log(data);
+  const [postReviews] = useCreateReviewMutation();
 
   const prods = data?.flatMap((item) => item.orderItems) || [];
 
@@ -50,13 +51,42 @@ function Order() {
   if (isLoading) return <ProcessLoader />;
   if (!data) return <p>沒有訂單</p>;
 
-  function showModal() {
+  function showModal(id) {
+    setOrderIdentity(id);
     setIsOpen(true);
   }
 
-  function handleReviews(e) {
+  async function handleReviews(e) {
     e.preventDefault();
-    console.log(review);
+
+    //[prodId,{...}]
+    const reviewEntries = Object.entries(review);
+    const reviews = reviewEntries.map(([prodId, value]) => {
+      const rank = value.rank;
+      const comment = value.comment;
+
+      const singleReview = {
+        prodId,
+        rank,
+        comment,
+      };
+
+      return singleReview;
+    });
+
+    const payload = {
+      orderId: orderIdentity,
+      reviews,
+    };
+
+    console.log(payload);
+
+    try {
+      const res = await postReviews(payload).unwrap();
+      //   console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   //const { paymentInfo, orderItems } = data;
@@ -167,7 +197,7 @@ function Order() {
           <Right>
             <OrderId>訂單編號: #{order._id}</OrderId>
             <OrderTotal>總額: ${order.totalPrice}</OrderTotal>
-            <RankBtn onClick={() => showModal()}>給予評價</RankBtn>
+            <RankBtn onClick={() => showModal(order._id)}>給予評價</RankBtn>
           </Right>
         </OrderBlock>
       ))}

@@ -67,26 +67,6 @@ export const setupOrder = asyncHandler(async (req, res) => {
   }
 });
 
-// export const getOrderInfo = asyncHandler(async (req, res) => {
-//   const userId = req.user._id;
-//   const order = await OrderModal.findOne({ user: userId, status: "paid" })
-//     .sort({ createdAt: -1 })
-//     .lean();
-
-//   if (!order) {
-//     res.status(404);
-//     throw new Error("查無此訂單");
-//   }
-
-//   order.createdAtFormatted = dayjs(order.createdAt)
-//     .tz("Asia/Taipei")
-//     .format("YYYY/MM/DD HH:mm");
-
-//   console.log(order);
-
-//   res.json(order);
-// });
-
 export const getOrderInfo = asyncHandler(async (req, res) => {
   const userId = req.user._id;
   const { all, sort } = req.query;
@@ -111,7 +91,7 @@ export const getOrderInfo = asyncHandler(async (req, res) => {
         .tz("Asia/Taipei")
         .format("YYYY/MM/DD HH:mm"),
     }));
-    console.log("all", orders);
+    //console.log("all", orders);
     res.json(orders);
   } else {
     orders = await OrderModal.findOne({ user: userId, status: "paid" })
@@ -131,21 +111,4 @@ export const getOrderInfo = asyncHandler(async (req, res) => {
 
     res.json([orders]);
   }
-
-  // const order = await OrderModal.findOne({ user: userId, status: "paid" })
-  //   .sort({ createdAt: -1 })
-  //   .lean();
-
-  // if (!order) {
-  //   res.status(404);
-  //   throw new Error("查無此訂單");
-  // }
-
-  // order.createdAtFormatted = dayjs(order.createdAt)
-  //   .tz("Asia/Taipei")
-  //   .format("YYYY/MM/DD HH:mm");
-
-  // console.log(order);
-
-  // res.json(order);
 });

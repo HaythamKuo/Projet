@@ -12,6 +12,7 @@ import userRouter from "./routes/userRoute.js";
 import prodRouter from "./routes/prodRoute.js";
 import cartRouter from "./routes/cartRoute.js";
 import orderRouter from "./routes/orderRoute.js";
+import reviewRouter from "./routes/reviewRoute.js";
 import ecPayRouter from "./routes/ecpayRoute.js";
 
 import googleAuthRouter from "./routes/googleAuthRoute.js";
@@ -34,6 +35,7 @@ app.use("/api/users", userRouter);
 app.use("/api/prods", prodRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/order", orderRouter);
+app.use("/api/review", reviewRouter);
 app.use("/api/ecpay", ecPayRouter);
 
 app.use(errHandler);

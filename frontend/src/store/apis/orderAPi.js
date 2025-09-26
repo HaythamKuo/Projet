@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const orderApi = createApi({
   reducerPath: "order",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5001/api/order",
+    baseUrl: "http://localhost:5001",
     credentials: "include",
   }),
 
@@ -12,14 +12,16 @@ const orderApi = createApi({
       createOrder: builder.mutation({
         query: (data) => ({
           method: "POST",
-          url: "/",
+          url: "/api/order",
           body: data,
         }),
       }),
       getOrder: builder.query({
         query: ({ all = false, sort = "desc" }) => ({
           method: "GET",
-          url: all ? `/prodorders?all=true&sort=${sort}` : `/prodorders`,
+          url: all
+            ? `/api/order/prodorders?all=true&sort=${sort}`
+            : `/prodorders`,
         }),
       }),
 
