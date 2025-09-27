@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { motion } from "framer-motion";
 
-const ReviewStars = ({ onChange, prodId, rating }) => {
+const ReviewStars = ({ onChange, prodId, rating, disable }) => {
   const handleClick = (value) => {
     if (onChange) onChange(value);
   };
@@ -11,11 +11,14 @@ const ReviewStars = ({ onChange, prodId, rating }) => {
       <div className="rating">
         {[5, 4, 3, 2, 1].map((star) => (
           <StarLabel
+            $disable={disable}
             key={star}
             htmlFor={`star${star}${prodId}`}
             whileHover={{ scale: 1.2, color: "#ff9e0b" }}
             whileTap={{ scale: 0.9, color: "#e58e09" }}
-            style={{ color: star <= rating ? "#ffa723" : "#666" }}
+            style={{
+              color: star <= rating ? "#ffa723" : "#666",
+            }}
             onClick={() => handleClick(star)}
           >
             ★
@@ -53,6 +56,7 @@ const StarLabel = styled(motion.label)`
   user-select: none;
   transition: color 0.2s;
   margin: 0 2px;
+  pointer-events: ${(prop) => prop.$disable && "none"};
 `;
 
 export default ReviewStars;

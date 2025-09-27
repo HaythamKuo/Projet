@@ -108,8 +108,6 @@ export const validateOrder = (address, items, paymentMethod) => {
     }
   });
 
-  //let totalPrice
-
   const totalPrice = items.reduce((acc, item) => {
     if (isNaN(item.unitPrice) || isNaN(item.quantity)) {
       errs.push("是開發者的失誤 靜待修正");
@@ -126,4 +124,24 @@ export const validateOrder = (address, items, paymentMethod) => {
     errs,
     cleanValue: { address, items, totalPrice, paymentMethod },
   };
+};
+
+export const ValidateReviews = (reviews = []) => {
+  const commentHasValue = reviews.some(
+    ([_, { comment }]) => comment?.trim().length > 0
+  );
+
+  const commentHasLength = reviews.every(
+    ([_, { comment }]) => comment?.trim().length <= 20
+  );
+
+  // return{
+  //   commentHasValue,commentHasLength
+  // }
+
+  if (!commentHasValue || !commentHasLength)
+    return {
+      isErr: true,
+      message: "至少要有一筆評論，且每則評論不能超過 20 字",
+    };
 };

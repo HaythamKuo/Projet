@@ -1,6 +1,7 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { useGetOrderQuery } from "../store/apis/orderAPi";
 import { useCreateReviewMutation } from "../store/apis/reviewSlice";
+import { toast } from "react-toastify";
 
 import {
   Right,
@@ -25,6 +26,7 @@ import {
 import ProcessLoader from "../styles/UI/ProcessLoader";
 import ReviewStars from "../styles/UI/ReviewStars";
 import Modal from "./Modal";
+import { ValidateReviews } from "../utils/validation";
 
 function Order() {
   const dialogRef = useRef();
@@ -32,6 +34,8 @@ function Order() {
   const [showAll, setShowAll] = useState(true);
   const [sortOrder, setSortOrder] = useState("desc");
   const [orderIdentity, setOrderIdentity] = useState(null);
+  const [review, setReview] = useState({});
+  const [submitAdmission, setSubmitAdmission] = useState([]);
 
   const { data, isLoading } = useGetOrderQuery({
     all: showAll,
@@ -39,17 +43,29 @@ function Order() {
   });
   const [postReviews] = useCreateReviewMutation();
 
-  const prods = data?.flatMap((item) => item.orderItems) || [];
+  const prods = useMemo(
+    () => data?.flatMap((item) => item.orderItems) || [],
+    [data]
+  );
 
+  useEffect(() => {
+    if (!isOpen) {
+      // 每次關閉都重置
+      const reset = {};
+      prods.forEach((prod) => {
+        reset[prod._id] = { rank: 1, comment: "" };
+      });
+      setReview(reset);
+      setOrderIdentity(null);
+      setSubmitAdmission([]);
+    }
+  }, [isOpen, prods]);
   //為了讓rank預設值為1
-  const initialReview = {};
-  prods.forEach((prod) => {
-    initialReview[prod._id] = { rank: 1, comment: "" };
-  });
-  const [review, setReview] = useState(initialReview);
-
-  if (isLoading) return <ProcessLoader />;
-  if (!data) return <p>沒有訂單</p>;
+  // const initialReview = {};
+  // prods.forEach((prod) => {
+  //   initialReview[prod._id] = { rank: 1, comment: "" };
+  // });
+  // const [review, setReview] = useState(initialReview);
 
   function showModal(id) {
     setOrderIdentity(id);
@@ -61,31 +77,67 @@ function Order() {
 
     //[prodId,{...}]
     const reviewEntries = Object.entries(review);
-    const reviews = reviewEntries.map(([prodId, value]) => {
-      const rank = value.rank;
-      const comment = value.comment;
 
-      const singleReview = {
+    const commentHasValue = reviewEntries.some(
+      ([_, { comment }]) => comment?.trim().length > 0
+    );
+    const commentHasLength = reviewEntries.every(
+      ([_, { comment }]) => comment?.trim().length <= 20
+    );
+
+    if (!commentHasValue || !commentHasLength) {
+      toast.warn("至少要有一筆評論，且每則評論不能超過 20 字");
+      return;
+    }
+
+    // const reviews = reviewEntries.map(([prodId, value]) => {
+    //   const rank = value.rank;
+    //   const comment = value.comment;
+
+    //   const singleReview = {
+    //     prodId,
+    //     rank: rank ?? 1,
+    //     comment: comment ?? "",
+    //   };
+
+    //   return singleReview;
+    // });
+
+    const reviews = reviewEntries
+      .filter(([_, { comment }]) => comment?.trim().length > 0)
+      .map(([prodId, { rank, comment }]) => ({
         prodId,
-        rank,
-        comment,
-      };
-
-      return singleReview;
-    });
+        rank: rank ?? 1,
+        comment: comment ?? "",
+      }));
 
     const payload = {
       orderId: orderIdentity,
       reviews,
     };
 
-    console.log(payload);
+    // setSubmitAdmission((pre) => [
+    //   ...pre,
+    //   reviews.map((review) => review.prodId),
+    // ]);
+
+    setSubmitAdmission((pre) => [
+      ...pre,
+      ...reviews.map((review) => review.prodId),
+    ]);
+
+    //console.log(payload);
+    console.log(reviews);
 
     try {
       const res = await postReviews(payload).unwrap();
       //   console.log(res);
     } catch (error) {
       console.log(error);
+
+      setSubmitAdmission((pre) =>
+        pre.filter((id) => !reviews.some((r) => r.prodId === id))
+      );
     }
   }
 
@@ -93,6 +145,8 @@ function Order() {
 
   //console.log(prods);
   //console.log(showAll);
+  if (isLoading) return <ProcessLoader />;
+  if (!data) return <p>沒有訂單</p>;
 
   return (
     <OrderContainer>
@@ -120,6 +174,7 @@ function Order() {
               <div key={prod._id}>
                 <p>{prod.name}</p>
                 <ReviewStars
+                  disable={submitAdmission.includes(prod._id)}
                   prodId={prod._id}
                   rating={review[prod._id]?.rank || 1}
                   onChange={(newRank) => {
@@ -134,6 +189,8 @@ function Order() {
                 />
                 <ReviewArea
                   name={prod._id}
+                  placeholder="字數不得超過20字"
+                  disabled={submitAdmission.includes(prod._id)}
                   value={review[prod._id]?.comment || ""}
                   onChange={(e) => {
                     const newComment = e.target.value;
@@ -151,7 +208,9 @@ function Order() {
           </div>
           <div style={{ display: "flex", justifyContent: "center" }}>
             <button>確定</button>
-            <button onClick={() => setIsOpen(false)}>取消</button>
+            <button type="button" onClick={() => setIsOpen(false)}>
+              取消
+            </button>
           </div>
         </ModalBox>
       </Modal>
