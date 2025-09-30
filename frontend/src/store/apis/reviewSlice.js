@@ -6,14 +6,25 @@ const reviewApi = createApi({
     baseUrl: "http://localhost:5001/api/review",
     credentials: "include",
   }),
+  tagTypes: ["Review"],
+  // keepUnusedDataFor:5,
   endpoints(builder) {
     return {
+      fetchSpecificReviews: builder.query({
+        query: (orderId) => ({
+          method: "GET",
+          url: `/order/${orderId}`,
+        }),
+        providesTags: ["Review"],
+      }),
+
       createReview: builder.mutation({
         query: (data) => ({
           method: "POST",
           body: data,
           url: "/create-review",
         }),
+        invalidatesTags: ["Review"],
         async onQueryStarted(arg, { dispatch, queryFulfilled }) {
           const { orderId, reviews } = arg;
 
@@ -38,18 +49,12 @@ const reviewApi = createApi({
             patchRes.undo();
           }
         },
-        // query(data) {
-        //   return {
-        //     method: "POST",
-        //     body: data,
-        //     url: "/create-review",
-        //   };
-        // },
       }),
     };
   },
 });
 
-export const { useCreateReviewMutation } = reviewApi;
+export const { useCreateReviewMutation, useLazyFetchSpecificReviewsQuery } =
+  reviewApi;
 
 export { reviewApi };

@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState, useMemo } from "react";
 import { useGetOrderQuery } from "../store/apis/orderAPi";
-import { useCreateReviewMutation } from "../store/apis/reviewSlice";
+import {
+  useCreateReviewMutation,
+  useLazyFetchSpecificReviewsQuery,
+} from "../store/apis/reviewSlice";
 import { toast } from "react-toastify";
 
 import {
@@ -41,31 +44,27 @@ function Order() {
     all: showAll,
     sort: sortOrder,
   });
-  const [postReviews] = useCreateReviewMutation();
+  const [postReviews, { isLoading: creating }] = useCreateReviewMutation();
 
-  const prods = useMemo(
-    () => data?.flatMap((item) => item.orderItems) || [],
-    [data]
-  );
+  const [trigerFetch, { data: cloudReview = [], isLoading: fetching, reset }] =
+    useLazyFetchSpecificReviewsQuery();
 
+  const prods = useMemo(() => {
+    const currentOrder = data?.find((o) => o._id === orderIdentity);
+    return currentOrder?.orderItems;
+  }, [orderIdentity, data]);
+
+  //監控 isOpen 在Modal關閉時將資料清乾淨
   useEffect(() => {
-    if (!isOpen) {
-      // 每次關閉都重置
-      const reset = {};
-      prods.forEach((prod) => {
-        reset[prod._id] = { rank: 1, comment: "" };
-      });
-      setReview(reset);
+    if (isOpen && orderIdentity) {
+      trigerFetch(orderIdentity);
+    } else {
+      reset();
+      setReview({});
       setOrderIdentity(null);
-      setSubmitAdmission([]);
+      //setSubmitAdmission([]);
     }
-  }, [isOpen, prods]);
-  //為了讓rank預設值為1
-  // const initialReview = {};
-  // prods.forEach((prod) => {
-  //   initialReview[prod._id] = { rank: 1, comment: "" };
-  // });
-  // const [review, setReview] = useState(initialReview);
+  }, [isOpen, prods, orderIdentity, reset, trigerFetch]);
 
   function showModal(id) {
     setOrderIdentity(id);
@@ -77,6 +76,7 @@ function Order() {
 
     //[prodId,{...}]
     const reviewEntries = Object.entries(review);
+    //const { isErr, message } = ValidateReviews(reviewEntries);
 
     const commentHasValue = reviewEntries.some(
       ([_, { comment }]) => comment?.trim().length > 0
@@ -86,22 +86,11 @@ function Order() {
     );
 
     if (!commentHasValue || !commentHasLength) {
-      toast.warn("至少要有一筆評論，且每則評論不能超過 20 字");
+      toast.warn("至少要有一筆評論，且每則評論不能超過 20 字", {
+        style: { zIndex: 1000 },
+      });
       return;
     }
-
-    // const reviews = reviewEntries.map(([prodId, value]) => {
-    //   const rank = value.rank;
-    //   const comment = value.comment;
-
-    //   const singleReview = {
-    //     prodId,
-    //     rank: rank ?? 1,
-    //     comment: comment ?? "",
-    //   };
-
-    //   return singleReview;
-    // });
 
     const reviews = reviewEntries
       .filter(([_, { comment }]) => comment?.trim().length > 0)
@@ -116,21 +105,17 @@ function Order() {
       reviews,
     };
 
-    // setSubmitAdmission((pre) => [
-    //   ...pre,
-    //   reviews.map((review) => review.prodId),
-    // ]);
-
     setSubmitAdmission((pre) => [
       ...pre,
       ...reviews.map((review) => review.prodId),
     ]);
 
     //console.log(payload);
-    console.log(reviews);
+    // console.log(reviews);
 
     try {
       const res = await postReviews(payload).unwrap();
+      setIsOpen(false);
       //   console.log(res);
     } catch (error) {
       console.log(error);
@@ -141,11 +126,11 @@ function Order() {
     }
   }
 
-  //const { paymentInfo, orderItems } = data;
+  //console.log(cloudReview);
 
-  //console.log(prods);
-  //console.log(showAll);
   if (isLoading) return <ProcessLoader />;
+  if (creating) return <p>上傳中</p>;
+  if (fetching) return <p>串連中</p>;
   if (!data) return <p>沒有訂單</p>;
 
   return (
@@ -158,61 +143,78 @@ function Order() {
         onClose={() => setIsOpen(false)}
         minorHeight="750px"
       >
-        {/* /<div>{prods.map(prod=>)}</div> */}
-        <ModalBox onSubmit={handleReviews}>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              overflowY: "auto",
-              background: "yellow",
-            }}
-          >
-            {prods?.map((prod) => (
-              <div key={prod._id}>
-                <p>{prod.name}</p>
-                <ReviewStars
-                  disable={submitAdmission.includes(prod._id)}
-                  prodId={prod._id}
-                  rating={review[prod._id]?.rank || 1}
-                  onChange={(newRank) => {
-                    setReview((pre) => ({
-                      ...pre,
-                      [prod._id]: {
-                        ...(pre[prod._id] || {}),
-                        rank: newRank,
-                      },
-                    }));
-                  }}
-                />
-                <ReviewArea
-                  name={prod._id}
-                  placeholder="字數不得超過20字"
-                  disabled={submitAdmission.includes(prod._id)}
-                  value={review[prod._id]?.comment || ""}
-                  onChange={(e) => {
-                    const newComment = e.target.value;
-                    setReview((pre) => ({
-                      ...pre,
-                      [prod._id]: {
-                        ...(pre[prod._id] || {}),
-                        comment: newComment,
-                      },
-                    }));
-                  }}
-                />
-              </div>
-            ))}
-          </div>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <button>確定</button>
-            <button type="button" onClick={() => setIsOpen(false)}>
-              取消
-            </button>
-          </div>
-        </ModalBox>
+        {fetching && <p>串連中</p>}
+        {!fetching && (
+          <ModalBox onSubmit={handleReviews}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                overflowY: "auto",
+                background: "yellow",
+              }}
+            >
+              {prods?.map((prod) => (
+                <div key={prod._id}>
+                  <p>{prod.name}</p>
+                  <ReviewStars
+                    // disable={submitAdmission.includes(prod._id)}
+                    disable={cloudReview?.some((e) => e.productId === prod._id)}
+                    prodId={prod._id}
+                    // rating={review[prod._id]?.rank || 1}
+                    rating={
+                      cloudReview
+                        ? cloudReview.map((e) => e.rating)
+                        : review[prod._id]?.rank
+                    }
+                    onChange={(newRank) => {
+                      setReview((pre) => ({
+                        ...pre,
+                        [prod._id]: {
+                          ...(pre[prod._id] || {}),
+                          rank: newRank,
+                        },
+                      }));
+                    }}
+                  />
+                  <ReviewArea
+                    name={prod._id}
+                    placeholder="字數不得超過20字"
+                    //disabled={submitAdmission.includes(prod._id)}
+                    disabled={cloudReview?.some(
+                      (e) => e.productId === prod._id
+                    )}
+                    // value={review[prod._id]?.comment || ""}
+                    value={
+                      cloudReview.find((e) => e.productId === prod._id)
+                        ?.comment ??
+                      review[prod._id]?.comment ??
+                      ""
+                    }
+                    onChange={(e) => {
+                      const newComment = e.target.value;
+                      setReview((pre) => ({
+                        ...pre,
+                        [prod._id]: {
+                          ...(pre[prod._id] || {}),
+                          comment: newComment,
+                        },
+                      }));
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <button disabled={cloudReview}>確定</button>
+              <button type="button" onClick={() => setIsOpen(false)}>
+                取消
+              </button>
+            </div>
+          </ModalBox>
+        )}
       </Modal>
       <button
         style={{ display: "block", width: "4rem" }}

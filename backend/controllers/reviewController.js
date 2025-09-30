@@ -1,5 +1,6 @@
 import asyncHandler from "express-async-handler";
 import reviewModal from "../models/reviewModal.js";
+import mongoose from "mongoose";
 
 export const submitReviews = asyncHandler(async (req, res) => {
   // console.log(req.body);
@@ -26,7 +27,7 @@ export const submitReviews = asyncHandler(async (req, res) => {
   const reviewDocs = reviews.map(({ prodId, rank, comment }) => ({
     productId: prodId,
     userId,
-
+    orderId,
     rating: rank ?? 1,
     comment,
   }));
@@ -43,4 +44,25 @@ export const submitReviews = asyncHandler(async (req, res) => {
   //     { prodId: '68c1324031e24052695f6459', rank: 1, comment: 'asd' }
   //   ]
   // }
+});
+
+export const getReviews = asyncHandler(async (req, res) => {
+  const { orderId } = req.params;
+
+  //console.log(orderId);
+
+  if (!orderId || !mongoose.Types.ObjectId.isValid(orderId)) {
+    res.status(400);
+    throw new Error("orderId 無效或缺失");
+  }
+  //只讀取不打算改動再存回 DB 就可以使用lean()
+  const allReviews = await reviewModal.find({ orderId }).lean();
+
+  //console.log(allReviews);
+
+  // if (!allReviews || allReviews.length === 0) {
+  //   res.status(404);
+  //   throw new Error("無此商品的評論");
+  // }
+  res.status(200).json(allReviews);
 });
