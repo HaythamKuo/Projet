@@ -40,6 +40,7 @@ function Order() {
   const [review, setReview] = useState({});
   const [submitAdmission, setSubmitAdmission] = useState([]);
 
+  //抓訂單API
   const { data, isLoading } = useGetOrderQuery({
     all: showAll,
     sort: sortOrder,
@@ -50,8 +51,10 @@ function Order() {
     useLazyFetchSpecificReviewsQuery();
 
   const prods = useMemo(() => {
+    if (!data || !orderIdentity) return [];
+
     const currentOrder = data?.find((o) => o._id === orderIdentity);
-    return currentOrder?.orderItems;
+    return currentOrder?.orderItems || [];
   }, [orderIdentity, data]);
 
   //監控 isOpen 在Modal關閉時將資料清乾淨
@@ -126,12 +129,12 @@ function Order() {
     }
   }
 
-  //console.log(cloudReview);
+  // console.log(cloudReview);
 
   if (isLoading) return <ProcessLoader />;
   if (creating) return <p>上傳中</p>;
   if (fetching) return <p>串連中</p>;
-  if (!data) return <p>沒有訂單</p>;
+  if (!data || data.length === 0) return <p>沒有訂單</p>;
 
   return (
     <OrderContainer>
@@ -165,9 +168,10 @@ function Order() {
                     prodId={prod._id}
                     // rating={review[prod._id]?.rank || 1}
                     rating={
-                      cloudReview
-                        ? cloudReview.map((e) => e.rating)
-                        : review[prod._id]?.rank
+                      cloudReview?.find((e) => e.productId === prod._id)
+                        ?.rating ??
+                      review[prod._id]?.rank ??
+                      1
                     }
                     onChange={(newRank) => {
                       setReview((pre) => ({
@@ -208,7 +212,7 @@ function Order() {
               ))}
             </div>
             <div style={{ display: "flex", justifyContent: "center" }}>
-              <button disabled={cloudReview}>確定</button>
+              <button disabled={!!cloudReview?.length}>確定</button>
               <button type="button" onClick={() => setIsOpen(false)}>
                 取消
               </button>
@@ -225,6 +229,7 @@ function Order() {
       <button
         style={{ display: "block", width: "4rem" }}
         onClick={() => setSortOrder((pre) => (pre === "desc" ? "asc" : "desc"))}
+        disabled={!showAll}
       >
         {/* {sortOrder === "asc" ? "由新到舊" : "由舊到新"} */}
         {sortOrder === "asc" ? "由舊到新" : "由新到舊"}

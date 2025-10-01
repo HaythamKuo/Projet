@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import ShinyText from "../components/reactBit/ShinyText";
 import { flexCenter, imgBasicStyle } from "../styles/theme";
 import { SubmitBtn, CancelBtn } from "../styles/ProdImgGallery.style";
-import { useGetOrderQuery } from "../store/apis/orderAPi";
+import { useGetSingleOrderQuery } from "../store/apis/orderAPi";
 import ProcessLoader from "../styles/UI/ProcessLoader";
 import { clearCart } from "../store/slices/cartSlice";
 import { emptiedCart } from "../store/thunks/addGoods";
@@ -50,12 +50,12 @@ function Ecpay() {
 
   //獲取最新訂單狀態
   const [searchParam] = useSearchParams();
-  const query = useGetOrderQuery();
 
   const status = searchParam.get("status");
   const orderId = searchParam.get("orderId");
+  const { data: order, isLoading } = useGetSingleOrderQuery(orderId);
 
-  const order = query?.data;
+  //const order = query?.data;
   const apiOrderId = order?._id ?? null;
   const apiOrderStatus = order?.status ?? null;
 
@@ -74,7 +74,7 @@ function Ecpay() {
   }, [dispatch, isSuccess]);
 
   //console.log(data);
-  if (query.isLoading) {
+  if (isLoading) {
     return <ProcessLoader />;
   }
 
@@ -87,6 +87,9 @@ function Ecpay() {
   if (!isSuccess && !isFailed) {
     return <ErrPage />;
   }
+
+  // console.log("apiOrderId" + apiOrderId);
+  // console.log("apiOrderStatus" + apiOrderStatus);
 
   return (
     <>
@@ -108,7 +111,7 @@ function Ecpay() {
           <OptionBtn>
             {isSuccess ? (
               <>
-                <SubmitBtn as={Link} to="/profile">
+                <SubmitBtn as={Link} to="/profile/orders">
                   瀏覽訂單
                 </SubmitBtn>
                 <CancelBtn as={Link} to="/">

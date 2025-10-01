@@ -13,7 +13,7 @@ const ECPAY_CONFIG = {
 
   ReturnURL: `${process.env.ECPAYRETURN_URL}/api/ecpay/ecpay-return`, // 付款完成後導向
   OrderResultURL: `${process.env.ECPAYRETURN_URL}/api/ecpay/ecpay-notify`,
-  ClientBackURL: `${process.env.CLIENT_ROUTE_DEV}/ectest`, // 前端結果頁面
+  ClientBackURL: `${process.env.CLIENT_ROUTE_DEV}/products`, // 前端結果頁面
   PaymentURL: "https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5", // 測試環境URL
 };
 

@@ -12,6 +12,7 @@ dayjs.extend(timezone);
 
 export const setupOrder = asyncHandler(async (req, res) => {
   const { error, value } = createOrderSchemaFn(req.body);
+  console.log(value);
 
   const prodOfCart = await cartModel.findOne({ userId: req.user._id });
 
@@ -107,8 +108,23 @@ export const getOrderInfo = asyncHandler(async (req, res) => {
       .tz("Asia/Taipei")
       .format("YYYY/MM/DD HH:mm");
 
-    console.log("single", orders);
+    //console.log("single", orders);
 
     res.json([orders]);
   }
+});
+
+export const getSingleOrder = asyncHandler(async (req, res) => {
+  const { orderId } = req.params;
+
+  if (!orderId) {
+    throw new Error("看來遺失了orderId");
+  }
+
+  const single = await OrderModal.findOne({ _id: orderId });
+
+  if (!single) {
+    throw new Error("無此訂單, 請重新搜尋");
+  }
+  res.json(single);
 });

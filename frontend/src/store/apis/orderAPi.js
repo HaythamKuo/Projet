@@ -20,8 +20,14 @@ const orderApi = createApi({
         query: ({ all = false, sort = "desc" }) => ({
           method: "GET",
           url: all
-            ? `/api/order/prodorders?all=true&sort=${sort}`
-            : `/prodorders`,
+            ? `/api/order/prodorders?all=${all}&sort=${sort}`
+            : `/api/order/prodorders`,
+        }),
+      }),
+      getSingleOrder: builder.query({
+        query: (orderId) => ({
+          method: "GET",
+          url: `/api/order/prodorders/${orderId}`,
         }),
       }),
 
@@ -29,7 +35,7 @@ const orderApi = createApi({
       createEcPayment: builder.mutation({
         query: (data) => ({
           method: "POST",
-          url: "api/ecpay/create-payment",
+          url: "/api/ecpay/create-payment",
           body: data,
         }),
       }),
@@ -41,5 +47,6 @@ export const {
   useGetOrderQuery,
   useCreateEcPaymentMutation,
   useCreateOrderMutation,
+  useGetSingleOrderQuery,
 } = orderApi;
 export { orderApi };
