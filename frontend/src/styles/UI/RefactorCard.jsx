@@ -1,9 +1,13 @@
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { addGoods } from "../../store/thunks/addGoods";
 import styled from "styled-components";
 import { imgBasicStyle } from "../theme";
 import { SubmitBtn } from "../ProdImgGallery.style";
 import { FaRegBookmark, FaCartShopping } from "react-icons/fa6";
 import StarRating from "./StarRating";
+import { useState } from "react";
 
 const Card = styled.div`
   border-radius: 8px;
@@ -74,6 +78,25 @@ const BookMark = styled(FaRegBookmark)`
   cursor: pointer;
 `;
 function RefactorCard({ id, src, alt, name, price, rating, query }) {
+  const [quantity, setQuantity] = useState(1);
+  const dispatch = useDispatch();
+
+  async function addToCart() {
+    try {
+      await dispatch(
+        addGoods({
+          productId: id,
+          selectedSizes: { S: 0, M: quantity, L: 0 },
+          unitPrice: price,
+        })
+      ).unwrap();
+      setQuantity((pre) => pre + 1);
+    } catch (error) {
+      console.error(error);
+      toast.error(error?.message || "加入購物車失敗");
+    }
+  }
+
   return (
     <Card>
       <ImgWrapper>
@@ -97,7 +120,7 @@ function RefactorCard({ id, src, alt, name, price, rating, query }) {
           </GoIoProd>
 
           <IconBox>
-            <Cart />
+            <Cart onClick={() => addToCart()} />
             <BookMark />
           </IconBox>
         </InfoBottom>

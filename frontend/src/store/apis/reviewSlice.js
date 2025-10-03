@@ -50,11 +50,20 @@ const reviewApi = createApi({
           }
         },
       }),
+      fetchGroupsReview: builder.query({
+        query: (id) => ({
+          method: "GET",
+          url: `/fetchjointreview/${id}`,
+        }),
+      }),
     };
   },
 });
 
-export const { useCreateReviewMutation, useLazyFetchSpecificReviewsQuery } =
-  reviewApi;
+export const {
+  useCreateReviewMutation,
+  useLazyFetchSpecificReviewsQuery,
+  useFetchGroupsReviewQuery,
+} = reviewApi;
 
 export { reviewApi };

@@ -168,8 +168,9 @@ function Checkout() {
     document.body.removeChild(form);
   }
 
-  //console.log(items);
+  console.log(items);
 
+  //製作訂單
   async function setOrder(e) {
     e.preventDefault();
 

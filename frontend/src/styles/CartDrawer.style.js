@@ -1,7 +1,7 @@
 import styled, { keyframes } from "styled-components";
 import { FiX } from "react-icons/fi";
-import { flexCenter, flexContainer } from "./theme";
-import { Button } from "./ProdCard.style";
+import { flexCenter, flexContainer, imgBasicStyle } from "./theme";
+
 import noProdSvg from "../assets/noprodhere.svg?react";
 import { FaHeart, FaRegTrashCan } from "react-icons/fa6";
 import { SubmitBtn } from "./ProdImgGallery.style";
@@ -96,10 +96,10 @@ export const ItemsContainer = styled.div`
     padding: 0.5rem;
 
     img {
-      display: block;
+      ${imgBasicStyle}/* display: block;
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: cover; */
     }
   }
 
@@ -112,7 +112,7 @@ export const ItemsContainer = styled.div`
     .influxInfo-top {
       display: flex;
       justify-content: space-between;
-      background-color: green;
+      //background-color: green;
     }
     .influxInfo-center {
       display: flex;
@@ -194,6 +194,4 @@ export const IconBtn = styled.button.attrs({ type: "button" })`
 `;
 
 export const DeleteCart = styled(FaRegTrashCan)``;
-export const CartToSave = styled(FaHeart)`
-  //color: red;
-`;
+export const CartToSave = styled(FaHeart)``;

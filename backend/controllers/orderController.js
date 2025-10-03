@@ -12,7 +12,7 @@ dayjs.extend(timezone);
 
 export const setupOrder = asyncHandler(async (req, res) => {
   const { error, value } = createOrderSchemaFn(req.body);
-  console.log(value);
+  console.log("這裡是orderController的value", value);
 
   const prodOfCart = await cartModel.findOne({ userId: req.user._id });
 

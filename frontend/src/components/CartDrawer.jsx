@@ -149,6 +149,7 @@ function CartDrawer() {
                     />
                   </div>
                   <div className="influxInfo">
+                    {/* 調整 */}
                     <div className="influxInfo-top">
                       <span>{item.productId.name}</span>
                       <span>{item.unitPrice}</span>

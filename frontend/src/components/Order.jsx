@@ -40,13 +40,27 @@ function Order() {
   const [review, setReview] = useState({});
   const [submitAdmission, setSubmitAdmission] = useState([]);
 
-  //抓訂單API
+  /**
+   * 取得訂單資料
+   *
+   * @function useGetOrderQuery
+   * @param {Object} params - 查詢參數
+   * @param {boolean} params.all - 是否抓取所有訂單
+   * @param {string} params.sort - 排序方式
+   * @returns {Object} 查詢結果
+   * @returns {Array} returns.data - 訂單列表
+   * @returns {boolean} returns.isLoading - 請求是否載入中
+   */
+
   const { data, isLoading } = useGetOrderQuery({
     all: showAll,
     sort: sortOrder,
   });
+
+  //創造評論
   const [postReviews, { isLoading: creating }] = useCreateReviewMutation();
 
+  //抓評論
   const [trigerFetch, { data: cloudReview = [], isLoading: fetching, reset }] =
     useLazyFetchSpecificReviewsQuery();
 
@@ -73,13 +87,14 @@ function Order() {
     setOrderIdentity(id);
     setIsOpen(true);
   }
+  //console.log(prods);
 
   async function handleReviews(e) {
     e.preventDefault();
 
-    //[prodId,{...}]
     const reviewEntries = Object.entries(review);
     //const { isErr, message } = ValidateReviews(reviewEntries);
+    console.log(reviewEntries);
 
     const commentHasValue = reviewEntries.some(
       ([_, { comment }]) => comment?.trim().length > 0
@@ -89,9 +104,7 @@ function Order() {
     );
 
     if (!commentHasValue || !commentHasLength) {
-      toast.warn("至少要有一筆評論，且每則評論不能超過 20 字", {
-        style: { zIndex: 1000 },
-      });
+      toast.warn("至少要有一筆評論，且每則評論不能超過 20 字");
       return;
     }
 
@@ -107,18 +120,22 @@ function Order() {
       orderId: orderIdentity,
       reviews,
     };
+    //68a046d4f1833ceaf964abac
+    //console.log(reviews);
 
     setSubmitAdmission((pre) => [
       ...pre,
       ...reviews.map((review) => review.prodId),
     ]);
 
-    //console.log(payload);
-    // console.log(reviews);
+    // console.log(data);
+    // console.log(prods);
 
     try {
-      const res = await postReviews(payload).unwrap();
       setIsOpen(false);
+      //console.log(payload);
+
+      const res = await postReviews(payload).unwrap();
       //   console.log(res);
     } catch (error) {
       console.log(error);
@@ -130,6 +147,13 @@ function Order() {
   }
 
   // console.log(cloudReview);
+
+  //   console.log(prods);
+  //   _id: "68de266a4c6f5f5ffd384af8"
+  // name: "happy dog"
+  // price: 45
+  // product: "68a046d4f1833ceaf964abac"
+  // quantity: 3
 
   if (isLoading) return <ProcessLoader />;
   if (creating) return <p>上傳中</p>;
@@ -160,49 +184,51 @@ function Order() {
               }}
             >
               {prods?.map((prod) => (
-                <div key={prod._id}>
+                <div key={prod.product}>
                   <p>{prod.name}</p>
                   <ReviewStars
                     // disable={submitAdmission.includes(prod._id)}
-                    disable={cloudReview?.some((e) => e.productId === prod._id)}
-                    prodId={prod._id}
+                    disable={cloudReview?.some(
+                      (e) => e.productId === prod.product
+                    )}
+                    prodId={prod.product}
                     // rating={review[prod._id]?.rank || 1}
                     rating={
-                      cloudReview?.find((e) => e.productId === prod._id)
+                      cloudReview?.find((e) => e.productId === prod.product)
                         ?.rating ??
-                      review[prod._id]?.rank ??
+                      review[prod.product]?.rank ??
                       1
                     }
                     onChange={(newRank) => {
                       setReview((pre) => ({
                         ...pre,
-                        [prod._id]: {
-                          ...(pre[prod._id] || {}),
+                        [prod.product]: {
+                          ...(pre[prod.product] || {}),
                           rank: newRank,
                         },
                       }));
                     }}
                   />
                   <ReviewArea
-                    name={prod._id}
+                    name={prod.product}
                     placeholder="字數不得超過20字"
                     //disabled={submitAdmission.includes(prod._id)}
                     disabled={cloudReview?.some(
-                      (e) => e.productId === prod._id
+                      (e) => e.productId === prod.product
                     )}
                     // value={review[prod._id]?.comment || ""}
                     value={
-                      cloudReview.find((e) => e.productId === prod._id)
+                      cloudReview.find((e) => e.productId === prod.product)
                         ?.comment ??
-                      review[prod._id]?.comment ??
+                      review[prod.product]?.comment ??
                       ""
                     }
                     onChange={(e) => {
                       const newComment = e.target.value;
                       setReview((pre) => ({
                         ...pre,
-                        [prod._id]: {
-                          ...(pre[prod._id] || {}),
+                        [prod.product]: {
+                          ...(pre[prod.product] || {}),
                           comment: newComment,
                         },
                       }));

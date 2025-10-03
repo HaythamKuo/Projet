@@ -24,6 +24,8 @@ export const submitReviews = asyncHandler(async (req, res) => {
     throw new Error("至少要有一筆評論，且每則評論不能超過 20 字");
   }
 
+  console.log(reviews);
+
   const reviewDocs = reviews.map(({ prodId, rank, comment }) => ({
     productId: prodId,
     userId,
@@ -36,14 +38,6 @@ export const submitReviews = asyncHandler(async (req, res) => {
   await reviewModal.insertMany(reviewDocs);
 
   res.status(201).json(reviewDocs);
-
-  // {
-  //   orderId: '68c1324031e24052695f6458',
-  //   reviews: [
-  //     { prodId: '68c0f8d0f56f81c02793cdf6', rank: 1, comment: '' },
-  //     { prodId: '68c1324031e24052695f6459', rank: 1, comment: 'asd' }
-  //   ]
-  // }
 });
 
 export const getReviews = asyncHandler(async (req, res) => {
@@ -60,9 +54,21 @@ export const getReviews = asyncHandler(async (req, res) => {
 
   //console.log(allReviews);
 
-  // if (!allReviews || allReviews.length === 0) {
-  //   res.status(404);
-  //   throw new Error("無此商品的評論");
-  // }
   res.status(200).json(allReviews);
+});
+
+export const fetchGroupReviews = asyncHandler(async (req, res) => {
+  const { productId } = req.params;
+
+  const specificGroups = await reviewModal
+    .find({ productId })
+    // 要新增照片欄位
+    .populate("userId", "name")
+    .sort({ createdAt: -1 });
+
+  if (!specificGroups || specificGroups.length === 0) {
+    throw new Error("無評論或是抓取失敗");
+  }
+
+  res.json(specificGroups);
 });

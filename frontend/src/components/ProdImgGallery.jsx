@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
@@ -32,6 +32,7 @@ import {
 
 import HighLightSection from "../styles/UI/HighLightSection";
 import ProcessLoader from "../styles/UI/ProcessLoader";
+import InfinityReviews from "./InfinityReviews";
 import {
   MdDeliveryDining,
   MdHomeRepairService,
@@ -69,7 +70,6 @@ function ProdImgGallery() {
 
   const [firstItem, setFirstItem] = useState({ S: 0, M: 0, L: 0 });
   const { prodid } = useParams();
-  const location = useLocation();
 
   const { userInfo } = useSelector((state) => state.auth);
   const cartItems = useSelector((state) => {
@@ -300,6 +300,7 @@ function ProdImgGallery() {
           </BottomWrapper>
         ))}
       </BottomContainer>
+      <InfinityReviews prodId={prodid} />
     </GalleryContainer>
   );
 }
