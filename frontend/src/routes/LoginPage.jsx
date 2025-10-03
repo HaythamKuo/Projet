@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import FormField from "../components/FormField";
@@ -18,12 +18,17 @@ function LoginPage() {
   // 要進到需授權的頁面會跳轉至登入
   const from = location.state?.from?.pathname || "/";
 
-  const fromCart = location.state?.fromCart || false;
+  //const fromCart = location.state?.fromCart || false;
 
   // 從cartDrawer來的屬性 如果為true會強制關閉購物車
-  if (fromCart) {
-    dispatch(closeCart());
-  }
+  // useEffect(() => {
+  //   if (fromCart) {
+  //     dispatch(closeCart());
+  //   }
+  // }, [fromCart, dispatch]);
+  // if (fromCart) {
+  //   dispatch(closeCart());
+  // }
 
   const [enterValue, setEnterValue] = useState({ email: "", password: "" });
 

@@ -60,16 +60,7 @@ function CartDrawer() {
 
   //console.log(items);
 
-  const handleLogin = () => {
-    dispatch(closeCart());
-    navigate("/auth", { state: { from: location.pathname, fromCart: true } });
-  };
-
-  //導向結帳頁面與關閉購物車
-  // function goToCheckout() {
-  //   dispatch(closeCart());
-  //   navigate("/checkout");
-  // }
+  //console.log(location.pathname);
 
   useEffect(() => {
     if (!userInfo || !isOpen) return; // 只有登入才 fetch
@@ -82,13 +73,6 @@ function CartDrawer() {
     };
     fetchData();
   }, [dispatch, userInfo, isOpen]);
-
-  useEffect(() => {
-    if (isOpen && location.pathname.startsWith("/auth")) {
-      toast.warn("請先登入再開啟購物車喔");
-      dispatch(closeCart());
-    }
-  }, [dispatch, isOpen, location.pathname]);
 
   useEffect(() => {
     //有必要寫成這樣嗎？
@@ -132,7 +116,10 @@ function CartDrawer() {
                     如果要購物請先登入會員喔！
                   </RemindToLoginSpan>
 
-                  <RemindToLoginBtn onClick={handleLogin}>
+                  <RemindToLoginBtn
+                    disabled={location.pathname === "/auth"}
+                    onClick={() => navigate("/auth")}
+                  >
                     前去登入
                   </RemindToLoginBtn>
                 </>

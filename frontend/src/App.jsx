@@ -9,6 +9,7 @@ import { CopyRight, CopyRightContainer } from "./styles/Footer.style";
 import { ContentContainer, LayoutWrapper, MainContent } from "./styles/index";
 import { useGetProfileQuery } from "./store/apis/apiSlice";
 import { setCredentials } from "./store/slices/authSlice";
+import RouteHandle from "./config/RouteHandle";
 
 function App({ toggleTheme }) {
   const dispatch = useDispatch();
@@ -36,6 +37,7 @@ function App({ toggleTheme }) {
         pauseOnHover // 滑鼠移至通知時是否暫停計時
         theme="colored" // 佈景：light, dark, colored
       />
+      <RouteHandle />
       <LayoutWrapper>
         <Navbar onClick={toggleTheme} />
 

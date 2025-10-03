@@ -92,11 +92,11 @@ function Checkout() {
 
   // console.log(cart);
 
-  useEffect(() => {
-    if (location.pathname === "/checkout") {
-      dispatch(closeCart());
-    }
-  }, [dispatch, location.pathname]);
+  // useEffect(() => {
+  //   if (location.pathname === "/checkout") {
+  //     dispatch(closeCart());
+  //   }
+  // }, [dispatch, location.pathname]);
 
   useEffect(() => {
     if (fetching) return;

@@ -92,7 +92,7 @@ function InfinityReviews({ prodId }) {
   }, [controlls]);
 
   if (fetching) return <p>讀取中</p>;
-  console.log(reviews);
+  //console.log(reviews);
 
   return (
     <StyledWrapper $direction={hasLengthEnough}>
