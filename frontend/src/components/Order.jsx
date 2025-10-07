@@ -25,6 +25,9 @@ import {
   OrderTotal,
   ModalBox,
   ReviewArea,
+  InnerBox,
+  CommentConfirm,
+  CommentCancel,
 } from "../styles/order.style";
 import ProcessLoader from "../styles/UI/ProcessLoader";
 import ReviewStars from "../styles/UI/ReviewStars";
@@ -148,13 +151,6 @@ function Order() {
 
   // console.log(cloudReview);
 
-  //   console.log(prods);
-  //   _id: "68de266a4c6f5f5ffd384af8"
-  // name: "happy dog"
-  // price: 45
-  // product: "68a046d4f1833ceaf964abac"
-  // quantity: 3
-
   if (isLoading) return <ProcessLoader />;
   if (creating) return <p>上傳中</p>;
   if (fetching) return <p>串連中</p>;
@@ -165,24 +161,14 @@ function Order() {
       <Modal
         isOpen={isOpen}
         ref={dialogRef}
-        height="100%"
-        width="100%"
+        height="50%"
         onClose={() => setIsOpen(false)}
         minorHeight="750px"
       >
         {fetching && <p>串連中</p>}
         {!fetching && (
           <ModalBox onSubmit={handleReviews}>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                overflowY: "auto",
-                background: "yellow",
-              }}
-            >
+            <InnerBox>
               {prods?.map((prod) => (
                 <div key={prod.product}>
                   <p>{prod.name}</p>
@@ -236,12 +222,16 @@ function Order() {
                   />
                 </div>
               ))}
-            </div>
-            <div style={{ display: "flex", justifyContent: "center" }}>
-              <button disabled={!!cloudReview?.length}>確定</button>
-              <button type="button" onClick={() => setIsOpen(false)}>
+            </InnerBox>
+            <div
+              style={{ display: "flex", justifyContent: "center", gap: "1rem" }}
+            >
+              <CommentConfirm disabled={!!cloudReview?.length}>
+                確定
+              </CommentConfirm>
+              <CommentCancel onClick={() => setIsOpen(false)}>
                 取消
-              </button>
+              </CommentCancel>
             </div>
           </ModalBox>
         )}

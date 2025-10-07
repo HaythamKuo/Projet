@@ -144,3 +144,44 @@ export const editAddress = asyncHandler(async (req, res) => {
 
   res.status(200).json({ message: "儲存成功", newAddress: address });
 });
+
+export const saveProducts = asyncHandler(async (req, res) => {
+  const { productId } = req.params;
+  const userId = req.user._id;
+
+  if (!productId) {
+    res.status(404);
+    throw new Error("找不到該產品");
+  }
+  if (!userId) {
+    res.status(404);
+    throw new Error("使用者發生一些問題");
+  }
+
+  const user = await userModel.findById(userId);
+
+  if (!user) {
+    res.status(404);
+    throw new Error("找不到使用者");
+  }
+
+  /**
+   * 1. 先找favorite裡有沒有一樣的id
+   * 2. 如果有就取消
+   * 3. 如果沒有就儲存
+   */
+
+  const isSave = user.favorites.some((e) => e.toString() === productId);
+
+  if (!isSave) {
+    user.favorites.push(productId);
+    await user.save();
+  } else {
+    const idx = user.favorites.findIndex((e) => e.toString() === productId);
+
+    user.favorites.splice(idx, 1);
+    await user.save();
+  }
+
+  res.json(user);
+});

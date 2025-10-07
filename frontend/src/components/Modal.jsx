@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { forwardRef, useEffect } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { createPortal } from "react-dom";
 import { flexCenter } from "../styles/theme";
 
@@ -82,27 +83,41 @@ const Modal = forwardRef(function Modal(
   { isOpen, children, onClose, height, width, minorHeight },
   ref
 ) {
+  //const scrollRef = useRef(0);
   const modalRoot = document.getElementById("modal");
 
   //控制dialog開關
   useEffect(() => {
     const dialog = ref.current;
     if (!dialog) return;
-    const scrollY = window.scrollY;
 
     if (isOpen && !dialog.open) {
+      //1.
+      // scrollRef.current = window.scrollY;
+
+      //2.
       dialog.showModal();
 
-      document.body.style.position = "fixed";
-      document.body.style.top = `-${scrollY}px`;
+      //3.
+      // document.body.style.position = "fixed";
+      // document.body.style.top = `-${scrollRef.current}px`;
+      // document.body.style.left = "0";
+      // document.body.style.right = "0";
     } else if (!isOpen && dialog.open) {
       dialog.close();
 
       // 關閉時恢復
-      const top = document.body.style.top;
-      document.body.style.position = "";
-      document.body.style.top = "";
-      window.scrollTo(0, parseInt(top || "0") * -1);
+      // const top = parseInt(document.body.style.top || "0") * -1;
+      // document.body.style.position = "";
+      // document.body.style.top = "";
+      // window.scrollTo(0, top);
+      // document.body.style.position = "";
+      // document.body.style.top = "";
+      // document.body.style.left = "";
+      // document.body.style.right = "";
+
+      // 3️⃣ 還原 scroll
+      //      window.scrollTo(0, scrollRef.current);
     }
   }, [isOpen, ref]);
 

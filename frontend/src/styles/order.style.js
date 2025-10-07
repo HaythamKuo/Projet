@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { flexCenter } from "./theme";
+import { SubmitBtn, CancelBtn } from "./ProdImgGallery.style";
 
 export const OrderContainer = styled.div`
   display: flex;
@@ -64,19 +66,12 @@ export const OrderTotal = styled.p`
 `;
 
 export const ModalBox = styled.form`
-  //padding: 2rem;
-  /* display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex-direction: column;
-  gap: 2rem; */
   display: flex;
   flex-direction: column;
   justify-content: space-around;
 
   width: 100%;
   height: 100%;
-  //background-color: red;
 `;
 export const ReviewArea = styled.textarea`
   width: 100%;
@@ -88,7 +83,7 @@ export const ReviewArea = styled.textarea`
   resize: vertical; /* 允許垂直調整大小 */
   font-size: 1rem;
   line-height: 1.5;
-  //box-sizing: border-box;
+
   transition: border-color 0.2s;
 
   &:hover {
@@ -101,3 +96,12 @@ export const ReviewArea = styled.textarea`
     box-shadow: 0 0 0 2px rgba(0, 95, 204, 0.2);
   }
 `;
+
+export const InnerBox = styled.div`
+  ${flexCenter}
+  flex-direction: column;
+  overflow-y: auto;
+`;
+
+export const CommentConfirm = styled(SubmitBtn)``;
+export const CommentCancel = styled(CancelBtn).attrs({ type: "button" })``;

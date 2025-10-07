@@ -14,6 +14,7 @@ const userSchema = Schema(
       required: [true, "請輸入郵件"],
       unique: true,
     },
+    favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
     optionMail: { type: String },
     optionName: { type: String },
     password: {

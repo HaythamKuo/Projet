@@ -7,6 +7,7 @@ import {
   getUserProfile,
   logoutUser,
   editAddress,
+  saveProducts,
 } from "../controllers/userController.js";
 
 const userRouter = Router();
@@ -17,5 +18,6 @@ userRouter.route("/editaddress").put(protect, editAddress);
 userRouter.route("/logout").post(logoutUser);
 userRouter.route("/login").post(loginUser);
 userRouter.route("/register").post(registerUser);
+userRouter.route("/favorite/:productId").post(protect, saveProducts);
 
 export default userRouter;
