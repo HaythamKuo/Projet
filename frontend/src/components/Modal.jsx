@@ -88,13 +88,37 @@ const Modal = forwardRef(function Modal(
   useEffect(() => {
     const dialog = ref.current;
     if (!dialog) return;
+    const scrollY = window.scrollY;
 
     if (isOpen && !dialog.open) {
       dialog.showModal();
+
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
     } else if (!isOpen && dialog.open) {
       dialog.close();
+
+      // 關閉時恢復
+      const top = document.body.style.top;
+      document.body.style.position = "";
+      document.body.style.top = "";
+      window.scrollTo(0, parseInt(top || "0") * -1);
     }
   }, [isOpen, ref]);
+
+  // 由React處理 ESC 關閉
+  useEffect(() => {
+    const dialog = ref.current;
+    if (!dialog) return;
+
+    const handleCancel = (e) => {
+      e.preventDefault(); // 阻止原生自動關閉
+      onClose?.(); // 改成由 React 控制關閉
+    };
+
+    dialog.addEventListener("cancel", handleCancel);
+    return () => dialog.removeEventListener("cancel", handleCancel);
+  }, [ref, onClose]);
 
   if (!modalRoot) return null;
 
