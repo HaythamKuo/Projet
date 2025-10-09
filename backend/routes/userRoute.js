@@ -8,6 +8,7 @@ import {
   logoutUser,
   editAddress,
   saveProducts,
+  getCollections,
 } from "../controllers/userController.js";
 
 const userRouter = Router();
@@ -19,5 +20,6 @@ userRouter.route("/logout").post(logoutUser);
 userRouter.route("/login").post(loginUser);
 userRouter.route("/register").post(registerUser);
 userRouter.route("/favorite/:productId").post(protect, saveProducts);
+userRouter.route("/:id/favorites").get(protect, getCollections);
 
 export default userRouter;

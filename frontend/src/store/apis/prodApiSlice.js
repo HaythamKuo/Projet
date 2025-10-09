@@ -120,4 +120,4 @@ export const {
   useSearchProdQuery,
 } = prodsApi;
 
-export { prodsApi };
+export { prodsApi, pause };

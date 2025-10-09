@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
 
 import { toast } from "react-toastify";
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+  Link,
+  useSearchParams,
+} from "react-router-dom";
 
 import { useGetProfileQuery } from "../store/apis/apiSlice";
 import {
@@ -31,6 +36,14 @@ function Profile() {
   const navigate = useNavigate();
   const { data, isLoading, isError, error } = useGetProfileQuery();
 
+  //根據query string來切換component
+  const [searchParams, setSearchparams] = useSearchParams();
+  const currentTab = searchParams.get("tab") || "created";
+
+  function handleQueryStr(tab) {
+    setSearchparams({ tab });
+  }
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
 
@@ -46,16 +59,23 @@ function Profile() {
       navigate("/profile", { replace: true });
       toast.success("✅ Google 綁定成功！");
       setHandleToast(true);
-      setType("third-party");
+      //setType("third-party");
+      searchParams({ tab: "third-party" });
     }
-  }, [location, navigate, handleToast]);
+  }, [location, navigate, handleToast, searchParams]);
+
+  useEffect(() => {
+    if (!searchParams.get("tab")) {
+      setSearchparams({ tab: "created" }, { replace: true });
+    }
+  }, [searchParams, setSearchparams]);
 
   let content;
-  if (type === "created") {
+  if (currentTab === "created") {
     content = <UploadProdList />;
-  } else if (type === "saved") {
-    content = <Collections />;
-  } else if (type === "third-party") {
+  } else if (currentTab === "saved") {
+    content = <Collections userId={data?._id} />;
+  } else if (currentTab === "third-party") {
     content = <BindAcc googleId={data?.googleId} />;
   }
 
@@ -93,20 +113,27 @@ function Profile() {
         </UserInteractionBox>
         <ProfileOptions>
           <ProfileOption
-            active={type === "created"}
-            onClick={() => setType("created")}
+            // active={type === "created"}
+            // onClick={() => setType("created")}
+            active={currentTab === "created"}
+            onClick={() => handleQueryStr("created")}
           >
             created
           </ProfileOption>
           <ProfileOption
-            active={type === "saved"}
-            onClick={() => setType("saved")}
+            // active={type === "saved"}
+            // onClick={() => setType("saved")}
+
+            active={currentTab === "saved"}
+            onClick={() => handleQueryStr("saved")}
           >
             saved
           </ProfileOption>
           <ProfileOption
-            active={type === "third-party"}
-            onClick={() => setType("third-party")}
+            // active={type === "third-party"}
+            // onClick={() => setType("third-party")}
+            active={currentTab === "third-party"}
+            onClick={() => handleQueryStr("third-party")}
           >
             綁定
           </ProfileOption>

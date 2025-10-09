@@ -1,11 +1,17 @@
 import { fetchBaseQuery, createApi } from "@reduxjs/toolkit/query/react";
+import { pause } from "./prodApiSlice";
+
+const customBaseQuery = async (...args) => {
+  await pause(2000);
+  return fetchBaseQuery({
+    baseUrl: "http://localhost:5001",
+    credentials: "include",
+  })(...args);
+};
 
 const usersApi = createApi({
   reducerPath: "userInfo",
-  baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5001",
-    credentials: "include",
-  }),
+  baseQuery: customBaseQuery,
   tagTypes: ["User"],
   endpoints(builder) {
     return {
@@ -49,6 +55,38 @@ const usersApi = createApi({
           body: address,
         }),
       }),
+      saveProds: builder.mutation({
+        query: (productId) => ({
+          method: "POST",
+          url: `/api/users/favorite/${productId}`,
+        }),
+        async onQueryStarted(id, { dispatch, queryFulfilled }) {
+          const patchRes = dispatch(
+            usersApi.util.updateQueryData("getProfile", undefined, (draft) => {
+              if (!draft.favorites) draft.favorites = [];
+              const idx = draft.favorites.indexOf(id);
+              if (idx === -1) {
+                draft.favorites.push(id);
+              } else {
+                draft.favorites.splice(idx, 1);
+              }
+            })
+          );
+
+          try {
+            await queryFulfilled;
+          } catch (err) {
+            patchRes.undo();
+            console.log("無法收藏產品,將會回滾", err);
+          }
+        },
+      }),
+      getSaveProds: builder.query({
+        query: (id) => ({
+          method: "GET",
+          url: `/api/users/${id}/favorites`,
+        }),
+      }),
     };
   },
 });
@@ -58,5 +96,7 @@ export const {
   useLogoutUserMutation,
   useRegisterMutation,
   useChangeAddressMutation,
+  useSaveProdsMutation,
+  useGetSaveProdsQuery,
 } = usersApi;
 export { usersApi };

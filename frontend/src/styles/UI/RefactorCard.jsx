@@ -1,13 +1,15 @@
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { addGoods } from "../../store/thunks/addGoods";
 import styled from "styled-components";
+import { useState } from "react";
+import { useFavorite } from "../../hooks/useFavorite";
+import { addGoods } from "../../store/thunks/addGoods";
 import { imgBasicStyle } from "../theme";
 import { SubmitBtn } from "../ProdImgGallery.style";
 import { FaRegBookmark, FaCartShopping } from "react-icons/fa6";
 import StarRating from "./StarRating";
-import { useState } from "react";
+import ProcessLoader from "./ProcessLoader";
 
 const Card = styled.div`
   border-radius: 8px;
@@ -76,8 +78,19 @@ const Cart = styled(FaCartShopping)`
 const BookMark = styled(FaRegBookmark)`
   font-size: 1.5rem;
   cursor: pointer;
+  //color:${({ $isSaved }) => $isSaved}
+  color: ${({ $isSaved }) => $isSaved && "red"};
 `;
 function RefactorCard({ id, src, alt, name, price, rating, query }) {
+  const { isLoading, saving, error, isSaved, toggleSaved } = useFavorite(id);
+
+  /**
+   * 這裡是內建的卡片的邏輯
+   *
+   */
+
+  //console.log(id);
+
   const [quantity, setQuantity] = useState(1);
   const dispatch = useDispatch();
 
@@ -96,6 +109,8 @@ function RefactorCard({ id, src, alt, name, price, rating, query }) {
       toast.error(error?.message || "加入購物車失敗");
     }
   }
+
+  if (saving) return <ProcessLoader />;
 
   return (
     <Card>
@@ -121,7 +136,7 @@ function RefactorCard({ id, src, alt, name, price, rating, query }) {
 
           <IconBox>
             <Cart onClick={() => addToCart()} />
-            <BookMark />
+            <BookMark $isSaved={isSaved} onClick={toggleSaved} />
           </IconBox>
         </InfoBottom>
       </InfoContainer>

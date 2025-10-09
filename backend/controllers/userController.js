@@ -124,6 +124,7 @@ export const getUserProfile = asyncHandler(async (req, res) => {
     email: user.email,
     googleId: user?.googleId || null,
     address: user?.address || "",
+    favorites: user?.favorites || [],
   });
 });
 
@@ -148,6 +149,8 @@ export const editAddress = asyncHandler(async (req, res) => {
 export const saveProducts = asyncHandler(async (req, res) => {
   const { productId } = req.params;
   const userId = req.user._id;
+
+  //console.log(productId);
 
   if (!productId) {
     res.status(404);
@@ -184,4 +187,18 @@ export const saveProducts = asyncHandler(async (req, res) => {
   }
 
   res.json(user);
+});
+
+export const getCollections = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const user = await userModel
+    .findById(id)
+    .populate("favorites", "name images");
+
+  if (!user) {
+    res.status(404);
+    throw new Error("找不到使用者");
+  }
+  res.json(user.favorites);
 });

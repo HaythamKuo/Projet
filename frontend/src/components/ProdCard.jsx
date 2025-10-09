@@ -22,18 +22,23 @@ const Cards = styled.div`
 `;
 
 function ProdCard() {
-  const { data, isLoading, isError, error } = useFetchProdQuery();
+  const {
+    data,
+    isLoading: fetching,
+    isError,
+    error: err,
+  } = useFetchProdQuery();
 
   let contents;
 
-  if (isLoading) {
+  if (fetching) {
     contents = Array.from({ length: 12 }, (_, i) => (
       <SkeletonCardItem key={i}>
         <Skeleton />
       </SkeletonCardItem>
     ));
   } else if (isError) {
-    contents = <p>錯誤：{error?.data?.message || "發生錯誤"}</p>;
+    contents = <p>錯誤：{err?.data?.message || "發生錯誤"}</p>;
   } else if (data && data.length > 0) {
     contents = data.map((item) => (
       <RefactorCard

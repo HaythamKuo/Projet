@@ -17,10 +17,7 @@ import {
   useDeleteMyProdMutation,
   useFetchMyProdsQuery,
 } from "../store/apis/prodApiSlice";
-import Skeleton, {
-  SkeletonCardItem,
-  SkeletonCard,
-} from "../styles/UI/Skeleton";
+import Skeleton, { SkeletonCardItem } from "../styles/UI/Skeleton";
 import Modal from "./Modal";
 import ProcessLoader from "../styles/UI/ProcessLoader";
 
