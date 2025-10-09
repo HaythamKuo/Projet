@@ -72,7 +72,7 @@ function LoginDropDown() {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <StateBox as={Link} to="auth">
+      <StateBox as={Link} to={userInfo ? "" : "/auth"}>
         <UserIcon />
         <UserState>{userInfo ? "Sign out" : "Sign in"}</UserState>
       </StateBox>
@@ -83,8 +83,10 @@ function LoginDropDown() {
             <MenuItem as={Link} to="profile">
               我的帳戶
             </MenuItem>
-            <MenuItem>我的清單</MenuItem>
-            <MenuItem as={Link} to="/profile/orders">
+            <MenuItem as={Link} to="profile/?tab=saved">
+              我的清單
+            </MenuItem>
+            <MenuItem as={Link} to="profile/orders">
               我的訂單
             </MenuItem>
             <MenuItem>123</MenuItem>

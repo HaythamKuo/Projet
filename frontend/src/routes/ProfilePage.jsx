@@ -29,7 +29,7 @@ import Collections from "../components/Collections";
 import BindAcc from "../components/BindAcc";
 
 function Profile() {
-  const [type, setType] = useState("created");
+  // const [type, setType] = useState("created");
   const [handleToast, setHandleToast] = useState(false);
 
   const location = useLocation();
