@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
 import {
   IconContainer,
   UserIcon,
@@ -14,9 +15,12 @@ import {
 } from "../styles/loginDropDown.style";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/slices/authSlice";
+
 import { clearCart } from "../store/slices/cartSlice";
-import { useLogoutUserMutation } from "../store/apis/apiSlice";
+import { useLogoutUserMutation, usersApi } from "../store/apis/apiSlice";
+
 import { toast } from "react-toastify";
+
 import ProcessLoader from "../styles/UI/ProcessLoader";
 
 function LoginDropDown() {
@@ -60,6 +64,7 @@ function LoginDropDown() {
       await callLogoutApi().unwrap();
       dispatch(clearCart());
       dispatch(logout());
+      dispatch(usersApi.util.resetApiState());
       toast.success("成功登出");
       navigate("/");
     } catch (error) {
@@ -72,7 +77,13 @@ function LoginDropDown() {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <StateBox as={Link} to={userInfo ? "" : "/auth"}>
+      <StateBox
+        // as={Link}
+        //  to={userInfo ? "#" : "/auth"}
+
+        as={userInfo ? "div" : Link}
+        to={userInfo ? undefined : "/auth"}
+      >
         <UserIcon />
         <UserState>{userInfo ? "Sign out" : "Sign in"}</UserState>
       </StateBox>

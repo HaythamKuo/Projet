@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import FormField from "../components/FormField";
 import { Container, FormContainer, OptText } from "../styles/form.style";
-import { closeCart } from "../store/slices/cartSlice";
+
 import { useLoginMutation } from "../store/apis/apiSlice";
 import { setCredentials } from "../store/slices/authSlice";
 import { toast } from "react-toastify";
@@ -19,16 +19,6 @@ function LoginPage() {
   const from = location.state?.from?.pathname || "/";
 
   //const fromCart = location.state?.fromCart || false;
-
-  // 從cartDrawer來的屬性 如果為true會強制關閉購物車
-  // useEffect(() => {
-  //   if (fromCart) {
-  //     dispatch(closeCart());
-  //   }
-  // }, [fromCart, dispatch]);
-  // if (fromCart) {
-  //   dispatch(closeCart());
-  // }
 
   const [enterValue, setEnterValue] = useState({ email: "", password: "" });
 

@@ -1,63 +1,53 @@
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 import { Outlet, Navigate, useLocation } from "react-router-dom";
+import { useGetProfileQuery } from "../store/apis/apiSlice";
+import { logout, setCredentials } from "../store/slices/authSlice";
 
 import ProcessLoader from "../styles/UI/ProcessLoader";
 
-import { toast } from "react-toastify";
-
 function PrivateRoute() {
   const location = useLocation();
-  const [showDirect, setShowDirect] = useState(false);
-  const [showToast, setShowToast] = useState(false);
-
-  //由userInfo來主導驗證
+  const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.auth);
 
-  /**
-   * @description
-   * 監聽 userInfo 變化，控制延遲導向與 toast flag
-   * 流程：
-   * 1. 如果未登入，設置 0.5 秒的延遲定時器：
-   *    - showDirect 設為 true → 控制 Navigate
-   *    - showToast 設為 true → 控制 toast
-   * 2. 如果 userInfo 有資料（登入成功），重置 showDirect 和 showToast
-   */
-  useEffect(() => {
-    if (!userInfo) {
-      const timer = setTimeout(() => {
-        setShowDirect(true);
-        setShowToast(true);
-      }, 500);
+  const isAuthorized = !!userInfo;
 
-      return () => clearTimeout(timer);
-    } else {
-      setShowDirect(false);
-      setShowToast(false);
-    }
-  }, [userInfo]);
+  const {
+    data: profile,
+    isLoading,
+    error,
+  } = useGetProfileQuery(undefined, { skip: isAuthorized });
 
-  /**
-   * @description
-   * 監聽 showToast flag，僅在 flag 為 true 且未登入時顯示 toast
-   * 顯示後立即重置 flag，防止多次觸發
-   */
+  // 檢查 API 錯誤（特別是 401），但只有在沒有 userInfo 的情況下才處理
   useEffect(() => {
-    if (showToast && !userInfo) {
+    // 只有在請求有錯誤 且 錯誤狀態是 401
+    // 並且 Redux 中沒有 userInfo (表示 token 無效且未登入) 時，才執行導航
+    if (error?.status === 401) {
+      // 確保 Redux store 和 localStorage 清空，即使 userInfo 已經為空
+      dispatch(logout());
+
+      // 提示使用者登入
       toast.warn("請先登入帳戶", {
         toastId: "login-required",
         position: "top-center",
       });
-      setShowToast(false);
     }
-  }, [showToast, userInfo]);
 
-  // 還在延遲期間，顯示 Loader
-  if (!userInfo && !showDirect) return <ProcessLoader />;
+    // 如果 API 成功取得 profile，且 Redux 中沒有 userInfo，則更新 Redux Store
+    if (profile && !userInfo) {
+      dispatch(setCredentials(profile));
+    }
+    // 注意: 這裡的依賴項需要精簡，確保邏輯正確觸發
+  }, [dispatch, error, profile, userInfo, location]);
 
-  // 延遲結束，仍未登入 → 導向登入頁
-  if (!userInfo && showDirect)
-    return <Navigate to="/auth" replace state={{ from: location }} />;
+  if (isLoading && !userInfo) return <ProcessLoader />;
+
+  const isPassSuccess = !!userInfo || !!profile;
+
+  if (!isPassSuccess)
+    return <Navigate to="auth" replace state={{ from: location }} />;
 
   // 有 userInfo，放行
   return <Outlet />;

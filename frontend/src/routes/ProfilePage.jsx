@@ -70,15 +70,6 @@ function Profile() {
     }
   }, [searchParams, setSearchparams]);
 
-  let content;
-  if (currentTab === "created") {
-    content = <UploadProdList />;
-  } else if (currentTab === "saved") {
-    content = <Collections userId={data?._id} />;
-  } else if (currentTab === "third-party") {
-    content = <BindAcc googleId={data?.googleId} />;
-  }
-
   let profile;
   if (isLoading) {
     profile = <ProcessLoader />;
@@ -86,6 +77,15 @@ function Profile() {
     profile = error;
   } else {
     profile = data;
+  }
+
+  let content;
+  if (currentTab === "created") {
+    content = <UploadProdList />;
+  } else if (currentTab === "saved") {
+    content = <Collections userId={data?._id} />;
+  } else if (currentTab === "third-party") {
+    content = <BindAcc googleId={data?.googleId} />;
   }
 
   return (
