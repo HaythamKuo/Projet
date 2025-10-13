@@ -96,20 +96,14 @@ function Collections({ userId }) {
       </SkeletonCardItem>
     ));
   } else if (!prods || prods?.length === 0) {
-    // content = (
-    //   <SaveSvgBox>
-    //     <SaveSvg />
-    //     <p style={{ fontSize: "2rem", color: "#777", fontWeight: "bold" }}>
-    //       目前沒有收藏的商品
-    //     </p>
-    //   </SaveSvgBox>
-    // );
-
-    content = Array.from({ length: 4 }, (_, index) => (
-      <SkeletonCardItem key={index}>
-        <Skeleton />
-      </SkeletonCardItem>
-    ));
+    content = (
+      <SaveSvgBox>
+        <SaveSvg />
+        <p style={{ fontSize: "2rem", color: "#777", fontWeight: "bold" }}>
+          目前沒有收藏的商品
+        </p>
+      </SaveSvgBox>
+    );
   } else {
     content = prods.map((item) => (
       <StatusBox initial="rest" whileHover="hover" key={item._id}>

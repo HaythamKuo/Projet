@@ -12,7 +12,7 @@ const customBaseQuery = async (...args) => {
 const usersApi = createApi({
   reducerPath: "userInfo",
   baseQuery: customBaseQuery,
-  tagTypes: ["User"],
+  tagTypes: ["User", "Collection"],
   endpoints(builder) {
     return {
       register: builder.mutation({
@@ -60,6 +60,7 @@ const usersApi = createApi({
           method: "POST",
           url: `/api/users/favorite/${productId}`,
         }),
+        invalidatesTags: ["Collection"],
         async onQueryStarted(id, { dispatch, queryFulfilled }) {
           const patchRes = dispatch(
             usersApi.util.updateQueryData("getProfile", undefined, (draft) => {
@@ -86,6 +87,7 @@ const usersApi = createApi({
           method: "GET",
           url: `/api/users/${id}/favorites`,
         }),
+        providesTags: ["Collection"],
       }),
     };
   },
