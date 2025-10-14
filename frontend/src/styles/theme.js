@@ -26,6 +26,8 @@ export const lightTheme = {
     default: "#1B1B1D",
     typeWriter: "#fb5607",
     cursor: "#ff9e00",
+    specificShadow: "12px 17px 51px rgba(0, 0, 0, 0.22)",
+    convertBeige: "beige",
   },
   spotLight: {
     backGround: "#f5f5f5",
@@ -38,6 +40,7 @@ export const lightTheme = {
   },
   button: {
     hovers: "#001a35",
+    hoverSearch: "#d6d6d6",
   },
 
   breakpoints,
@@ -51,6 +54,8 @@ export const darkTheme = {
     default: "#e6e6ff",
     typeWriter: "#ffbd00",
     cursor: "#ffd166",
+    specificShadow: "12px 17px 51px rgba(255, 255, 255, 0.22)",
+    convertBeige: "#373735",
   },
   spotLight: {
     backGround: "#111111",
@@ -63,6 +68,7 @@ export const darkTheme = {
   },
   button: {
     hovers: "#f2f2f2",
+    hoverSearch: "#111111",
   },
   breakpoints,
   media: generateMedia(breakpoints),

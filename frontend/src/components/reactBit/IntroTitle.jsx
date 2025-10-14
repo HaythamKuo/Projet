@@ -13,6 +13,7 @@ const TextContainer = styled.p`
 const AnimatedSpan = styled(animated.span)`
   display: inline-block;
   will-change: transform, filter, opacity;
+  color: ${({ theme }) => theme.colors.default};
 `;
 
 const IntroTitle = ({

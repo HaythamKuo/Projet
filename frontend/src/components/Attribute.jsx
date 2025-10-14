@@ -19,7 +19,8 @@ const StyledWrapper = styled.div`
     height: 254px;
     background: rgba(217, 217, 217, 0.58);
     border: 1px solid white;
-    box-shadow: 12px 17px 51px rgba(0, 0, 0, 0.22);
+    //box-shadow: 12px 17px 51px rgba(0, 0, 0, 0.22);
+    box-shadow: ${({ theme }) => theme.colors.specificShadow};
     backdrop-filter: blur(6px);
     border-radius: 17px;
     text-align: center;

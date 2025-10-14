@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
 export const HeaderLayout = styled.header`
-  background-color: beige;
+  background-color: ${({ theme }) => theme.colors.convertBeige};
   display: flex;
-  //  flex-direction: row;
+
   justify-content: space-evenly;
   gap: 2rem;
   align-items: center;
@@ -13,7 +13,6 @@ export const HeaderLayout = styled.header`
 
   transition: all 0.3s ease;
 
-  // 如果您想要bottom邊緣更圓滑，可以調整下方的border-radius
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
 

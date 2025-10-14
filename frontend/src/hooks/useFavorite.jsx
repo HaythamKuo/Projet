@@ -16,6 +16,7 @@ const useFavorite = (id) => {
     try {
       await save(id).unwrap();
     } catch (error) {
+      //toast.error(error?.data?.message);
       console.error("收藏失敗", error);
     }
   };

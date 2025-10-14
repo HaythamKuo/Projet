@@ -9,18 +9,17 @@ import {
   ImgHover,
   ImgHoverWrapper,
   ImgHoverContainer,
-  ImgHoverTitle,
   ImgHoverBox,
   TextWrapper,
   TextHover,
   TextSearch,
+  ImgInstance,
 } from "../styles/homePage.style";
 
 import TypeWriter, { TypeWriterContainer } from "../components/TypeWriter";
 import Attribute from "../components/Attribute";
 import IntroTitle from "../components/reactBit/IntroTitle";
 import SpotlightCard from "../components/SpotlightCard";
-import Image from "../components/Image";
 
 const titles = ["娃娃", "運送服務", "情緒價值"];
 
@@ -63,8 +62,7 @@ function HomePage() {
         />
         <ProdDesc>
           <ImgWrapper>
-            {/* <Image src="/golden-2.jpg" alt="handsome boy" w={850} h={350} /> */}
-            <Image src="/golden-2.jpg" alt="handsome boy" h={550} />
+            <ImgInstance src="/golden-2.jpg" alt="handsome boy" />
           </ImgWrapper>
           <SpotlightCard
             className="custom-spotlight-card"
@@ -84,8 +82,7 @@ function HomePage() {
 
         <ProdDesc>
           <ImgWrapper>
-            {/* <Image src="/husky-1.jpg" alt="handsome boy" w={850} h={550} /> */}
-            <Image src="/husky-1.jpg" alt="handsome boy" h={550} />
+            <ImgInstance src="/husky-2.jpg" alt="handsome boy" />
           </ImgWrapper>
           <SpotlightCard
             className="custom-spotlight-card"

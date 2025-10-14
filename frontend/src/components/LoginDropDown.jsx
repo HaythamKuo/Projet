@@ -62,9 +62,9 @@ function LoginDropDown() {
   async function handleLogout() {
     try {
       await callLogoutApi().unwrap();
+      dispatch(usersApi.util.resetApiState());
       dispatch(clearCart());
       dispatch(logout());
-      dispatch(usersApi.util.resetApiState());
       toast.success("成功登出");
       navigate("/");
     } catch (error) {

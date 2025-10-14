@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { useState } from "react";
 import { useFavorite } from "../../hooks/useFavorite";
@@ -78,23 +78,24 @@ const Cart = styled(FaCartShopping)`
 const BookMark = styled(FaRegBookmark)`
   font-size: 1.5rem;
   cursor: pointer;
-  //color:${({ $isSaved }) => $isSaved}
   color: ${({ $isSaved }) => $isSaved && "red"};
 `;
 function RefactorCard({ id, src, alt, name, price, rating, query }) {
-  const { isLoading, saving, error, isSaved, toggleSaved } = useFavorite(id);
-
-  /**
-   * 這裡是內建的卡片的邏輯
-   *
-   */
-
-  //console.log(id);
-
-  const [quantity, setQuantity] = useState(1);
+  //宣告專區
   const dispatch = useDispatch();
+  const [quantity, setQuantity] = useState(1);
+  const { userInfo } = useSelector((state) => state.auth);
+
+  const { saving, isSaved, toggleSaved } = useFavorite(id);
+
+  //console.log(userInfo);
 
   async function addToCart() {
+    if (!userInfo) {
+      toast.error("請先登入再進行購物喔！");
+      return;
+    }
+
     try {
       await dispatch(
         addGoods({
@@ -108,6 +109,15 @@ function RefactorCard({ id, src, alt, name, price, rating, query }) {
       console.error(error);
       toast.error(error?.message || "加入購物車失敗");
     }
+  }
+
+  async function saveProds() {
+    if (!userInfo) {
+      toast.error("請先登入再進行收藏喔！");
+
+      return;
+    }
+    await toggleSaved();
   }
 
   if (saving) return <ProcessLoader />;
@@ -136,7 +146,7 @@ function RefactorCard({ id, src, alt, name, price, rating, query }) {
 
           <IconBox>
             <Cart onClick={() => addToCart()} />
-            <BookMark $isSaved={isSaved} onClick={toggleSaved} />
+            <BookMark $isSaved={isSaved} onClick={saveProds} />
           </IconBox>
         </InfoBottom>
       </InfoContainer>

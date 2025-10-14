@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { flexCenter, flexContainer } from "./theme";
+import { flexCenter, flexContainer, imgBasicStyle } from "./theme";
 import { FaSearch } from "react-icons/fa";
 
 export const HomeContainer = styled.div`
@@ -9,7 +9,7 @@ export const HomeContainer = styled.div`
 export const CenterOfHome = styled.div`
   ${flexCenter}
   flex-direction:column;
-  background-color: green;
+  /* background-color: green; */
   width: 100%;
 
   //可能不止需要40vh
@@ -66,8 +66,20 @@ export const ProdDesc = styled.div`
 `;
 
 export const ImgWrapper = styled.div`
+  /* flex: 3;
+  min-width: 0; */
+
   flex: 3;
-  min-width: 0;
+  height: 550px;
+  width: 100%;
+  box-shadow: ${({ theme }) => theme.colors.specificShadow};
+
+  overflow: hidden;
+  border-radius: 0.75rem;
+`;
+
+export const ImgInstance = styled.img`
+  ${imgBasicStyle}
 `;
 
 // 底層圖片hover效果
@@ -91,6 +103,7 @@ export const ImgHoverBox = styled.div`
 export const ImgHoverWrapper = styled.div`
   border-radius: 0.75rem;
   flex: 2;
+  box-shadow: ${({ theme }) => theme.colors.specificShadow};
 
   position: relative;
   width: 300px;
@@ -134,14 +147,21 @@ export const TextWrapper = styled.div`
   ${flexCenter}
   gap: 10px;
 
-  background-color: #ebebeb;
+  /* background-color: #ebebeb; */
+  background-color: ${({ theme }) => theme.colors.convertBeige};
+
   height: 500px;
   cursor: pointer;
 
   &:hover {
-    background-color: #d6d6d6;
+    background-color: ${({ theme }) => theme.button.hoverSearch};
   }
 `;
 
-export const TextHover = styled.div``;
-export const TextSearch = styled(FaSearch)``;
+export const TextHover = styled.span`
+  color: ${({ theme }) => theme.spotLight.color};
+  font-weight: bold;
+`;
+export const TextSearch = styled(FaSearch)`
+  color: ${({ theme }) => theme.spotLight.color};
+`;
