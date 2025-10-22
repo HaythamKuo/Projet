@@ -1,18 +1,22 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 import { useUploadProdsMutation } from "../store/apis/prodApiSlice";
 import UploadButton from "../styles/UI/UploadBtn";
 import FormField from "./FormField";
 
 import { validateForm } from "../utils/validation";
-import { FormContainer, FormBtn } from "../styles/createProduct.style";
+import { FormContainer, BtnBox } from "../styles/createProduct.style";
+import { SubmitBtn, CancelBtn } from "../styles/ProdImgGallery.style";
 import SplitText from "./reactBit/SplitText";
 import SelectOption from "./SelectOption";
 import ProdSize from "./ProdSize";
 import ProcessLoader from "../styles/UI/ProcessLoader";
 
 function CreateProduct() {
+  const navigate = useNavigate();
+
   const [imgs, setImg] = useState([]);
   const [imgReset, setimgReset] = useState(false);
   const [category, setCategory] = useState(null);
@@ -105,7 +109,13 @@ function CreateProduct() {
         />
         <ProdSize size={size} setSize={setSize} />
         <UploadButton onFileSelect={handleImg} reset={imgReset} />
-        <FormBtn type="submit">送出</FormBtn>
+
+        <BtnBox>
+          <SubmitBtn type="submit">送出</SubmitBtn>
+          <CancelBtn onClick={() => navigate(-1)} type="button">
+            取消
+          </CancelBtn>
+        </BtnBox>
       </FormContainer>
     </>
   );

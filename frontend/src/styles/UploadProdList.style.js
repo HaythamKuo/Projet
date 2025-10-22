@@ -83,6 +83,7 @@ const PromptProd = styled(promptSvg)`
 `;
 const PromptTitle = styled.span`
   font-size: 2rem;
+  color: ${({ theme }) => theme.colors.default};
 `;
 
 export {

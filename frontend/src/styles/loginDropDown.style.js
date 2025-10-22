@@ -14,9 +14,13 @@ export const StateBox = styled.div`
   gap: 7px;
 `;
 
-export const UserIcon = styled(FaUser)``;
+export const UserIcon = styled(FaUser)`
+  color: ${({ theme }) => theme.colors.default};
+`;
 
-export const UserState = styled.span``;
+export const UserState = styled.span`
+  color: ${({ theme }) => theme.colors.default};
+`;
 
 const fadeInSlideDown = keyframes`
   0% {
@@ -34,7 +38,8 @@ export const DropDownMenu = styled.div`
   top: 150%;
   right: 0;
   width: 260px;
-  background-color: #fff;
+  //background-color: #fff;
+  background-color: ${({ theme }) => theme.spotLight.border};
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   z-index: 100;
@@ -76,10 +81,12 @@ export const MenuItem = styled.li`
   margin: 0;
   padding: 1rem 4rem;
   color: black;
-
+  //normal- black, dark- white
+  color: ${({ theme }) => theme.colors.default};
   &:hover {
     background-color: #d8e1e9;
     border-radius: 1.5rem;
+    color: black;
   }
 `;
 

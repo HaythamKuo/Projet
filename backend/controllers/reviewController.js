@@ -49,7 +49,7 @@ export const getReviews = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("orderId 無效或缺失");
   }
-  //只讀取不打算改動再存回 DB 就可以使用lean()
+
   const allReviews = await reviewModal.find({ orderId }).lean();
 
   //console.log(allReviews);
@@ -66,9 +66,11 @@ export const fetchGroupReviews = asyncHandler(async (req, res) => {
     .populate("userId", "name")
     .sort({ createdAt: -1 });
 
-  if (!specificGroups || specificGroups.length === 0) {
-    throw new Error("無評論或是抓取失敗");
-  }
+  //待除錯
+  // if (!specificGroups || specificGroups.length === 0) {
+  //   res.json([]);
+  //   throw new Error("無評論或是抓取失敗");
+  // }
 
-  res.json(specificGroups);
+  res.json(specificGroups || []);
 });

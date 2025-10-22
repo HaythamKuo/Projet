@@ -128,6 +128,7 @@ export const IconContainer = styled.div`
 const refactorIconStyle = css`
   font-size: 1.25rem;
   cursor: pointer;
+  color: ${({ theme }) => theme.colors.default};
 `;
 export const CartIcon = styled(FaShoppingCart)`
   ${refactorIconStyle}

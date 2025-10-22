@@ -114,7 +114,8 @@ const SplitParent = styled.p`
   display: inline;
   white-space: normal;
   word-wrap: break-word;
-  ${(props) => props.customStyles}
+  color: ${({ theme }) => theme.colors.default};
+  ${(props) => props.$customStyles}
 `;
 
 const WordWrapper = styled.span`
@@ -190,7 +191,7 @@ const SplitText = ({
   );
 
   return (
-    <SplitParent ref={ref} textAlign={textAlign} customStyles={customStyles}>
+    <SplitParent ref={ref} textAlign={textAlign} $customStyles={customStyles}>
       {words.map((word, wordIndex) => (
         <WordWrapper key={wordIndex}>
           {word.map((letter, letterIndex) => {

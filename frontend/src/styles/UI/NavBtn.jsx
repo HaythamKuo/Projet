@@ -11,7 +11,7 @@ const NavBtn = ({ name, ismobile, address }) => {
 
 const Btn = styled.button`
   cursor: pointer;
-  color: black;
+  color: ${({ theme }) => theme.colors.default};
   text-decoration: none;
   font-size: ${({ $ismobile }) => ($ismobile ? "2rem" : "1rem")};
   border: none;

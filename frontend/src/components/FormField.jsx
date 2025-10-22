@@ -1,6 +1,7 @@
 import { ErrMes, ErrBox, FormGroup } from "../styles/form.style";
 
 function FormField({
+  width,
   label,
   type,
   name,
@@ -12,7 +13,11 @@ function FormField({
   ...rest
 }) {
   return (
-    <FormGroup $isCenter={$isCenter} $firstPadding={$firstPadding}>
+    <FormGroup
+      $isCenter={$isCenter}
+      $firstPadding={$firstPadding}
+      $width={width}
+    >
       <label htmlFor={name}>{label}</label>
       <input
         type={type}

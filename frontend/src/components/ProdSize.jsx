@@ -11,9 +11,16 @@ export const SizeLabel = styled.span`
   border: 1px solid black;
   cursor: pointer;
   border-radius: 50%;
-  color: ${({ $isActive }) => ($isActive ? "white" : "black")};
 
-  background-color: ${({ $isActive }) => ($isActive ? "black" : "white")};
+  ${({ $isActive, theme }) => {
+    const activeColor = theme.spotLight.backGround;
+    const inactiveColor = theme.colors.default;
+
+    return `
+    color: ${$isActive ? activeColor : inactiveColor};
+    background-color: ${$isActive ? inactiveColor : activeColor};
+  `;
+  }}
 
   &:first-child {
     margin: 0 1rem 0 0;
@@ -29,6 +36,7 @@ export const InputSizeContainer = styled.div`
   label {
     font-size: 20px;
     font-weight: bold;
+    color: ${({ theme }) => theme.colors.default};
   }
 
   input {

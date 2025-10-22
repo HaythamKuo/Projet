@@ -21,6 +21,7 @@ import {
   InfoUpload,
   InfoDelete,
   ProfileOption,
+  OrderLink,
 } from "../styles/profile.style";
 import ProcessLoader from "../styles/UI/ProcessLoader";
 
@@ -102,12 +103,13 @@ function Profile() {
           <Link to="/create-product">
             <InfoUpload />
           </Link>
+
           <ProfileBtns>
-            <button>訊息</button>
+            {/* <button>訊息</button> */}
             {/* <button as={Link} to="/orders">
               查看訂單
             </button> */}
-            <Link to="orders">check</Link>
+            <OrderLink to="orders">訂單內容</OrderLink>
           </ProfileBtns>
           <InfoDelete />
         </UserInteractionBox>
@@ -118,7 +120,7 @@ function Profile() {
             active={currentTab === "created"}
             onClick={() => handleQueryStr("created")}
           >
-            created
+            您的產品
           </ProfileOption>
           <ProfileOption
             // active={type === "saved"}
@@ -127,7 +129,7 @@ function Profile() {
             active={currentTab === "saved"}
             onClick={() => handleQueryStr("saved")}
           >
-            saved
+            收藏清單
           </ProfileOption>
           <ProfileOption
             // active={type === "third-party"}

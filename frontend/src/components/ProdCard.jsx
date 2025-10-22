@@ -1,18 +1,18 @@
 import styled from "styled-components";
 
 import RefactorCard from "../styles/UI/RefactorCard";
+import IntroTitle from "./reactBit/IntroTitle";
 
 import { useFetchProdQuery } from "../store/apis/prodApiSlice";
 import Skeleton, { SkeletonCardItem } from "../styles/UI/Skeleton";
+import Breadcrumb from "../styles/UI/Breadcrumb";
 
 const CardsContainer = styled.section`
   margin: 0 auto;
-`;
-const Heading = styled.h1`
-  font-size: 24px;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 `;
 
 const Cards = styled.div`
@@ -57,8 +57,14 @@ function ProdCard() {
 
   return (
     <CardsContainer>
-      <Heading>所有娃娃我都放在這了 去找吧!</Heading>
-
+      {/* <Heading>所有娃娃我都放在這了 去找吧!</Heading> */}
+      <IntroTitle
+        direction="bottom"
+        text="所有娃娃我都放在這了 去找吧!"
+        size="3rem"
+        $center
+      />
+      <Breadcrumb />
       <Cards>{contents}</Cards>
     </CardsContainer>
   );

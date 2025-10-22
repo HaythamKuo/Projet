@@ -21,7 +21,7 @@ import { useLogoutUserMutation, usersApi } from "../store/apis/apiSlice";
 
 import { toast } from "react-toastify";
 
-import ProcessLoader from "../styles/UI/ProcessLoader";
+// import ProcessLoader from "../styles/UI/ProcessLoader";
 
 function LoginDropDown() {
   const [openUser, setOpenUser] = useState(false);
@@ -78,9 +78,6 @@ function LoginDropDown() {
       onMouseLeave={handleMouseLeave}
     >
       <StateBox
-        // as={Link}
-        //  to={userInfo ? "#" : "/auth"}
-
         as={userInfo ? "div" : Link}
         to={userInfo ? undefined : "/auth"}
       >

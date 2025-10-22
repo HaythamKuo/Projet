@@ -34,13 +34,17 @@ export const lightTheme = {
     border: "#e0e0e0",
     color: "#333333",
     spotColor: "rgba(0, 0, 0, 0.05)",
+    rating: "#555",
   },
   card: {
     backGround: "#f4f4f4",
+    specificBack: "white",
   },
   button: {
     hovers: "#001a35",
     hoverSearch: "#d6d6d6",
+    backGround: "#007bff",
+    direct: "#707070",
   },
 
   breakpoints,
@@ -62,13 +66,17 @@ export const darkTheme = {
     border: "#222222",
     color: "#ffffff",
     spotColor: "rgba(255, 255, 255, 0.25)",
+    rating: "#ff9e00",
   },
   card: {
     backGround: "black",
+    specificBack: "#434c46",
   },
   button: {
     hovers: "#f2f2f2",
     hoverSearch: "#111111",
+    backGround: "#0ea5e9",
+    direct: "#e6e6ff",
   },
   breakpoints,
   media: generateMedia(breakpoints),

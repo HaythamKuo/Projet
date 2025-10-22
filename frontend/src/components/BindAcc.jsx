@@ -12,7 +12,7 @@ const BindContainer = styled.div`
   justify-content: center;
   gap: 2rem;
 `;
-const GoogleIcon = styled(FaGoogle)`
+export const GoogleIcon = styled(FaGoogle)`
   font-size: 2rem;
 `;
 const BindBox = styled.div`

@@ -18,7 +18,7 @@ const Card = styled.div`
   display: flex;
 
   flex-direction: column;
-  background-color: white;
+  background-color: ${({ theme }) => theme.card.specificBack};
 `;
 
 const ImgWrapper = styled.div`
@@ -36,8 +36,9 @@ const InfoContainer = styled.div`
 `;
 
 const ProdName = styled.h3`
-  color: red;
+  color: ${({ theme }) => theme.colors.default};
   font-size: 2rem;
+  font-weight: bold;
 `;
 
 const InfoCenter = styled.div`
@@ -48,6 +49,7 @@ const InfoCenter = styled.div`
   p {
     font-size: 1.75rem;
     font-weight: bolder;
+    color: ${({ theme }) => theme.colors.default};
   }
 `;
 
@@ -72,13 +74,14 @@ const IconBox = styled.div`
 const Cart = styled(FaCartShopping)`
   font-size: 1.5rem;
   cursor: pointer;
-  //margin-left: 2rem;
+  color: ${({ theme }) => theme.colors.default};
 `;
 
 const BookMark = styled(FaRegBookmark)`
   font-size: 1.5rem;
   cursor: pointer;
-  color: ${({ $isSaved }) => $isSaved && "red"};
+  background-color: ${({ $isSaved }) => $isSaved && "red"};
+  color: ${({ theme }) => theme.colors.default};
 `;
 function RefactorCard({ id, src, alt, name, price, rating, query }) {
   //宣告專區

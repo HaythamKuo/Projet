@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { FormBtn } from "./createProduct.style";
+// import { FormBtn } from "./createProduct.style";
+import { SubmitBtn } from "./ProdImgGallery.style";
 
 export const EditForm = styled.form`
   display: flex;
@@ -8,6 +9,6 @@ export const EditForm = styled.form`
 
   margin-bottom: 2rem;
 `;
-export const EditFormBtn = styled(FormBtn)`
+export const EditFormBtn = styled(SubmitBtn)`
   width: 30%;
 `;

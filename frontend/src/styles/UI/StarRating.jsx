@@ -28,6 +28,7 @@ const Empty = styled(FaRegStar)`
 const RatingText = styled.span`
   font-size: 1rem;
   color: #555;
+  color: ${({ theme }) => theme.spotLight.rating};
   margin-left: 0.25rem;
   margin-top: 3.25px;
 `;

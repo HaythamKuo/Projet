@@ -20,13 +20,15 @@ const BreadcrumbContainer = styled.div`
   }
 `;
 
-export const BreadLeftArrow = styled(MdOutlineKeyboardArrowLeft)``;
+export const BreadLeftArrow = styled(MdOutlineKeyboardArrowLeft)`
+  color: ${({ theme }) => theme.colors.default};
+`;
 export const BreadRightArrow = styled(BreadLeftArrow)`
   transform: rotate(0.5turn);
+  color: ${({ theme }) => theme.colors.default};
 `;
 
 export const Left = styled.div`
-  //background-color: yellow;
   display: flex;
   align-items: center;
   gap: 3px;
@@ -38,7 +40,7 @@ export const Right = styled.div`
   gap: 3px;
 
   a:last-child {
-    color: black;
+    color: ${({ theme }) => theme.colors.default};
     font-weight: bolder;
     pointer-events: none;
   }
@@ -48,10 +50,13 @@ export const Right = styled.div`
   }
 `;
 
-//const DirectGroup=styled.div``
-
 const Direct = styled.span`
-  color: #594f21;
+  color: ${({ theme }) => theme.button.direct};
+  /* color: #707070; */
+
+  cursor: pointer;
+  font-size: 1.25rem;
+  font-weight: bold;
 `;
 
 //這個麵包屑可以被重構 不只應用於商品頁面 我覺得可以延伸至其他地方 像是會員, 服務等等
@@ -123,7 +128,7 @@ function Breadcrumb() {
       <ul>
         <Left onClick={() => navigate(-1)}>
           <BreadLeftArrow />
-          <Direct style={{ cursor: "pointer" }}>上一頁</Direct>
+          <Direct>上一頁</Direct>
         </Left>
         <div
           style={{ background: "gray", padding: "1px", margin: "5px" }}

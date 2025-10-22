@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Button } from "./ProdCard.style";
+import { SubmitBtn } from "./ProdImgGallery.style";
 
 export const FormContainer = styled.form`
   display: flex;
@@ -9,7 +9,12 @@ export const FormContainer = styled.form`
   margin-bottom: 2rem;
 `;
 
-export const FormBtn = styled(Button)`
+export const FormBtn = styled(SubmitBtn)`
   align-self: center;
   width: 30%;
+`;
+
+export const BtnBox = styled.div`
+  display: flex;
+  gap: 5rem;
 `;

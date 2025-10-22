@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 import { MdDeleteForever, MdUpload } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 export const ProfileContainer = styled.div`
   display: flex;
@@ -25,15 +26,17 @@ export const UserPhoto = styled.img`
 export const UserName = styled.h1`
   font-size: 2rem;
   font-weight: 500;
+  color: ${({ theme }) => theme.colors.default};
 `;
 export const UserMail = styled.span`
   font-weight: 300;
-  color: gray;
+  color: ${({ theme }) => theme.button.direct};
 `;
 
 export const UserInteractionBox = styled.div`
   display: flex;
   align-items: center;
+
   gap: 1.75rem;
 `;
 export const ProfileBtns = styled.div`
@@ -44,27 +47,42 @@ export const ProfileBtns = styled.div`
 export const InfoUpload = styled(MdUpload)`
   font-size: 1.5rem;
   cursor: pointer;
-  color: black;
+  color: ${({ theme }) => theme.colors.default};
 `;
 export const InfoDelete = styled(MdDeleteForever)`
   font-size: 1.5rem;
   cursor: pointer;
+  color: ${({ theme }) => theme.colors.default};
 `;
 
 export const ProfileOptions = styled.div`
   display: flex;
   gap: 1rem;
-  margin-top: 1.75rem;
-  margin-bottom: 1rem;
+  /* margin-top: 1.75rem;
+  margin-bottom: 1rem; */
+  margin: 1.75rem 0 1rem 0;
+  color: ${({ theme }) => theme.colors.default};
 `;
 export const ProfileOption = styled.span`
   cursor: pointer;
   padding: 8px 0;
   font-weight: 500;
-  border-bottom: ${({ active }) => (active ? "3px solid black" : "none")};
+  border-bottom: ${({ active, theme }) =>
+    active ? `3px solid ${theme.colors.default}` : "none"};
 
   //bug
   :hover {
     color: red;
+  }
+`;
+
+export const OrderLink = styled(Link)`
+  font-size: 1rem;
+  color: ${({ theme }) => theme.colors.default};
+  background-color: ${({ theme }) => theme.spotLight.spotColor};
+  padding: 0.5rem;
+  //border: 1px solid black;
+  border-radius: 8px;
+  &:hover {
   }
 `;

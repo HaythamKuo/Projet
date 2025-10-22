@@ -102,7 +102,9 @@ function UploadProdList() {
             <Edit />
           </Link>
         </IconBox>
-        <MyImg src={item.images[0].url} alt={item.name} />
+        <Link to={`/products/${item._id}`}>
+          <MyImg src={item.images[0].url} alt={item.name} />
+        </Link>
       </ImageWrapper>
     ));
   }

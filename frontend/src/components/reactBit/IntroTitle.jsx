@@ -7,6 +7,7 @@ import { useIntersectionObserver } from "../../hooks/useIntersectObserve";
 const TextContainer = styled.p`
   margin-bottom: 2rem;
   font-size: 6rem;
+  font-size: ${(prop) => prop.$size || "6rem"};
   text-align: ${(props) => (props.$center ? "center" : "")};
 `;
 
@@ -28,6 +29,7 @@ const IntroTitle = ({
   animationTo,
   easing = "easeOutCubic",
   $center = false,
+  size,
 }) => {
   const elements = animateBy === "words" ? text.split(" ") : text.split("");
   // const [inView, setInView] = useState(false);
@@ -81,7 +83,12 @@ const IntroTitle = ({
   );
 
   return (
-    <TextContainer ref={ref} className={className} $center={$center}>
+    <TextContainer
+      ref={ref}
+      className={className}
+      $center={$center}
+      $size={size}
+    >
       {springs.map((props, index) => (
         <AnimatedSpan key={index} style={props}>
           {elements[index] === " " ? "\u00A0" : elements[index]}

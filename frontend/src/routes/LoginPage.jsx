@@ -1,8 +1,14 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import FormField from "../components/FormField";
-import { Container, FormContainer, OptText } from "../styles/form.style";
+import {
+  Container,
+  Divider,
+  FormContainer,
+  OptText,
+  Google,
+} from "../styles/form.style";
 
 import { useLoginMutation } from "../store/apis/apiSlice";
 import { setCredentials } from "../store/slices/authSlice";
@@ -91,6 +97,7 @@ function LoginPage() {
             onBlur={() => handleBlurValue("email")}
             mes="錯誤郵件"
             err={emailHasError}
+            width="20rem"
           />
 
           <FormField
@@ -105,15 +112,19 @@ function LoginPage() {
             minLength={6}
             mes="錯誤密碼"
             err={passwordHasError}
+            width="20rem"
           />
 
           <button>登入</button>
-          <Link to="register">
+          {/* <Link to="register">
             <OptText>沒有帳號嗎？立刻註冊</OptText>
-          </Link>
+          </Link> */}
+          <OptText to="register">沒有帳號嗎？立刻註冊</OptText>
         </FormContainer>
-
-        <a href="http://localhost:5001/api/google/auth/google">google</a>
+        <Divider>或是選擇</Divider>
+        <a href="http://localhost:5001/api/google/auth/google">
+          <Google />
+        </a>
       </Container>
     </>
   );

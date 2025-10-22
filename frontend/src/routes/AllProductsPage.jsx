@@ -15,8 +15,8 @@ function AllProductsPage() {
       {/* 條件 */}
       <div></div>
       {/* 圖片 */}
-      <Breadcrumb />
       <div>
+        {/* <Breadcrumb /> */}
         <ProdCard />
       </div>
     </ProdPageContainer>

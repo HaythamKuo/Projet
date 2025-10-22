@@ -7,7 +7,8 @@ import { useFetchGroupsReviewQuery } from "../store/apis/reviewSlice";
 const StyledWrapper = styled.div`
   width: 100%;
   overflow: hidden;
-
+  margin-top: 3rem;
+  background-color: aqua;
   //  display: ${({ $direction }) => !$direction && "flex"};
 `;
 
@@ -64,6 +65,11 @@ const OptionBox = styled.div`
   display: flex;
   gap: 0.5rem;
 `;
+const EmptyComment = styled.p`
+  font-size: 1.5rem;
+  margin-top: 3rem;
+  color: ${({ theme }) => theme.colors.default};
+`;
 
 function repeatItems(items, minRepeat = 2) {
   if (!items || items.length === 0) return [];
@@ -78,7 +84,7 @@ function repeatItems(items, minRepeat = 2) {
 function InfinityReviews({ prodId }) {
   const controlls = useAnimation();
 
-  const { data: reviews, isLoading: fetching } =
+  const { data: reviews = [], isLoading: fetching } =
     useFetchGroupsReviewQuery(prodId);
 
   const hasLengthEnough = reviews?.length >= 3;
@@ -92,6 +98,9 @@ function InfinityReviews({ prodId }) {
   }, [controlls]);
 
   if (fetching) return <p>讀取中</p>;
+  if (!reviews || reviews.length === 0)
+    return <EmptyComment>目前尚無任何評論喔</EmptyComment>;
+
   //console.log(reviews);
 
   return (
@@ -116,7 +125,7 @@ function InfinityReviews({ prodId }) {
                 <p>{card?.userId?.name}</p>
               </Proflie>
               <ReviewBox>
-                <Comment>{card.comment}</Comment>
+                <Comment>{card?.comment}</Comment>
               </ReviewBox>
             </CommentContaner>
           ))}
