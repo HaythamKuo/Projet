@@ -38,10 +38,10 @@ function App({ toggleTheme }) {
         theme="colored" // 佈景：light, dark, colored
       />
       <RouteHandle />
-      <LayoutWrapper>
+      <LayoutWrapper id="page-content">
         <Navbar onClick={toggleTheme} />
 
-        <ContentContainer id="page-content">
+        <ContentContainer>
           <MainContent>
             <Outlet />
           </MainContent>

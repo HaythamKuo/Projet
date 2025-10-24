@@ -1,10 +1,18 @@
+import { useState, useRef } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { useGetSaveProdsQuery } from "../store/apis/apiSlice";
+
+import {
+  useGetSaveProdsQuery,
+  useRemoveProdsMutation,
+} from "../store/apis/apiSlice";
 import saveSvg from "../assets/save_prods.svg?react";
 import Skeleton, { SkeletonCardItem } from "../styles/UI/Skeleton";
+import { Delete } from "../styles/UploadProdList.style";
+import Modal from "./Modal";
 
 import { flexCenter, imgBasicStyle } from "../styles/theme";
+import ProcessLoader from "../styles/UI/ProcessLoader";
 const titleNameVariants = {
   rest: {
     y: 0,
@@ -59,12 +67,15 @@ const Img = styled.img`
 `;
 const TitleName = styled(motion.h2)`
   font-weight: bold;
+  color: ${({ theme }) => theme.colors.default};
 `;
 const StatusBox = styled(motion.div)`
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+
+  position: relative;
 `;
 
 const SaveSvgBox = styled.div`
@@ -79,12 +90,44 @@ const SaveSvg = styled(saveSvg)`
   align-self: center;
 `;
 
+const NoProdText = styled.p`
+  font-size: 2rem;
+  font-weight: bold;
+  color: ${({ theme }) => theme.button.direct};
+`;
+
+const DeleteCollection = styled(Delete)`
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 10;
+  font-size: 1.5rem;
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 8px;
+`;
+
 function Collections({ userId }) {
   const { data: prods, isLoading } = useGetSaveProdsQuery(userId);
-  // console.log(prods);
 
-  //const colletions = prods?.favorites;
-  //console.log(colletions);
+  //進行移除動作
+  const [target, setTarget] = useState(null);
+  const [rmSaveProds, { isLoading: deleting }] = useRemoveProdsMutation();
+
+  function handleModalAndRmTar(id) {
+    setOpen(true);
+    setTarget(id);
+  }
+
+  async function removeAction(prodId, userId) {
+    setOpen(false);
+    await rmSaveProds({ prodId, userId });
+  }
+
+  //控制Modal開關
+  const dialogRef = useRef(null);
+
+  const [isOpen, setOpen] = useState(false);
 
   const hasCollections = !prods || prods?.length === 0;
 
@@ -99,14 +142,13 @@ function Collections({ userId }) {
     content = (
       <SaveSvgBox>
         <SaveSvg />
-        <p style={{ fontSize: "2rem", color: "#777", fontWeight: "bold" }}>
-          目前沒有收藏的商品
-        </p>
+        <NoProdText>目前沒有收藏的商品</NoProdText>
       </SaveSvgBox>
     );
   } else {
     content = prods.map((item) => (
       <StatusBox initial="rest" whileHover="hover" key={item._id}>
+        <DeleteCollection onClick={() => handleModalAndRmTar(item._id)} />
         <Wrapper>
           <Img src={item.images[0].url} alt="img" />
         </Wrapper>
@@ -115,35 +157,28 @@ function Collections({ userId }) {
     ));
   }
 
-  return (
-    <ProdListContainer $hasProds={!hasCollections}>
-      {/* <StatusBox>
-        <Wrapper>
-          <Img src="/husky-2.jpg" />
-        </Wrapper>
-        <TitleName>willson</TitleName>
-      </StatusBox>
-      <Wrapper>
-        <Img src="/husky-2.jpg" />
-      </Wrapper>
-      <Wrapper>
-        <Img src="/husky-2.jpg" />
-      </Wrapper>
-      <Wrapper>
-        <Img src="/husky-2.jpg" />
-      </Wrapper>
-      <Wrapper>
-        <Img src="/husky-2.jpg" />
-      </Wrapper>
-      <Wrapper>
-        <Img src="/husky-2.jpg" />
-      </Wrapper>
-      <Wrapper>
-        <Img src="/husky-2.jpg" />
-      </Wrapper> */}
+  if (deleting) return <ProcessLoader />;
 
-      {content}
-    </ProdListContainer>
+  return (
+    <>
+      {isOpen && (
+        <Modal
+          isOpen={isOpen}
+          onClose={() => setOpen(false)}
+          ref={dialogRef}
+          // minorHeight="500px"
+          width="500px"
+          height="500px"
+        >
+          <h1>確定取消收藏嗎？</h1>
+          <button onClick={() => removeAction(target, userId)}>確定</button>
+          <button onClick={() => setOpen(false)}>取消</button>
+        </Modal>
+      )}
+      <ProdListContainer $hasProds={!hasCollections}>
+        {content}
+      </ProdListContainer>
+    </>
   );
 }
 export default Collections;

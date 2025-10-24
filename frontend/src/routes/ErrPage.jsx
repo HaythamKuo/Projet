@@ -6,7 +6,6 @@ import styled from "styled-components";
 import { flexCenter } from "../styles/theme";
 
 const CircularWrapper = styled(motion.div)`
-  //margin: 0 auto;
   position: relative;
   width: 200px;
   height: 200px;
@@ -27,10 +26,10 @@ const Letter = styled.span`
   inset: 0;
   font-size: 24px;
   transition: all 0.5s cubic-bezier(0, 0, 0, 1);
+  color: ${({ theme }) => theme.colors.default};
 `;
 
 const CircularContainer = styled.div`
-  //background-color: black;
   height: 100vh;
 
   ${flexCenter}
@@ -38,7 +37,9 @@ const CircularContainer = styled.div`
   gap: 2rem;
 `;
 
-const CircularDes = styled.span``;
+const CircularDes = styled.span`
+  color: ${({ theme }) => theme.colors.default};
+`;
 
 const HomeButton = styled(motion.button)`
   padding: 12px 24px;

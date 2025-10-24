@@ -23,6 +23,7 @@ import LoginDropDown from "./LoginDropDown";
 import { toggleCart } from "../store/slices/cartSlice";
 
 import useClickOutside from "../hooks/useClickOutside";
+import { useScrollBlock } from "../hooks/useScrollBlock";
 
 function Navbar({ onClick }) {
   const [open, setOpen] = useState(false);
@@ -34,15 +35,23 @@ function Navbar({ onClick }) {
   const isCheckout = pathname === "/checkout";
   const isCreating = pathname === "/create-product";
 
-  //搜索
+  //關於搜索
   const [search, setSearch] = useState(false);
   const controlSearch = useRef(null);
-
   useClickOutside(controlSearch, () => setSearch(false));
 
+  const [blockScroll, allowScroll] = useScrollBlock(controlSearch);
   useEffect(() => {
     setSearch(false);
   }, [pathname]);
+
+  useEffect(() => {
+    if (search) {
+      blockScroll();
+    } else {
+      allowScroll();
+    }
+  }, [search, blockScroll, allowScroll]);
 
   //try out inert attribute
   useEffect(() => {

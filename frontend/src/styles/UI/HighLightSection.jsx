@@ -22,9 +22,11 @@ const TextWrapper = styled.div`
     //用prop來換
     font-size: 3.5rem;
     font-weight: bolder;
+    color: ${({ theme }) => theme.colors.default};
   }
 
   .wrapper_des {
+    color: ${({ theme }) => theme.colors.default};
   }
 `;
 

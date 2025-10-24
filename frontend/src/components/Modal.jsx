@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { forwardRef, useEffect } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+//import { AnimatePresence, motion } from "framer-motion";
 import { createPortal } from "react-dom";
 import { flexCenter } from "../styles/theme";
 
@@ -92,32 +92,9 @@ const Modal = forwardRef(function Modal(
     if (!dialog) return;
 
     if (isOpen && !dialog.open) {
-      //1.
-      // scrollRef.current = window.scrollY;
-
-      //2.
       dialog.showModal();
-
-      //3.
-      // document.body.style.position = "fixed";
-      // document.body.style.top = `-${scrollRef.current}px`;
-      // document.body.style.left = "0";
-      // document.body.style.right = "0";
     } else if (!isOpen && dialog.open) {
       dialog.close();
-
-      // 關閉時恢復
-      // const top = parseInt(document.body.style.top || "0") * -1;
-      // document.body.style.position = "";
-      // document.body.style.top = "";
-      // window.scrollTo(0, top);
-      // document.body.style.position = "";
-      // document.body.style.top = "";
-      // document.body.style.left = "";
-      // document.body.style.right = "";
-
-      // 3️⃣ 還原 scroll
-      //      window.scrollTo(0, scrollRef.current);
     }
   }, [isOpen, ref]);
 

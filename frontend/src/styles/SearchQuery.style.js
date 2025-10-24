@@ -21,13 +21,15 @@ export const SearchForSearch = styled(SearchIcon)`
 `;
 export const DeleteIcon = styled(TiDelete)`
   font-size: 2rem;
-  //background-color: ;
+  color: ${({ theme }) => theme.colors.default};
   cursor: pointer;
 `;
 
 export const SearchBox = styled(motion.form)`
   ${flexCenter}
   background-color: white;
+  background-color: ${({ theme }) => theme.spotLight.backGround};
+
   border-radius: 8px;
   padding: 1rem;
   position: relative;
@@ -40,8 +42,9 @@ export const SearchInput = styled.input.attrs({
   border: none;
   width: 30rem;
   height: 2.5rem;
-
+  background-color: ${({ theme }) => theme.spotLight.backGround};
   font-size: 2.5rem;
+  color: ${({ theme }) => theme.colors.default};
 
   &:hover {
     border: none;
@@ -67,6 +70,7 @@ export const BriefRes = styled.div`
 
   top: 100%;
   background-color: white;
+  background-color: ${({ theme }) => theme.spotLight.backGround};
 
   padding: 0 1rem;
   p {
@@ -76,7 +80,7 @@ export const BriefRes = styled.div`
 `;
 export const DeriveContent = styled.p`
   font-size: 1rem;
-  color: black;
+  color: ${({ theme }) => theme.colors.default};
 `;
 
 export const ResItem = styled(Link)`
@@ -88,12 +92,15 @@ export const ResItem = styled(Link)`
   cursor: pointer;
   text-decoration: none; /* 移除預設下劃線 */
   color: inherit; /* 繼承文字顏色 */
+  color: ${({ theme }) => theme.colors.default};
 
   transition: background 0.2s ease;
 
-  background-color: ${({ $isActive }) => $isActive && "#f5f5f5"};
+  background-color: ${({ $isActive, theme }) =>
+    $isActive && theme.card.specificBack};
 
   &:hover {
     background: #f5f5f5;
+    background: ${({ theme }) => theme.card.specificBack};
   }
 `;

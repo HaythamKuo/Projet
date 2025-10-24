@@ -4,9 +4,6 @@ import { flexCenter } from "./theme";
 import { GoogleIcon } from "../components/BindAcc";
 
 export const Container = styled.div`
-  /* display: flex;
-  align-items: center;
-  justify-content: center; */
   ${flexCenter}
   flex-direction: column;
 
@@ -91,14 +88,14 @@ export const Divider = styled.div`
   width: 100%;
   color: ${({ theme }) => theme.colors.default};
   font-size: 14px;
+  font-weight: bold;
 
   &::before,
   &::after {
     content: "";
     flex: 1;
     height: 1px;
-    background-color: #444; /* 線條顏色 */
-    //background-color: #333; /* 線條顏色 */
+    background-color: #444;
 
     margin: 0 12px;
   }

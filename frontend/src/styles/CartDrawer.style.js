@@ -19,6 +19,7 @@ export const Drawer = styled.div`
   width: clamp(320px, 75vw, 500px);
 
   background-color: white;
+  background-color: ${({ theme }) => theme.colors.backGround};
   transition: transform 0.3s ease-out;
   transform: translateX(${({ $open }) => ($open ? "0" : "100%")});
   z-index: 1000;
@@ -51,10 +52,12 @@ export const CartTop = styled.div`
 export const CloseBtn = styled(FiX)`
   cursor: pointer;
   font-size: 2.5rem;
+  color: ${({ theme }) => theme.colors.default};
 `;
 export const CartQuantity = styled.div`
   display: flex;
   align-items: center;
+  color: ${({ theme }) => theme.colors.default};
 
   h3 {
     font-size: 2rem;
@@ -63,8 +66,9 @@ export const CartQuantity = styled.div`
   }
   span {
     font-size: 1.5rem;
-    color: black;
-    background-color: #f0f0f0;
+    color: ${({ theme }) => theme.colors.default};
+    /* background-color: #f0f0f0; */
+    background-color: ${({ theme }) => theme.card.specificBack};
     border-radius: 50%;
     padding: 0 10px;
   }
@@ -174,18 +178,32 @@ export const DefaultBox = styled.div`
   ${flexCenter}
   flex: ${({ $isFlex }) => ($isFlex ? 0 : 1)};
   flex-direction: column;
+  gap: 1rem;
 `;
 export const NoProdSpan = styled.span`
   font-size: 2rem;
+  color: ${({ theme }) => theme.colors.default};
 `;
 
-export const RemindToLoginSpan = styled.span``;
+export const RemindToLoginSpan = styled.span`
+  color: ${({ theme }) => theme.colors.default};
+  font-weight: bold;
+`;
 
-export const RemindToLoginBtn = styled.button.attrs({ type: "button" })``;
+// export const RemindToLoginBtn = styled.button.attrs({ type: "button" })``;
+
+export const RemindToLoginBtn = styled(SubmitBtn)`
+  &:disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+  }
+`;
 
 export const NoProd = styled(noProdSvg)`
   width: 300px;
   height: 300px;
+  /* color: aqua; */
+  background-color: azure;
 `;
 
 export const IconBtn = styled.button.attrs({ type: "button" })`

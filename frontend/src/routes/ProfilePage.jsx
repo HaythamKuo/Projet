@@ -49,13 +49,6 @@ function Profile() {
     const params = new URLSearchParams(location.search);
 
     if (params.get("bind") === "success" && !handleToast) {
-      // setType("third-party");
-
-      // toast.success("✅ Google 綁定成功！");
-
-      // // 清掉 query，避免重複觸發
-      // navigate("/profile", { replace: true });
-
       //待修正
       navigate("/profile", { replace: true });
       toast.success("✅ Google 綁定成功！");

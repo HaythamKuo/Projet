@@ -1,4 +1,6 @@
 import { useMemo, useEffect, useState, forwardRef, useCallback } from "react";
+import { createPortal } from "react-dom";
+
 import { useNavigate } from "react-router-dom";
 import { useSearchProdQuery } from "../store/apis/prodApiSlice";
 
@@ -11,6 +13,7 @@ import {
   SearchInput,
   ResItem,
   DeleteIcon,
+  DeriveContent,
 } from "../styles/SearchQuery.style";
 
 const SearchQuery = forwardRef(function SearchQuery(_, ref) {
@@ -106,68 +109,71 @@ const SearchQuery = forwardRef(function SearchQuery(_, ref) {
       navigate(`/search?query=${encodeURIComponent(keyword)}`);
     }
   }
+  // const modalRoot = document.getElementById("modal");
+  // if (!modalRoot) return null;
 
-  return (
-    <>
-      <GlobalSearchBackground
-        key="backdrop"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.3 }}
-      >
-        <SearchContainer>
-          <SearchBox
-            onSubmit={handleQuery}
-            ref={ref}
-            key="box"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-          >
-            <SearchForSearch />
-            <SearchInput
-              autoFocus
-              onChange={(e) => setKeyword(e.target.value)}
-              value={keyword}
-            />
-            {keyword && <DeleteIcon onClick={() => resetKeyWord()} />}
-            {keyword && (
-              <BriefRes>
-                {isLoading ? (
-                  <ResItem>搜尋中</ResItem>
-                ) : (
-                  <>
-                    {isSearched && sliceItems.length === 0 && "看來是沒有東西"}
-                    {sliceItems.map((item, i) => (
-                      <ResItem
-                        onMouseEnter={() => setActiveIndex(i)}
-                        key={item._id}
-                        $isActive={activeIndex === i}
-                        to={`/products/${item._id}`}
-                      >
-                        {item.name}
-                      </ResItem>
-                    ))}
+  return createPortal(
+    <GlobalSearchBackground
+      key="backdrop"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      <SearchContainer>
+        <SearchBox
+          onSubmit={handleQuery}
+          ref={ref}
+          key="box"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.3 }}
+        >
+          <SearchForSearch />
+          <SearchInput
+            autoFocus
+            onChange={(e) => setKeyword(e.target.value)}
+            value={keyword}
+          />
+          {keyword && <DeleteIcon onClick={() => resetKeyWord()} />}
+          {keyword && (
+            <BriefRes>
+              {isLoading ? (
+                <ResItem>搜尋中</ResItem>
+              ) : (
+                <>
+                  {isSearched && sliceItems.length === 0 && (
+                    <DeriveContent>看來是沒有東西</DeriveContent>
+                  )}
+                  {sliceItems.map((item, i) => (
+                    <ResItem
+                      onMouseEnter={() => setActiveIndex(i)}
+                      key={item._id}
+                      $isActive={activeIndex === i}
+                      to={`/products/${item._id}`}
+                    >
+                      {item.name}
+                    </ResItem>
+                  ))}
 
-                    {data.length > 5 && (
-                      <ResItem
-                        to={`/search?query=${encodeURIComponent(keyword)}`}
-                        onMouseEnter={() => setActiveIndex(sliceItems.length)}
-                        $isActive={activeIndex === sliceItems.length}
-                      >
-                        更多內容...
-                      </ResItem>
-                    )}
-                  </>
-                )}
-              </BriefRes>
-            )}
-          </SearchBox>
-        </SearchContainer>
-      </GlobalSearchBackground>
-    </>
+                  {data.length > 5 && (
+                    <ResItem
+                      to={`/search?query=${encodeURIComponent(keyword)}`}
+                      onMouseEnter={() => setActiveIndex(sliceItems.length)}
+                      $isActive={activeIndex === sliceItems.length}
+                    >
+                      更多內容...
+                    </ResItem>
+                  )}
+                </>
+              )}
+            </BriefRes>
+          )}
+        </SearchBox>
+      </SearchContainer>
+    </GlobalSearchBackground>,
+    document.getElementById("modal")
   );
 });
 export default SearchQuery;

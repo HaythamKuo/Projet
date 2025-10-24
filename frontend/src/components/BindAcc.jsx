@@ -3,18 +3,21 @@ import styled from "styled-components";
 
 import { FaGoogle } from "react-icons/fa";
 import { LineIcon } from "../styles/Checkout.style";
+import { flexCenter } from "../styles/theme";
 //import { toast } from "react-toastify";
 
 const BindContainer = styled.div`
-  /* background-color: red; */
-  display: flex;
+  /* display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center; */
+  ${flexCenter}
   gap: 2rem;
 `;
 export const GoogleIcon = styled(FaGoogle)`
   font-size: 2rem;
+  color: ${({ theme }) => theme.colors.default};
 `;
+
 const BindBox = styled.div`
   display: flex;
   flex-direction: column;
@@ -28,13 +31,15 @@ const BindDesc = styled.button`
   &:hover {
     background-color: none;
   }
-  a {
-    color: black;
-  }
 `;
 
 const BindSuccess = styled.span`
+  color: ${({ theme }) => theme.colors.default};
   font-size: 1rem;
+`;
+
+const AnchorLink = styled.a`
+  color: ${({ theme }) => theme.colors.default};
 `;
 
 export default function BindAcc({ googleId }) {
@@ -53,9 +58,9 @@ export default function BindAcc({ googleId }) {
           <BindSuccess>成功綁定</BindSuccess>
         ) : (
           <BindDesc>
-            <a href="http://localhost:5001/api/google/auth/google/bind">
+            <AnchorLink href="http://localhost:5001/api/google/auth/google/bind">
               綁定至Google
-            </a>
+            </AnchorLink>
           </BindDesc>
         )}
       </BindBox>

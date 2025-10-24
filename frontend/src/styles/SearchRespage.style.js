@@ -8,6 +8,11 @@ export const SearchContainer = styled.div``;
 export const SpecificTar = styled.span`
   font-weight: bold;
   font-size: 2rem;
+  color: ${({ theme }) => theme.colors.default};
+`;
+
+export const SpecificRes = styled.p`
+  color: ${({ theme }) => theme.colors.default};
 `;
 export const FilterContainer = styled.div`
   display: grid;

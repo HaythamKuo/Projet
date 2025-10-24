@@ -11,6 +11,7 @@ import {
   HomePage,
   ProdPage,
   RemindTitle,
+  SpecificRes,
 } from "../styles/SearchRespage.style";
 import RefactorCard from "../styles/UI/RefactorCard";
 import ProcessLoader from "../styles/UI/ProcessLoader";
@@ -37,7 +38,9 @@ function SearchRespage() {
   return (
     <SearchContainer>
       <Breadcrumb />
-      搜尋結果" <SpecificTar>{query}</SpecificTar> "
+      <SpecificRes>
+        搜尋結果" <SpecificTar>{query}</SpecificTar> "
+      </SpecificRes>
       {products.length ? (
         <FilterContainer>
           {products.map((item) => (

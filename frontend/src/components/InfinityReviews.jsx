@@ -99,9 +99,7 @@ function InfinityReviews({ prodId }) {
 
   if (fetching) return <p>讀取中</p>;
   if (!reviews || reviews.length === 0)
-    return <EmptyComment>目前尚無任何評論喔</EmptyComment>;
-
-  //console.log(reviews);
+    return <EmptyComment>目前尚無任何評論喔!</EmptyComment>;
 
   return (
     <StyledWrapper $direction={hasLengthEnough}>

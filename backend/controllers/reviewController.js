@@ -66,11 +66,5 @@ export const fetchGroupReviews = asyncHandler(async (req, res) => {
     .populate("userId", "name")
     .sort({ createdAt: -1 });
 
-  //待除錯
-  // if (!specificGroups || specificGroups.length === 0) {
-  //   res.json([]);
-  //   throw new Error("無評論或是抓取失敗");
-  // }
-
   res.json(specificGroups || []);
 });

@@ -28,6 +28,8 @@ import {
   DefaultImg,
   TopAmount,
   BottomAmount,
+  Prodtitle,
+  ProdPrice,
 } from "../styles/ProdImgGallery.style";
 
 import HighLightSection from "../styles/UI/HighLightSection";
@@ -235,8 +237,8 @@ function ProdImgGallery() {
 
         <InfoPanel>
           <Top>
-            <h1 className="prodTitle">{prod.name}</h1>
-            <span className="prodPrice">$ {prod.price}</span>
+            <Prodtitle>{prod?.name}</Prodtitle>
+            <ProdPrice>$ {prod?.price}</ProdPrice>
 
             {["S", "M", "L"].map((size) => (
               <ControlAmounts key={size}>

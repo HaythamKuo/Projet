@@ -29,6 +29,7 @@ import {
 //import QuantityAmount from "../styles/UI/QuantityAmount";
 
 import { useSelector, useDispatch } from "react-redux";
+import { useScrollBlock } from "../hooks/useScrollBlock";
 
 import { fetchGoods } from "../store/thunks/fetchGoods";
 
@@ -46,21 +47,23 @@ function CartDrawer() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  //const { data: profile, isLoading: fetching, isError } = useGetProfileQuery();
-
   const { isOpen, isLoading, error: err } = useSelector((state) => state.cart);
 
   const { userInfo } = useSelector((state) => state.auth);
   const items = useSelector(selectCartItems);
   const totalPrice = useSelector(cartTotalPrice);
 
+  //購物車 → 限制滾動
+  const [blockScroll, allowScroll] = useScrollBlock(controlCart);
+
+  useEffect(() => {
+    if (isOpen) blockScroll();
+    else allowScroll();
+  }, [isOpen, blockScroll, allowScroll]);
+
   //hook
   const { handleDelete } = useDeleteGood();
   useClickOutside(controlCart, () => dispatch(closeCart()));
-
-  //console.log(items);
-
-  //console.log(location.pathname);
 
   useEffect(() => {
     if (!userInfo || !isOpen) return; // 只有登入才 fetch

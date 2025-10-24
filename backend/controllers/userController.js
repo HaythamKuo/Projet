@@ -207,3 +207,26 @@ export const getCollections = asyncHandler(async (req, res) => {
   }
   res.json(user.favorites);
 });
+
+export const removeFavorite = asyncHandler(async (req, res) => {
+  const { productId } = req.params;
+  console.log(productId);
+
+  const userId = req.user._id;
+
+  const user = await userModel.findById(userId).populate("favorites");
+
+  if (!user) {
+    res.status(404);
+    throw new Error("無法刪除所收藏的商品");
+  }
+
+  user.favorites = user.favorites.filter(
+    (item) => item._id.toString() !== productId
+  );
+  //user.favorites = [...newCollections];
+  //console.log(newCollections);
+  await user.save();
+  res.json(user);
+});
+//68c38c6a6829fa76cd69387d

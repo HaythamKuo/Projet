@@ -94,18 +94,18 @@ export const InfoPanel = styled.div`
   display: flex;
   flex-direction: column;
 `;
-export const Top = styled.div`
-  .prodTitle {
-    font-size: 2rem;
-    font-weight: bold;
-  }
+export const Top = styled.div``;
 
-  .prodPrice {
-    font-weight: 800;
-    font-size: 1.75rem;
-  }
+export const Prodtitle = styled.h1`
+  font-size: 2rem;
+  font-weight: bold;
+  color: ${({ theme }) => theme.colors.default};
 `;
-
+export const ProdPrice = styled.span`
+  font-weight: 800;
+  font-size: 1.75rem;
+  color: ${({ theme }) => theme.colors.default};
+`;
 export const ControlAmounts = styled.div`
   margin-top: 1rem;
   display: flex;
@@ -135,6 +135,7 @@ export const TopAmount = styled.div`
     margin-left: 7px;
     font-size: 1.5rem;
     font-weight: bolder;
+    color: ${({ theme }) => theme.colors.default};
   }
 `;
 export const BottomAmount = styled.div`
@@ -192,7 +193,7 @@ export const CancelBtn = styled(SubmitBtn)`
 export const Center = styled.div`
   margin-top: 2rem;
   padding-top: 1.5rem;
-  border-top: 1px solid black;
+  border-top: 1px solid ${({ theme }) => theme.colors.default};
 
   display: flex;
   flex-direction: column;
@@ -208,6 +209,11 @@ export const Center = styled.div`
 
     & > svg {
       font-size: 1.5rem;
+      color: ${({ theme }) => theme.colors.default};
+    }
+
+    span {
+      color: ${({ theme }) => theme.colors.default};
     }
   }
 `;
@@ -239,11 +245,13 @@ export const BottomWrapper = styled.div`
 export const IconWrapper = styled.div`
   & > svg {
     font-size: 3rem;
+    color: ${({ theme }) => theme.colors.default};
   }
 `;
 
 export const MinorTitle = styled.h3`
   text-align: center;
+  color: ${({ theme }) => theme.colors.default};
 `;
 export const MinorDes = styled(MinorTitle).attrs({ as: "span" })`
   //test

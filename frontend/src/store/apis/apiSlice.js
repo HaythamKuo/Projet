@@ -89,6 +89,33 @@ const usersApi = createApi({
         }),
         providesTags: ["Collection"],
       }),
+
+      removeProds: builder.mutation({
+        query: ({ prodId }) => ({
+          method: "DELETE",
+          url: `/api/users/favorites/${prodId}`,
+        }),
+        invalidatesTags: ["Collection"],
+        async onQueryStarted({ prodId, userId }, { dispatch, queryFulfilled }) {
+          const patchRes = dispatch(
+            usersApi.util.updateQueryData("getSaveProds", userId, (draft) => {
+              // //找到相對應的產品 有的話就刪除 沒有的話就回滾
+
+              const idx = draft.findIndex((p) => p._id === prodId);
+
+              if (idx === -1) return;
+              draft.splice(idx, 1);
+            })
+          );
+
+          try {
+            await queryFulfilled;
+          } catch (error) {
+            patchRes.undo();
+            console.log("無法刪除產品,將會回滾", error);
+          }
+        },
+      }),
     };
   },
 });
@@ -100,5 +127,6 @@ export const {
   useChangeAddressMutation,
   useSaveProdsMutation,
   useGetSaveProdsQuery,
+  useRemoveProdsMutation,
 } = usersApi;
 export { usersApi };

@@ -6,6 +6,9 @@ const AuthLayoutContainer = styled.div`
   width: 100%;
   height: 80vh;
   ${flexCenter}
+  ${({ theme }) => theme.media.xxl} {
+    margin-top: 1rem;
+  }
 `;
 
 function AuthLayout() {
