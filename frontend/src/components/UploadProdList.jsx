@@ -20,6 +20,8 @@ import {
 import Skeleton, { SkeletonCardItem } from "../styles/UI/Skeleton";
 import Modal from "./Modal";
 import ProcessLoader from "../styles/UI/ProcessLoader";
+import { ConfirmTxt, BtnContainer } from "./Collections";
+import { SubmitBtn, CancelBtn } from "../styles/ProdImgGallery.style";
 
 function UploadProdList() {
   const [target, setTarget] = useState(null);
@@ -113,14 +115,20 @@ function UploadProdList() {
   return (
     <>
       {deleting && <ProcessLoader />}
-      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} ref={dialogRef}>
-        <h1>這是彈跳式視窗</h1>
-        <p>確定要刪除嗎</p>
-
-        <button type="button" onClick={removeTargetDeed}>
-          確定
-        </button>
-        <button onClick={() => setIsOpen(false)}>取消</button>
+      <Modal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        ref={dialogRef}
+        width="500px"
+        height="500px"
+      >
+        <ConfirmTxt>確定要刪除嗎</ConfirmTxt>
+        <BtnContainer>
+          <SubmitBtn type="button" onClick={removeTargetDeed}>
+            確定
+          </SubmitBtn>
+          <CancelBtn onClick={() => setIsOpen(false)}>取消</CancelBtn>
+        </BtnContainer>
       </Modal>
       <ProdListContainer>{content || "哈哈是我啦"}</ProdListContainer>
     </>

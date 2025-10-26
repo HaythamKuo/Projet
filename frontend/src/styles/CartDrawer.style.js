@@ -2,7 +2,7 @@ import styled, { keyframes } from "styled-components";
 import { FiX } from "react-icons/fi";
 import { flexCenter, flexContainer, imgBasicStyle } from "./theme";
 
-import noProdSvg from "../assets/noprodhere.svg?react";
+import EmptyCart from "../assets/emptyCart.svg?react";
 import { FaHeart, FaRegTrashCan } from "react-icons/fa6";
 import { SubmitBtn } from "./ProdImgGallery.style";
 
@@ -80,7 +80,7 @@ export const CartCenter = styled.div`
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 
-  border: 1px solid ${({ theme }) => theme.default};
+  border: 1px solid ${({ theme }) => theme.colors.default};
   border-radius: 4px;
 `;
 
@@ -100,10 +100,7 @@ export const ItemsContainer = styled.div`
     padding: 0.5rem;
 
     img {
-      ${imgBasicStyle}/* display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover; */
+      ${imgBasicStyle}
     }
   }
 
@@ -175,6 +172,7 @@ export const CheckBtn = styled(SubmitBtn)`
 export const DefaultBox = styled.div`
   /* height: 100%;
   top: 50%; */
+
   ${flexCenter}
   flex: ${({ $isFlex }) => ($isFlex ? 0 : 1)};
   flex-direction: column;
@@ -199,11 +197,9 @@ export const RemindToLoginBtn = styled(SubmitBtn)`
   }
 `;
 
-export const NoProd = styled(noProdSvg)`
-  width: 300px;
-  height: 300px;
-  /* color: aqua; */
-  background-color: azure;
+export const NoProd = styled(EmptyCart)`
+  width: 350px;
+  height: 350px;
 `;
 
 export const IconBtn = styled.button.attrs({ type: "button" })`

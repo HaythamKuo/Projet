@@ -1,10 +1,9 @@
-import { useEffect, useRef, useState, useMemo } from "react";
+import { useEffect, useRef, useState, useMemo, Fragment } from "react";
 import { useGetOrderQuery } from "../store/apis/orderAPi";
 import {
   useCreateReviewMutation,
   useLazyFetchSpecificReviewsQuery,
 } from "../store/apis/reviewSlice";
-import { toast } from "react-toastify";
 
 import {
   Right,
@@ -20,18 +19,22 @@ import {
   ImgWrapper,
   Prodname,
   Quantity,
-  RankBtn,
   OrderId,
   OrderTotal,
   ModalBox,
   ReviewArea,
-  InnerBox,
+  ErrRes,
   CommentConfirm,
   CommentCancel,
+  ShowNewBtn,
+  BtnBox,
+  ConfineBox,
+  ModalProdName,
 } from "../styles/order.style";
 import ProcessLoader from "../styles/UI/ProcessLoader";
 import ReviewStars from "../styles/UI/ReviewStars";
 import Modal from "./Modal";
+import { useScrollBlock } from "../hooks/useScrollBlock";
 import { ValidateReviews } from "../utils/validation";
 
 function Order() {
@@ -42,6 +45,10 @@ function Order() {
   const [orderIdentity, setOrderIdentity] = useState(null);
   const [review, setReview] = useState({});
   const [submitAdmission, setSubmitAdmission] = useState([]);
+  const [err, setErr] = useState("");
+
+  //監控Modal 並鎖住背景滾動
+  const [blockScroll, allowScroll] = useScrollBlock(dialogRef);
 
   /**
    * 取得訂單資料
@@ -63,7 +70,7 @@ function Order() {
   //創造評論
   const [postReviews, { isLoading: creating }] = useCreateReviewMutation();
 
-  //抓評論
+  //抓評論並顯示評論得地方
   const [trigerFetch, { data: cloudReview = [], isLoading: fetching, reset }] =
     useLazyFetchSpecificReviewsQuery();
 
@@ -82,9 +89,19 @@ function Order() {
       reset();
       setReview({});
       setOrderIdentity(null);
+      setErr("");
+
       //setSubmitAdmission([]);
     }
   }, [isOpen, prods, orderIdentity, reset, trigerFetch]);
+
+  useEffect(() => {
+    if (isOpen && dialogRef.current) {
+      blockScroll();
+    } else {
+      allowScroll();
+    }
+  }, [isOpen, blockScroll, allowScroll]);
 
   function showModal(id) {
     setOrderIdentity(id);
@@ -94,24 +111,17 @@ function Order() {
 
   async function handleReviews(e) {
     e.preventDefault();
+    setErr("");
 
     const reviewEntries = Object.entries(review);
-    //const { isErr, message } = ValidateReviews(reviewEntries);
-    console.log(reviewEntries);
+    const { isErr, message } = ValidateReviews(reviewEntries);
 
-    const commentHasValue = reviewEntries.some(
-      ([_, { comment }]) => comment?.trim().length > 0
-    );
-    const commentHasLength = reviewEntries.every(
-      ([_, { comment }]) => comment?.trim().length <= 20
-    );
-
-    if (!commentHasValue || !commentHasLength) {
-      toast.warn("至少要有一筆評論，且每則評論不能超過 20 字");
+    if (isErr) {
+      setErr(message);
       return;
     }
 
-    const reviews = reviewEntries
+    const reviews = reviewEntries``
       .filter(([_, { comment }]) => comment?.trim().length > 0)
       .map(([prodId, { rank, comment }]) => ({
         prodId,
@@ -123,23 +133,17 @@ function Order() {
       orderId: orderIdentity,
       reviews,
     };
-    //68a046d4f1833ceaf964abac
-    //console.log(reviews);
 
     setSubmitAdmission((pre) => [
       ...pre,
       ...reviews.map((review) => review.prodId),
     ]);
 
-    // console.log(data);
-    // console.log(prods);
-
     try {
       setIsOpen(false);
       //console.log(payload);
 
-      const res = await postReviews(payload).unwrap();
-      //   console.log(res);
+      await postReviews(payload).unwrap();
     } catch (error) {
       console.log(error);
 
@@ -168,17 +172,15 @@ function Order() {
         {fetching && <p>串連中</p>}
         {!fetching && (
           <ModalBox onSubmit={handleReviews}>
-            <InnerBox>
+            <ConfineBox>
               {prods?.map((prod) => (
-                <div key={prod.product}>
-                  <p>{prod.name}</p>
+                <Fragment key={prod.product}>
+                  <ModalProdName>{prod.name}</ModalProdName>
                   <ReviewStars
-                    // disable={submitAdmission.includes(prod._id)}
                     disable={cloudReview?.some(
                       (e) => e.productId === prod.product
                     )}
                     prodId={prod.product}
-                    // rating={review[prod._id]?.rank || 1}
                     rating={
                       cloudReview?.find((e) => e.productId === prod.product)
                         ?.rating ??
@@ -198,11 +200,9 @@ function Order() {
                   <ReviewArea
                     name={prod.product}
                     placeholder="字數不得超過20字"
-                    //disabled={submitAdmission.includes(prod._id)}
                     disabled={cloudReview?.some(
                       (e) => e.productId === prod.product
                     )}
-                    // value={review[prod._id]?.comment || ""}
                     value={
                       cloudReview.find((e) => e.productId === prod.product)
                         ?.comment ??
@@ -211,6 +211,7 @@ function Order() {
                     }
                     onChange={(e) => {
                       const newComment = e.target.value;
+                      setErr("");
                       setReview((pre) => ({
                         ...pre,
                         [prod.product]: {
@@ -220,11 +221,18 @@ function Order() {
                       }));
                     }}
                   />
-                </div>
+                </Fragment>
               ))}
-            </InnerBox>
-            <div
-              style={{ display: "flex", justifyContent: "center", gap: "1rem" }}
+            </ConfineBox>
+
+            {err && <ErrRes>{err}</ErrRes>}
+
+            <BtnBox
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                gap: "1rem",
+              }}
             >
               <CommentConfirm disabled={!!cloudReview?.length}>
                 確定
@@ -232,24 +240,20 @@ function Order() {
               <CommentCancel onClick={() => setIsOpen(false)}>
                 取消
               </CommentCancel>
-            </div>
+            </BtnBox>
           </ModalBox>
         )}
       </Modal>
-      <button
-        style={{ display: "block", width: "4rem" }}
-        onClick={() => setShowAll((pre) => !pre)}
-      >
+      <ShowNewBtn onClick={() => setShowAll((pre) => !pre)}>
         {showAll ? "最新訂單" : "全部訂單"}
-      </button>
-      <button
-        style={{ display: "block", width: "4rem" }}
+      </ShowNewBtn>
+      <ShowNewBtn
         onClick={() => setSortOrder((pre) => (pre === "desc" ? "asc" : "desc"))}
         disabled={!showAll}
       >
         {/* {sortOrder === "asc" ? "由新到舊" : "由舊到新"} */}
         {sortOrder === "asc" ? "由舊到新" : "由新到舊"}
-      </button>
+      </ShowNewBtn>
 
       {data?.map((order) => (
         <OrderBlock key={order._id}>
@@ -261,7 +265,6 @@ function Order() {
               <OrderDate>送達日期 {order.createdAtFormatted}</OrderDate>
             </OrderTop>
 
-            {/* 這裡如果每張訂單裡還有多個商品，可以再嵌套 map */}
             {order.orderItems?.map((prod) => (
               <OrderItems key={prod._id}>
                 <ImgWrapper>
@@ -270,7 +273,6 @@ function Order() {
                 <OrderRight>
                   <Prodname>{prod.name}</Prodname>
                   <Quantity>數量： {prod.quantity}</Quantity>
-                  <RankBtn>給予評價</RankBtn>
                 </OrderRight>
               </OrderItems>
             ))}
@@ -279,7 +281,9 @@ function Order() {
           <Right>
             <OrderId>訂單編號: #{order._id}</OrderId>
             <OrderTotal>總額: ${order.totalPrice}</OrderTotal>
-            <RankBtn onClick={() => showModal(order._id)}>給予評價</RankBtn>
+            <CommentConfirm onClick={() => showModal(order._id)}>
+              給予評價
+            </CommentConfirm>
           </Right>
         </OrderBlock>
       ))}

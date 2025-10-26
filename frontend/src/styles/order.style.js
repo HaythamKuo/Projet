@@ -9,7 +9,7 @@ export const OrderContainer = styled.div`
 `;
 
 export const OrderBlock = styled.div`
-  background-color: white;
+  background-color: ${({ theme }) => theme.card.specificBack};
   border: 1px solid black;
   padding: 2rem;
   border-radius: 0.25rem;
@@ -31,7 +31,9 @@ export const OrderStatus = styled.span`
   font-size: 1.5rem;
   color: #348aa7;
 `;
-export const OrderDate = styled.p``;
+export const OrderDate = styled.p`
+  color: ${({ theme }) => theme.colors.default};
+`;
 
 export const OrderItems = styled.div`
   display: flex;
@@ -47,9 +49,11 @@ export const OrderRight = styled.div`
 
 export const Prodname = styled.p`
   font-size: 1.5rem;
+  color: ${({ theme }) => theme.colors.default};
 `;
 export const Quantity = styled.p`
   font-size: 1.25rem;
+  color: ${({ theme }) => theme.colors.default};
 `;
 
 // export const RankBox = styled``;
@@ -57,24 +61,35 @@ export const RankBtn = styled.button.attrs({ type: "button" })`
   border: none;
 `;
 
-export const Right = styled.div``;
+export const Right = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
 export const OrderId = styled.p`
-  color: gray;
+  color: ${({ theme }) => theme.button.direct};
 `;
 export const OrderTotal = styled.p`
   font-size: 1.25rem;
+  color: ${({ theme }) => theme.colors.default};
 `;
 
 export const ModalBox = styled.form`
-  display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  ${flexCenter}
+  gap: 1rem;
 
   width: 100%;
   height: 100%;
+  padding: 1rem;
+`;
+export const ModalProdName = styled.p`
+  font-size: 2rem;
+  color: ${({ theme }) => theme.colors.default};
 `;
 export const ReviewArea = styled.textarea`
-  width: 100%;
+  width: 30%;
+
   min-height: 80px;
   max-height: 200px; /* 超過出現捲動條 */
   padding: 0.5rem;
@@ -97,11 +112,34 @@ export const ReviewArea = styled.textarea`
   }
 `;
 
-export const InnerBox = styled.div`
-  ${flexCenter}
-  flex-direction: column;
-  overflow-y: auto;
-`;
-
 export const CommentConfirm = styled(SubmitBtn)``;
 export const CommentCancel = styled(CancelBtn).attrs({ type: "button" })``;
+
+export const ShowNewBtn = styled(SubmitBtn)`
+  width: 200px;
+`;
+export const ErrRes = styled.p`
+  color: red;
+`;
+export const BtnBox = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+`;
+
+export const ConfineBox = styled.div`
+  ${flexCenter};
+  justify-content: flex-start;
+  width: 100%;
+  max-height: 400px;
+  height: auto;
+  overflow-y: auto;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+
+  background-color: ${({ theme }) => theme.card.specificBack};
+  border: 1px solid #ddd;
+  border-radius: 20px;
+`;

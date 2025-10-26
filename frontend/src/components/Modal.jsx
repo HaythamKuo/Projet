@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import { forwardRef, useEffect } from "react";
-//import { AnimatePresence, motion } from "framer-motion";
+
 import { createPortal } from "react-dom";
 import { flexCenter } from "../styles/theme";
 
 const DialogContainer = styled.dialog`
+  background-color: ${({ theme }) => theme.card.specificBack};
   border: none;
   border-radius: 10px;
   padding: 0;
@@ -31,16 +32,15 @@ const DialogContainer = styled.dialog`
 // styled ContentBox
 export const ContentBox = styled.div`
   width: 100%;
-  //max-width: 500px;
   min-height: 200px;
-  //height: ${(prop) => prop.$minorHeight && "1000px"};
+
   max-height: ${(prop) => prop.$minorHeight && prop.$minorHeight};
   height: ${(prop) => prop.$minorHeight && prop.$minorHeight};
 
-  background-color: bisque;
+  background-color: ${({ theme }) => theme.colors.convertBeige};
 
   ${flexCenter}
-  flex-direction: column;
+  flex-direction: ${(prop) => prop.$direction || "column"};
   gap: 1rem;
 `;
 
@@ -80,7 +80,7 @@ export const ContentBox = styled.div`
  */
 
 const Modal = forwardRef(function Modal(
-  { isOpen, children, onClose, height, width, minorHeight },
+  { isOpen, children, onClose, height, width, minorHeight, direction },
   ref
 ) {
   //const scrollRef = useRef(0);
@@ -116,7 +116,9 @@ const Modal = forwardRef(function Modal(
 
   return createPortal(
     <DialogContainer ref={ref} width={width} height={height} onClose={onClose}>
-      <ContentBox $minorHeight={minorHeight}>{children}</ContentBox>
+      <ContentBox $minorHeight={minorHeight} $direction={direction}>
+        {children}
+      </ContentBox>
     </DialogContainer>,
     modalRoot
   );

@@ -26,7 +26,6 @@ import {
   CartToSave,
   IconBtn,
 } from "../styles/CartDrawer.style";
-//import QuantityAmount from "../styles/UI/QuantityAmount";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useScrollBlock } from "../hooks/useScrollBlock";
@@ -109,6 +108,7 @@ function CartDrawer() {
               {Array.isArray(items) && items.length === 0 && (
                 <>
                   <NoProd />
+
                   <NoProdSpan>看來是還沒購物喔</NoProdSpan>
                 </>
               )}

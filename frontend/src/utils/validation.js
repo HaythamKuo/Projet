@@ -126,6 +126,7 @@ export const validateOrder = (address, items, paymentMethod) => {
   };
 };
 
+//驗證評論
 export const ValidateReviews = (reviews = []) => {
   const commentHasValue = reviews.some(
     ([_, { comment }]) => comment?.trim().length > 0
@@ -144,4 +145,6 @@ export const ValidateReviews = (reviews = []) => {
       isErr: true,
       message: "至少要有一筆評論，且每則評論不能超過 20 字",
     };
+
+  return { isErr: false };
 };

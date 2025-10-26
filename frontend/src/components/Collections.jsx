@@ -13,6 +13,7 @@ import Modal from "./Modal";
 
 import { flexCenter, imgBasicStyle } from "../styles/theme";
 import ProcessLoader from "../styles/UI/ProcessLoader";
+import { SubmitBtn, CancelBtn } from "../styles/ProdImgGallery.style";
 const titleNameVariants = {
   rest: {
     y: 0,
@@ -106,6 +107,16 @@ const DeleteCollection = styled(Delete)`
   background-color: rgba(255, 255, 255, 0.6);
   border-radius: 8px;
 `;
+export const ConfirmTxt = styled.h2`
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: ${({ theme }) => theme.colors.default};
+`;
+export const BtnContainer = styled.div`
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+`;
 
 function Collections({ userId }) {
   const { data: prods, isLoading } = useGetSaveProdsQuery(userId);
@@ -170,9 +181,13 @@ function Collections({ userId }) {
           width="500px"
           height="500px"
         >
-          <h1>確定取消收藏嗎？</h1>
-          <button onClick={() => removeAction(target, userId)}>確定</button>
-          <button onClick={() => setOpen(false)}>取消</button>
+          <ConfirmTxt>確定取消收藏嗎？</ConfirmTxt>
+          <BtnContainer>
+            <SubmitBtn onClick={() => removeAction(target, userId)}>
+              確定
+            </SubmitBtn>
+            <CancelBtn onClick={() => setOpen(false)}>取消</CancelBtn>
+          </BtnContainer>
         </Modal>
       )}
       <ProdListContainer $hasProds={!hasCollections}>
