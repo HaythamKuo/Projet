@@ -28,6 +28,12 @@ export const lightTheme = {
     cursor: "#ff9e00",
     specificShadow: "12px 17px 51px rgba(0, 0, 0, 0.22)",
     convertBeige: "beige",
+    gradientColor: `linear-gradient(
+    120deg,
+    rgba(0, 0, 255, 0) 40%,
+    rgba(0, 0, 255, 0.8) 50%,
+    rgba(0, 0, 255, 0) 60%
+  )`,
   },
   spotLight: {
     backGround: "#f5f5f5",
@@ -60,6 +66,12 @@ export const darkTheme = {
     cursor: "#ffd166",
     specificShadow: "12px 17px 51px rgba(255, 255, 255, 0.22)",
     convertBeige: "#373735",
+    gradientColor: `linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(255, 255, 255, 0) 60%
+  )`,
   },
   spotLight: {
     backGround: "#111111",

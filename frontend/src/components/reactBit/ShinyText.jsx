@@ -10,25 +10,10 @@ const shine = keyframes`
   }
 `;
 
-// 使用 styled-components 創建樣式化的元件
 const StyledShinyText = styled.div`
   color: #b5b5b5a4;
-  //color: #666;
 
-  //暗黑模式使用
-  /* background: linear-gradient(
-    120deg,
-    rgba(255, 255, 255, 0) 40%,
-    rgba(255, 255, 255, 0.8) 50%,
-    rgba(255, 255, 255, 0) 60%
-  ); */
-
-  background: linear-gradient(
-    120deg,
-    rgba(0, 0, 255, 0) 40%,
-    rgba(0, 0, 255, 0.8) 50%,
-    rgba(0, 0, 255, 0) 60%
-  );
+  background: ${({ theme }) => theme.colors.gradientColor};
 
   background-size: 200% 100%;
   -webkit-background-clip: text;

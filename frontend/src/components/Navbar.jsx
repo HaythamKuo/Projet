@@ -31,9 +31,10 @@ function Navbar({ onClick }) {
   const dispatch = useDispatch();
   const { isOpen } = useSelector((state) => state.cart);
 
+  //管理pathname 控制部分網頁授權
+  const pathNameGroups = ["/checkout", "/create-product", "/ecpayresult"];
   const { pathname } = useLocation();
-  const isCheckout = pathname === "/checkout";
-  const isCreating = pathname === "/create-product";
+  const isIncludePathname = pathNameGroups.includes(pathname);
 
   //關於搜索
   const [search, setSearch] = useState(false);
@@ -98,7 +99,7 @@ function Navbar({ onClick }) {
           <LoginDropDown />
 
           <IconContainer>
-            {!isCheckout && !isCreating && (
+            {!isIncludePathname && (
               <>
                 <SearchIcon onClick={() => setSearch(true)} />
                 <AnimatePresence>

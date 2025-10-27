@@ -27,8 +27,7 @@ const PayResSuccess = styled.img`
 
 const OptionBlock = styled(Container)`
   border-radius: 12px;
-
-  background-color: aliceblue;
+  background-color: ${({ theme }) => theme.card.specificBack};
   width: 100%;
   max-width: 400px;
   gap: 1rem;
@@ -38,6 +37,7 @@ const OptionBlock = styled(Container)`
 
 const OptionSpan = styled.span`
   font-size: 1.5rem;
+  font-weight: bold;
 `;
 const OptionBtn = styled.div`
   display: flex;
@@ -45,7 +45,7 @@ const OptionBtn = styled.div`
 `;
 
 function Ecpay() {
-  //http://localhost:5173/ecpayresult?status=success&orderId=68bd26099ae381247f4a2e19
+  //http://localhost:5173/ecpayresult?status=success&orderId=68de266a4c6f5f5ffd384af7
   const dispatch = useDispatch();
 
   //獲取最新訂單狀態
@@ -65,7 +65,6 @@ function Ecpay() {
   useEffect(() => {
     if (isSuccess) {
       dispatch(clearCart());
-      console.log("作動");
 
       dispatch(emptiedCart())
         .unwrap()
@@ -87,9 +86,6 @@ function Ecpay() {
   if (!isSuccess && !isFailed) {
     return <ErrPage />;
   }
-
-  // console.log("apiOrderId" + apiOrderId);
-  // console.log("apiOrderStatus" + apiOrderStatus);
 
   return (
     <>
