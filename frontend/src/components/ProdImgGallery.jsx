@@ -267,15 +267,15 @@ function ProdImgGallery() {
             </SubmitBox>
           </Top>
           <Center>
-            <div className="ProflieIcon">
+            <div className="profileIcon">
               <MdDeliveryDining />
               <span>免費且快捷的運輸</span>
             </div>
-            <div className="ProflieIcon">
+            <div className="profileIcon">
               <MdHomeRepairService />
               <span>完善的售後服務</span>
             </div>
-            <div className="ProflieIcon">
+            <div className="profileIcon">
               <MdSquareFoot />
               <span>降低碳足跡排放</span>
             </div>

@@ -18,6 +18,8 @@ const BackgroundWrapper = styled.div`
 
   ${({ theme }) => theme.media.md} {
     min-height: 250px;
+
+    min-height: 200px;
   }
 
   /* 定義自訂屬性，並讓它們支援過渡 */

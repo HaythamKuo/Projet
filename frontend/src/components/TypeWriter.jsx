@@ -19,6 +19,13 @@ export const TypeWriterContainer = styled.div`
     font-size: 3.5rem;
 
     //RWD to "I am"
+    ${({ theme }) => theme.media.lg} {
+      font-size: 2.5rem;
+    }
+
+    ${({ theme }) => theme.media.md} {
+      font-size: 2rem;
+    }
   }
 `;
 
@@ -46,7 +53,7 @@ const TypeWriterText = styled.h1`
   }
 
   ${({ theme }) => theme.media.md} {
-    font-size: 4rem;
+    font-size: 2rem;
   }
 `;
 
@@ -62,7 +69,7 @@ const Cursor = styled.span`
   }
 
   ${({ theme }) => theme.media.md} {
-    height: 2.5rem;
+    height: 1.5rem;
   }
 
   background-color: ${({ theme }) => theme.colors.cursor};

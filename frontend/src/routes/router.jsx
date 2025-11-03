@@ -15,6 +15,7 @@ import EditProduct from "../components/EditProduct";
 import ErrPage from "./ErrPage";
 
 import Checkout from "../components/Checkout";
+import PublicrouteHandle from "../config/PublicrouteHandle";
 import Ecpay from "./Ecpay";
 import SearchRespage from "./SearchRespage";
 import Order from "../components/Order";
@@ -30,14 +31,28 @@ export const createRouter = (toggleTheme) => {
           index: true,
           element: <HomePage />,
         },
+        // {
+        //   path: "auth",
+        //   element: <AuthLayout />,
+        //   children: [
+        //     { index: true, element: <LoginPage /> },
+        //     { path: "register", element: <RegisterPage /> },
+        //   ],
+        // },
         {
-          path: "auth",
-          element: <AuthLayout />,
+          element: <PublicrouteHandle />, // 先檢查是否登入
           children: [
-            { index: true, element: <LoginPage /> },
-            { path: "register", element: <RegisterPage /> },
+            {
+              path: "auth",
+              element: <AuthLayout />,
+              children: [
+                { index: true, element: <LoginPage /> },
+                { path: "register", element: <RegisterPage /> },
+              ],
+            },
           ],
         },
+
         {
           path: "products",
           element: <Outlet />,
@@ -57,6 +72,8 @@ export const createRouter = (toggleTheme) => {
               children: [
                 { index: true, element: <Profile /> },
                 { path: "orders", element: <Order /> },
+                { path: "create-product", element: <CreateProduct /> },
+                { path: "edit-product/:prodid", element: <EditProduct /> },
               ],
             },
             {
@@ -67,14 +84,14 @@ export const createRouter = (toggleTheme) => {
                 </CheckoutGuard>
               ),
             },
-            {
-              path: "create-product",
-              element: <CreateProduct />,
-            },
-            {
-              path: "edit-product/:prodid",
-              element: <EditProduct />,
-            },
+            // {
+            //   path: "create-product",
+            //   element: <CreateProduct />,
+            // },
+            // {
+            //   path: "edit-product/:prodid",
+            //   element: <EditProduct />,
+            // },
             {
               path: "ecpayresult",
               element: <Ecpay />,

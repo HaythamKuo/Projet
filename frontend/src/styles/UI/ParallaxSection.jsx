@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import Image from "../../components/Image";
 
 // Styled Components
 const ParallaxContainer = styled.section`
@@ -7,6 +6,9 @@ const ParallaxContainer = styled.section`
 
   display: flex;
   flex-direction: column;
+  ${({ theme }) => theme.media.md} {
+    margin-bottom: 2rem;
+  }
 `;
 
 const Section = styled.div`

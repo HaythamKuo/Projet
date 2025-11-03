@@ -17,6 +17,9 @@ export const FooterContainer = styled.footer`
     //flex: 1;
     flex-direction: column;
     width: 30%;
+    ${(props) => props.theme.media.md} {
+      width: 100%;
+    }
   }
 
   .linkSection {
@@ -24,6 +27,10 @@ export const FooterContainer = styled.footer`
     display: flex;
     justify-content: space-between;
     width: 65%;
+    ${(props) => props.theme.media.md} {
+      margin-top: 1rem;
+      width: 100%;
+    }
   }
 
   .linksSection {
@@ -33,6 +40,14 @@ export const FooterContainer = styled.footer`
     li {
       padding: 0.5rem 0;
     }
+
+    ${(props) => props.theme.media.md} {
+      margin-top: 1rem;
+    }
+  }
+
+  ${(props) => props.theme.media.md} {
+    flex-direction: column;
   }
 `;
 

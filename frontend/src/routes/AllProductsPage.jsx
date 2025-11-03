@@ -13,7 +13,7 @@ function AllProductsPage() {
         <ParallaxSection />
       </div>
       {/* 條件 */}
-      <div></div>
+
       {/* 圖片 */}
       <div>
         {/* <Breadcrumb /> */}

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { TiDelete } from "react-icons/ti";
+import { imgBasicStyle } from "../theme";
 
 const UploadWrapper = styled.div`
   display: flex;
@@ -33,7 +34,12 @@ const ImgContainer = styled.div`
 
 const PreviewWrapper = styled.div`
   position: relative;
-  width: 200px;
+  width: clamp(150px, 25vw, 250px);
+
+  aspect-ratio: 16 / 9;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
 `;
 
 const DeleteIcon = styled(TiDelete)`
@@ -46,12 +52,7 @@ const DeleteIcon = styled(TiDelete)`
 `;
 
 const UploadPreview = styled.img`
-  //width: 200px;
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  border-radius: 8px;
-  object-fit: cover;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  ${imgBasicStyle}
 `;
 
 const HiddenInput = styled.input`

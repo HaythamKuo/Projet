@@ -29,6 +29,10 @@ const StyledShinyText = styled.div`
 
   font-size:3rem;
   font-weight: bolder;
+
+  ${({ theme }) => theme.media.md} {
+    font-size: 2rem;
+  }
 `;
 
 const ShinyText = ({

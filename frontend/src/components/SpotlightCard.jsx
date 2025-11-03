@@ -23,6 +23,12 @@ const CardSpotlight = styled.div`
     max-width: 660px; // 最大寬度限制
   }
 
+  ${({ theme }) => theme.media.xxl} {
+    height: auto;
+  }
+  ${(props) => props.theme.media.xl} {
+  }
+
   /* 預設 CSS 變數 */
   --mouse-x: 50%;
   --mouse-y: 50%;

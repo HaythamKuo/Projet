@@ -27,10 +27,16 @@ export const ThumbnailList = styled.div`
 `;
 
 export const ThumbnailWrapper = styled.div`
-  border-radius: ${(props) => props.borderRadius};
   cursor: pointer;
   width: 100px;
   height: 100px;
+
+  ${({ theme }) => theme.media.md} {
+    overflow: hidden;
+    width: 200px;
+    height: 100px;
+    border-radius: 8px;
+  }
 `;
 
 const jointStyledThumbnail = css`
@@ -81,6 +87,9 @@ export const MainImgWrapper = styled.div`
   }
   ${({ theme }) => theme.media.lg} {
     height: clamp(300px, 45vh, 700px);
+  }
+  ${({ theme }) => theme.media.md} {
+    width: 100%;
   }
 `;
 
@@ -199,7 +208,7 @@ export const Center = styled.div`
   flex-direction: column;
   gap: 1rem;
 
-  .ProflieIcon {
+  .profileIcon {
     display: flex;
     align-items: center;
     gap: 15px;
@@ -218,7 +227,7 @@ export const Center = styled.div`
   }
 `;
 
-export const Bottom = styled.div``;
+// export const Bottom = styled.div``;
 
 //這裡是商品概括容器
 export const HighlightSectionContainer = styled.div`
@@ -231,6 +240,10 @@ export const BottomContainer = styled.div`
   margin-top: 1rem;
   display: flex;
   justify-content: space-around;
+
+  ${({ theme }) => theme.media.md} {
+    flex-direction: column;
+  }
 `;
 export const BottomWrapper = styled.div`
   display: flex;
@@ -241,6 +254,9 @@ export const BottomWrapper = styled.div`
   //test
   flex: 1;
   min-width: 0;
+  ${({ theme }) => theme.media.md} {
+    margin: 1rem 0;
+  }
 `;
 export const IconWrapper = styled.div`
   & > svg {

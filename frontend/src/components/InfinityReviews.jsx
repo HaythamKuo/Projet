@@ -8,8 +8,10 @@ const StyledWrapper = styled.div`
   width: 100%;
   overflow: hidden;
   margin-top: 3rem;
-  background-color: aqua;
-  //  display: ${({ $direction }) => !$direction && "flex"};
+
+  ${({ theme }) => theme.media.md} {
+    display: none;
+  }
 `;
 
 const Slider = styled(motion.div)`

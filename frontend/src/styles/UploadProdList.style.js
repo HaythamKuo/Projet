@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { TiDelete } from "react-icons/ti";
 import { TbPencil } from "react-icons/tb";
 import promptSvg from "../assets/shoud_upload.svg?react";
-import { flexCenter } from "./theme";
+import { flexCenter, imgBasicStyle } from "./theme";
 const ProdListContainer = styled.div`
   width: 100%;
   display: flex;
@@ -25,7 +25,6 @@ const IconBox = styled.div`
     cursor: pointer;
     background-color: rgba(255, 255, 255, 0.6);
     border-radius: 8px;
-
     font-size: 1.5rem;
   }
 `;
@@ -58,15 +57,19 @@ const ImageWrapper = styled.div`
   ${({ theme }) => theme.media.md} {
     flex: 0 0 calc(50% - 0.5rem);
 
-    height: 500px;
+    /* height: 500px; */
   }
 `;
-const MyImg = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+
+const MyImgWrapper = styled.div`
   border-radius: 8px;
+  overflow: hidden;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  aspect-ratio: 16/9;
+`;
+
+const MyImg = styled.img`
+  ${imgBasicStyle}
 `;
 
 const EmptyWrapper = styled.div`
@@ -74,16 +77,17 @@ const EmptyWrapper = styled.div`
   height: 100%;
   ${flexCenter}
   gap: 2rem;
+
+  ${({ theme }) => theme.media.md} {
+    flex-direction: column-reverse;
+    /* gap: 1rem; */
+  }
 `;
 
 const PromptProd = styled(promptSvg)`
   width: 300px;
   height: 300px;
   align-self: center;
-`;
-const PromptTitle = styled.span`
-  font-size: 2rem;
-  color: ${({ theme }) => theme.colors.default};
 `;
 
 export {
@@ -95,5 +99,5 @@ export {
   ProdListContainer,
   EmptyWrapper,
   PromptProd,
-  PromptTitle,
+  MyImgWrapper,
 };

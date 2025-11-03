@@ -48,8 +48,9 @@ const cartSlice = createSlice({
     closeCart: (state) => {
       state.isOpen = false;
     },
-    toggleCart: (state) => {
+    toggleCart: (state, action) => {
       state.isOpen = !state.isOpen;
+      console.log("closeCart called by:", action); // 打印完整 action
     },
     removeItem: (state, action) => {
       state.cart.items = state.cart.items.filter(
@@ -112,6 +113,9 @@ const cartSlice = createSlice({
       .addCase(fetchGoods.fulfilled, (state, action) => {
         state.isLoading = false;
         state.hasFetched = true;
+
+        // 保留 isOpen，只更新 cart 內容
+        // state.cart = { ...state.cart, ...action.payload };
 
         Object.assign(state.cart, action.payload);
       })

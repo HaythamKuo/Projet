@@ -19,5 +19,6 @@ export const HeaderLayout = styled.header`
   //RWD
   ${({ theme }) => theme.media.md} {
     flex-direction: column;
+    /* justify-content: space-between; */
   }
 `;

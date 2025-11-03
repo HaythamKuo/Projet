@@ -14,6 +14,8 @@ import Modal from "./Modal";
 import { flexCenter, imgBasicStyle } from "../styles/theme";
 import ProcessLoader from "../styles/UI/ProcessLoader";
 import { SubmitBtn, CancelBtn } from "../styles/ProdImgGallery.style";
+import ShinyText from "./reactBit/ShinyText";
+
 const titleNameVariants = {
   rest: {
     y: 0,
@@ -69,6 +71,9 @@ const Img = styled.img`
 const TitleName = styled(motion.h2)`
   font-weight: bold;
   color: ${({ theme }) => theme.colors.default};
+  ${({ theme }) => theme.media.md} {
+    font-size: 1.5rem;
+  }
 `;
 const StatusBox = styled(motion.div)`
   display: flex;
@@ -89,12 +94,6 @@ const SaveSvg = styled(saveSvg)`
   width: 300px;
   height: 300px;
   align-self: center;
-`;
-
-const NoProdText = styled.p`
-  font-size: 2rem;
-  font-weight: bold;
-  color: ${({ theme }) => theme.button.direct};
 `;
 
 const DeleteCollection = styled(Delete)`
@@ -153,7 +152,7 @@ function Collections({ userId }) {
     content = (
       <SaveSvgBox>
         <SaveSvg />
-        <NoProdText>目前沒有收藏的商品</NoProdText>
+        <ShinyText text="目前沒有收藏的商品" />
       </SaveSvgBox>
     );
   } else {

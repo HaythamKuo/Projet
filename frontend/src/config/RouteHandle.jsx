@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { closeCart } from "../store/slices/cartSlice";
@@ -11,12 +11,18 @@ import { closeCart } from "../store/slices/cartSlice";
 export default function RouteHandle({ excludePaths = [] }) {
   const location = useLocation();
   const dispatch = useDispatch();
+  const prePath = useRef(location.pathname);
 
   useEffect(() => {
-    if (!excludePaths.includes(location.pathname)) {
+    if (
+      prePath.current !== location.pathname &&
+      !excludePaths.includes(location.pathname)
+    ) {
       dispatch(closeCart());
     }
+
+    prePath.current = location.pathname;
   }, [location.pathname, dispatch, excludePaths]);
 
-  return null; // 這個組件不渲染任何 UI
+  return null;
 }

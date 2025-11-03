@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { flexCenter, flexContainer, imgBasicStyle } from "./theme";
+import { flexCenter, imgBasicStyle } from "./theme";
 import { FaSearch } from "react-icons/fa";
 
 export const HomeContainer = styled.div`
@@ -53,8 +53,9 @@ export const AttributesContainer = styled.div`
 
 // for product desc section
 export const ProdDesc = styled.div`
-  ${flexContainer}
-  justify-content:space-around;
+  display: flex;
+  justify-content: space-around;
+  align-items: stretch;
 
   gap: 1rem;
   margin: 1rem 0;
@@ -66,16 +67,18 @@ export const ProdDesc = styled.div`
 `;
 
 export const ImgWrapper = styled.div`
-  /* flex: 3;
-  min-width: 0; */
-
   flex: 3;
-  height: 550px;
+
   width: 100%;
   box-shadow: ${({ theme }) => theme.colors.specificShadow};
 
   overflow: hidden;
   border-radius: 0.75rem;
+
+  ${({ theme }) => theme.media.xxl} {
+    width: 100%;
+    height: auto;
+  }
 `;
 
 export const ImgInstance = styled.img`
@@ -95,29 +98,53 @@ export const ImgHoverTitle = styled.h3`
   font-size: 3rem;
 `;
 
+export const RwdBox = styled.div`
+  display: flex;
+  gap: 1rem;
+  flex: 4;
+  ${({ theme }) => theme.media.md} {
+    /* display: flex; */
+    flex-direction: column;
+    width: 100%;
+  }
+`;
+
 export const ImgHoverBox = styled.div`
   display: flex;
   gap: 1rem;
+
+  ${(props) => props.theme.media.lg} {
+    /* padding: 0 4rem; */
+    flex-direction: column;
+  }
+
+  ${({ theme }) => theme.media.md} {
+    padding: 0;
+  }
 `;
 
 export const ImgHoverWrapper = styled.div`
+  ${flexCenter}
+  position: relative;
   border-radius: 0.75rem;
   flex: 2;
   box-shadow: ${({ theme }) => theme.colors.specificShadow};
 
-  position: relative;
   width: 300px;
 
+  ${({ theme }) => theme.media.md} {
+    width: 100%;
+  }
   //高度應該是自訂的
   height: 500px;
   overflow: hidden;
+  aspect-ratio: 16 / 9;
 
   &::before {
-    //寬度與高度未知
     content: "";
     position: absolute;
     inset: 0;
-    //display: grid;
+
     place-content: center;
     background-size: cover;
     background-position: center;
@@ -133,28 +160,36 @@ export const ImgHoverWrapper = styled.div`
 
 export const ImgHover = styled.h1`
   position: relative;
+
   color: white;
   font-size: 5rem;
   text-align: center;
-  line-height: 500px;
+
   pointer-events: none;
 `;
 
 export const TextWrapper = styled.div`
+  ${flexCenter}
   border-radius: 0.75rem;
   flex: 1;
 
-  ${flexCenter}
   gap: 10px;
 
-  /* background-color: #ebebeb; */
   background-color: ${({ theme }) => theme.colors.convertBeige};
 
-  height: 500px;
   cursor: pointer;
 
   &:hover {
     background-color: ${({ theme }) => theme.button.hoverSearch};
+  }
+
+  ${(props) => props.theme.media.lg} {
+    height: auto;
+    min-height: 150px;
+  }
+  ${({ theme }) => theme.media.md} {
+    min-height: 100px;
+    width: 100%;
   }
 `;
 

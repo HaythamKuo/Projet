@@ -33,6 +33,9 @@ export const SearchBox = styled(motion.form)`
   border-radius: 8px;
   padding: 1rem;
   position: relative;
+  ${({ theme }) => theme.media.md} {
+    width: 70%;
+  }
 `;
 
 export const SearchInput = styled.input.attrs({
@@ -52,6 +55,10 @@ export const SearchInput = styled.input.attrs({
 
   &:focus {
     outline: none;
+  }
+
+  ${({ theme }) => theme.media.md} {
+    width: 100%;
   }
 `;
 
@@ -76,6 +83,10 @@ export const BriefRes = styled.div`
   p {
     font-size: 1.5rem;
     margin: 1rem 0;
+  }
+
+  ${({ theme }) => theme.media.md} {
+    width: 100%;
   }
 `;
 export const DeriveContent = styled.p`

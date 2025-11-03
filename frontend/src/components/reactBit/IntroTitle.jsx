@@ -6,9 +6,20 @@ import { useIntersectionObserver } from "../../hooks/useIntersectObserve";
 // Styled components
 const TextContainer = styled.p`
   margin-bottom: 2rem;
-  font-size: 6rem;
+
   font-size: ${(prop) => prop.$size || "6rem"};
   text-align: ${(props) => (props.$center ? "center" : "")};
+
+  ${({ theme }) => theme.media.xxl} {
+    font-size: 3.5rem;
+  }
+
+  ${(props) => props.theme.media.xl} {
+    margin-top: 1rem;
+  }
+  ${(props) => props.theme.media.md} {
+    font-size: 1.5rem;
+  }
 `;
 
 const AnimatedSpan = styled(animated.span)`

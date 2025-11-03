@@ -8,7 +8,7 @@ export const LayoutContainer = styled.div`
 
   ${(props) => props.theme.media.xxl} {
     padding: 0 16rem;
-    /* background-color: gold; */
+    background-color: gold;
   }
 
   ${(props) => props.theme.media.xl} {

@@ -18,6 +18,10 @@ export const OrderBlock = styled.div`
   justify-content: space-between;
   gap: 1rem;
   overflow: hidden;
+
+  ${({ theme }) => theme.media.md} {
+    flex-direction: column;
+  }
 `;
 
 export const Left = styled.div`
@@ -65,6 +69,10 @@ export const Right = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+
+  ${({ theme }) => theme.media.md} {
+    margin-top: 1rem;
+  }
 `;
 export const OrderId = styled.p`
   color: ${({ theme }) => theme.button.direct};
@@ -110,6 +118,10 @@ export const ReviewArea = styled.textarea`
     outline: none;
     box-shadow: 0 0 0 2px rgba(0, 95, 204, 0.2);
   }
+
+  ${({ theme }) => theme.media.lg} {
+    width: 100%;
+  }
 `;
 
 export const CommentConfirm = styled(SubmitBtn)``;
@@ -142,4 +154,12 @@ export const ConfineBox = styled.div`
   background-color: ${({ theme }) => theme.card.specificBack};
   border: 1px solid #ddd;
   border-radius: 20px;
+`;
+export const SortBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  ${({ theme }) => theme.media.lg} {
+    flex-direction: row;
+  }
 `;

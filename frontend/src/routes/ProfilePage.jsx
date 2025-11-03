@@ -28,6 +28,7 @@ import ProcessLoader from "../styles/UI/ProcessLoader";
 import UploadProdList from "../components/UploadProdList";
 import Collections from "../components/Collections";
 import BindAcc from "../components/BindAcc";
+import Breadcrumb from "../styles/UI/Breadcrumb";
 
 function Profile() {
   // const [type, setType] = useState("created");
@@ -53,7 +54,7 @@ function Profile() {
       navigate("/profile", { replace: true });
       toast.success("✅ Google 綁定成功！");
       setHandleToast(true);
-      //setType("third-party");
+
       searchParams({ tab: "third-party" });
     }
   }, [location, navigate, handleToast, searchParams]);
@@ -84,6 +85,7 @@ function Profile() {
 
   return (
     <>
+      <Breadcrumb />
       <ProfileContainer>
         <ImgWrapper>
           <UserPhoto src="/golden-2.jpg" />
@@ -93,15 +95,11 @@ function Profile() {
         {/* <UserMail>這邊放email</UserMail> */}
         <UserMail>{profile.email}</UserMail>
         <UserInteractionBox>
-          <Link to="/create-product">
+          <Link to="create-product">
             <InfoUpload />
           </Link>
 
           <ProfileBtns>
-            {/* <button>訊息</button> */}
-            {/* <button as={Link} to="/orders">
-              查看訂單
-            </button> */}
             <OrderLink to="orders">訂單內容</OrderLink>
           </ProfileBtns>
           <InfoDelete />
@@ -130,7 +128,7 @@ function Profile() {
             active={currentTab === "third-party"}
             onClick={() => handleQueryStr("third-party")}
           >
-            綁定
+            綁定選項
           </ProfileOption>
         </ProfileOptions>
         {content}

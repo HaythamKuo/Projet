@@ -14,6 +14,7 @@ import {
   TextHover,
   TextSearch,
   ImgInstance,
+  RwdBox,
 } from "../styles/homePage.style";
 
 import TypeWriter, { TypeWriterContainer } from "../components/TypeWriter";
@@ -109,16 +110,18 @@ function HomePage() {
           delay={150}
           animateBy="words"
           direction="up"
-          className=""
+          $center="center"
         />
 
         <ImgHoverBox>
-          <ImgHoverWrapper>
-            <ImgHover>Cat</ImgHover>
-          </ImgHoverWrapper>
-          <ImgHoverWrapper>
-            <ImgHover>Cat</ImgHover>
-          </ImgHoverWrapper>
+          <RwdBox>
+            <ImgHoverWrapper>
+              <ImgHover>Cat</ImgHover>
+            </ImgHoverWrapper>
+            <ImgHoverWrapper>
+              <ImgHover>Cat</ImgHover>
+            </ImgHoverWrapper>
+          </RwdBox>
 
           <TextWrapper>
             <TextSearch />

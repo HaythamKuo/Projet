@@ -13,6 +13,7 @@ import SplitText from "./reactBit/SplitText";
 import SelectOption from "./SelectOption";
 import ProdSize from "./ProdSize";
 import ProcessLoader from "../styles/UI/ProcessLoader";
+import Breadcrumb from "../styles/UI/Breadcrumb";
 
 function CreateProduct() {
   const navigate = useNavigate();
@@ -96,6 +97,7 @@ function CreateProduct() {
       {isLoading && <ProcessLoader />}
 
       <FormContainer onSubmit={handleForm}>
+        <Breadcrumb />
         <SplitText text="創建你的娃娃" customStyles="font-size: 3rem;" />
         <FormField label="產品名稱" type="text" name="name" />
         <FormField label="價錢" type="text" name="price" />

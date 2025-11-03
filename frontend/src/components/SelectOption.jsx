@@ -28,6 +28,7 @@ const SelectButton = styled.button.attrs({ type: "button" })`
 
 const SelectSpan = styled.span`
   font-size: 1.25rem;
+  color: ${({ theme }) => theme.colors.default};
 `;
 
 export const Arrow = styled(MdOutlineKeyboardArrowRight)`

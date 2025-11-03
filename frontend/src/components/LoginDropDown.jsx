@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import {
@@ -20,10 +20,16 @@ import { clearCart } from "../store/slices/cartSlice";
 import { useLogoutUserMutation, usersApi } from "../store/apis/apiSlice";
 
 import { toast } from "react-toastify";
+import useClickOutside from "../hooks/useClickOutside";
+import useObserverInnerWidth from "../hooks/useObserverInnerWidth";
 
 // import ProcessLoader from "../styles/UI/ProcessLoader";
 
 function LoginDropDown() {
+  const controllDropBar = useRef(null);
+
+  // const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
+  const isMobile = useObserverInnerWidth(1024);
   const [openUser, setOpenUser] = useState(false);
   const closeTimeOut = useRef(null);
   const dispatch = useDispatch();
@@ -33,6 +39,15 @@ function LoginDropDown() {
   const { userInfo } = useSelector((state) => state.auth);
   const [callLogoutApi] = useLogoutUserMutation();
 
+  //控制rwd之下的dropdownBar
+  useClickOutside(
+    controllDropBar,
+    useCallback(() => {
+      if (isMobile) setOpenUser(false);
+    }, [isMobile])
+  );
+
+  /////////////////////////
   useEffect(() => {
     return () => {
       if (closeTimeOut.current) clearTimeout(closeTimeOut.current);
@@ -72,10 +87,19 @@ function LoginDropDown() {
     }
   }
 
+  // useEffect(() => {
+  //   const handleResize = () => setIsMobile(window.innerWidth < 1024);
+  //   window.addEventListener("resize", handleResize);
+
+  //   return () => window.removeEventListener("resize", handleResize);
+  // }, []);
+
   return (
     <IconContainer
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      ref={controllDropBar}
+      onMouseEnter={!isMobile ? handleMouseEnter : undefined}
+      onMouseLeave={!isMobile ? handleMouseLeave : undefined}
+      onClick={isMobile ? () => setOpenUser((pre) => !pre) : undefined}
     >
       <StateBox
         as={userInfo ? "div" : Link}
@@ -97,7 +121,6 @@ function LoginDropDown() {
             <MenuItem as={Link} to="profile/orders">
               我的訂單
             </MenuItem>
-            <MenuItem>123</MenuItem>
           </MenuList>
         </MenuSection>
 

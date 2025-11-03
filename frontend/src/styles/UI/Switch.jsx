@@ -88,6 +88,10 @@ const StyledWrapper = styled.div`
     -webkit-box-shadow: none;
     box-shadow: none;
   }
+
+  ${({ theme }) => theme.media.md} {
+    margin-top: 1rem;
+  }
 `;
 
 export default Switch;

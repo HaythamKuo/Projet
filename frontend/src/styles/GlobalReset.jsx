@@ -78,6 +78,13 @@ p, h1, h2, h3, h4, h5, h6 {
    --nav-height: 5rem;
 }
 
+${({ theme }) => theme.media.lg}{
+	.toastContainer{
+	width:50%;
+}
+}
+
+
 
 
 

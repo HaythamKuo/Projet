@@ -62,10 +62,13 @@ function CartDrawer() {
 
   //hook
   const { handleDelete } = useDeleteGood();
-  useClickOutside(controlCart, () => dispatch(closeCart()));
+  useClickOutside(controlCart, () => {
+    dispatch(closeCart());
+  });
 
   useEffect(() => {
     if (!userInfo || !isOpen) return; // 只有登入才 fetch
+
     const fetchData = async () => {
       try {
         await dispatch(fetchGoods()).unwrap();
@@ -77,7 +80,6 @@ function CartDrawer() {
   }, [dispatch, userInfo, isOpen]);
 
   useEffect(() => {
-    //有必要寫成這樣嗎？
     if (!err) return;
     const toastId = "cart-fetch-error";
     if (!toast.isActive(toastId)) {
@@ -87,8 +89,9 @@ function CartDrawer() {
 
   return createPortal(
     <>
-      {isOpen && <OverLay />}
+      {isOpen && <OverLay $open={isOpen} />}
 
+      {/* <OverLay $open={isOpen} onClick={() => dispatch(closeCart())} /> */}
       <Drawer $open={isOpen} ref={controlCart} className="outter">
         <CartContainer className="inner">
           {isLoading && (

@@ -2,6 +2,7 @@ import styled, { css } from "styled-components";
 
 import { flexCenter, flexContainer } from "./theme";
 import { FaSearch, FaShoppingCart } from "react-icons/fa";
+import { FaAlignJustify, FaXmark } from "react-icons/fa6";
 
 export const NavContainer = styled.nav`
   //ok?
@@ -48,7 +49,8 @@ export const NavContainer = styled.nav`
     }
 
     ${({ theme }) => theme.media.md} {
-      //justify-content: space-around;
+      justify-content: space-between;
+      flex: 0;
       padding: 0 2rem;
     }
   }
@@ -62,6 +64,10 @@ export const NavContainer = styled.nav`
     }
     span {
       font-size: 2rem;
+    }
+
+    ${({ theme }) => theme.media.lg} {
+      /* margin-right: 1rem; */
     }
   }
 
@@ -77,14 +83,23 @@ export const NavContainer = styled.nav`
     ${({ theme }) => theme.media.xl} {
       gap: 3rem;
     }
+    ${({ theme }) => theme.media.lg} {
+      gap: 0.5rem;
+      justify-content: space-around;
+    }
   }
   .mobile {
     display: none;
     ${({ theme }) => theme.media.md} {
       display: flex;
       font-size: 2rem;
-      cursor: pointer;
-      right: 3rem;
+      /* right: 3rem; */
+    }
+  }
+  .mobileSearch {
+    display: none;
+    ${({ theme }) => theme.media.md} {
+      display: flex;
     }
   }
 `;
@@ -97,21 +112,25 @@ export const Sentinel = styled.div`
 `;
 
 export const MobileNav = styled.div`
-  position: fixed;
-  top: 5rem;
-  right: 0;
-  width: 70%;
-  max-width: 300px;
-  height: 100vh;
-  background-color: ${({ theme }) => theme.colors.backGround};
-  box-shadow: -4px 0 6px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2rem 1rem;
-  z-index: 1100;
-  transform: ${({ open }) => (open ? "translateX(0)" : "translateX(100%)")};
-  transition: transform 0.3s ease-in-out;
+  display: none;
+
+  ${({ theme }) => theme.media.md} {
+    position: fixed;
+    top: 5rem;
+    right: 0;
+    width: 70%;
+    max-width: 300px;
+    height: 100vh;
+    background-color: ${({ theme }) => theme.colors.backGround};
+    box-shadow: -4px 0 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem;
+    z-index: 11;
+    transform: ${({ open }) => (open ? "translateX(0)" : "translateX(100%)")};
+    transition: transform 0.3s ease-in-out;
+  }
 `;
 
 export const IconContainer = styled.div`
@@ -136,4 +155,10 @@ export const CartIcon = styled(FaShoppingCart)`
 
 export const SearchIcon = styled(FaSearch)`
   ${refactorIconStyle}
+`;
+export const SideBar = styled(FaAlignJustify)`
+  color: ${({ theme }) => theme.colors.default};
+`;
+export const CloseSideBar = styled(FaXmark)`
+  color: ${({ theme }) => theme.colors.default};
 `;

@@ -8,24 +8,28 @@ import Footer from "./components/Footer";
 import { CopyRight, CopyRightContainer } from "./styles/Footer.style";
 import { ContentContainer, LayoutWrapper, MainContent } from "./styles/index";
 import { useGetProfileQuery } from "./store/apis/apiSlice";
-import { setCredentials } from "./store/slices/authSlice";
+import { setCredentials, setLoadingFalse } from "./store/slices/authSlice";
 import RouteHandle from "./config/RouteHandle";
 
 function App({ toggleTheme }) {
   const dispatch = useDispatch();
 
-  //為何要這樣寫
-  const { data } = useGetProfileQuery(undefined, {
+  const { data, isLoading, isSuccess } = useGetProfileQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
 
   useEffect(() => {
-    if (data) dispatch(setCredentials(data));
-  }, [data, dispatch]);
+    if (isSuccess && data) {
+      dispatch(setCredentials(data));
+    } else if (!isLoading) {
+      dispatch(setLoadingFalse());
+    }
+  }, [data, dispatch, isSuccess, isLoading]);
 
   return (
     <>
       <ToastContainer
+        className="toastContainer"
         position="top-right" // 通知顯示位置，可選 top-left, top-center, bottom-left...
         autoClose={3000} // 自動關閉時間 (ms)，設為 false 則不自動關閉
         hideProgressBar={false} // 是否隱藏進度條
@@ -37,6 +41,7 @@ function App({ toggleTheme }) {
         pauseOnHover // 滑鼠移至通知時是否暫停計時
         theme="colored" // 佈景：light, dark, colored
       />
+
       <RouteHandle />
       <LayoutWrapper id="page-content">
         <Navbar onClick={toggleTheme} />

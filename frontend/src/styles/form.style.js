@@ -68,8 +68,12 @@ export const FormGroup = styled.div`
     border-radius: 1rem;
 
     //起始為0
-    width: 35rem;
+
     width: ${(prop) => prop.$width || "35rem"};
+
+    ${({ theme }) => theme.media.md} {
+      width: 100%;
+    }
   }
 `;
 

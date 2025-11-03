@@ -9,6 +9,10 @@ const AuthLayoutContainer = styled.div`
   ${({ theme }) => theme.media.xxl} {
     margin-top: 1rem;
   }
+
+  ${({ theme }) => theme.media.md} {
+    margin-bottom: 3rem;
+  }
 `;
 
 function AuthLayout() {

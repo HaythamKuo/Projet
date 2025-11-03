@@ -1,18 +1,27 @@
 import { useEffect, useCallback, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   useEditMyProdMutation,
   useFetchSpecificProdQuery,
 } from "../store/apis/prodApiSlice";
-import { EditForm, EditFormBtn } from "../styles/editForm.style";
+import {
+  EditForm,
+  EditFormBtn,
+  IdSpan,
+  CancelFormBtn,
+  BtnBox,
+} from "../styles/editForm.style";
 import FormField from "./FormField";
 import SelectOption from "./SelectOption";
 import UploadButton from "../styles/UI/UploadBtn";
 import ProdSize from "./ProdSize";
 import { validateEditForm } from "../utils/validation";
+import ProcessLoader from "../styles/UI/ProcessLoader";
+import Breadcrumb from "../styles/UI/Breadcrumb";
 
 function EditProduct() {
+  const navigate = useNavigate();
   const { prodid } = useParams();
 
   const [category, setCategory] = useState(null);
@@ -107,12 +116,13 @@ function EditProduct() {
     }
   }, [data, isSuccess]);
 
-  if (isLoading) return <p>載入中</p>;
+  if (isLoading || editting) return <ProcessLoader />;
   if (isError) return <p>{error?.data?.message || "發生了一些錯誤"}</p>;
 
   return (
     <EditForm onSubmit={handleForm}>
-      <span>產品id: {data._id}</span>
+      <Breadcrumb />
+      <IdSpan>產品id: {data._id}</IdSpan>
       <FormField
         label="產品名稱"
         type="text"
@@ -146,9 +156,12 @@ function EditProduct() {
         reset={resetUpload}
         onResetFinished={() => setResetUpload(false)}
       />
-      <EditFormBtn type="submit" disabled={isSubmit}>
-        {isSubmit ? "處理中" : "送出"}
-      </EditFormBtn>
+      <BtnBox>
+        <EditFormBtn type="submit" disabled={isSubmit}>
+          {isSubmit ? "處理中" : "送出"}
+        </EditFormBtn>
+        <CancelFormBtn onClick={() => navigate(-1)}>取消</CancelFormBtn>
+      </BtnBox>
     </EditForm>
   );
 }

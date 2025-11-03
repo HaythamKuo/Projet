@@ -26,6 +26,12 @@ export const Drawer = styled.div`
 
   display: flex;
   flex-direction: column;
+
+  ${({ theme }) => theme.media.md} {
+    width: 100vw; /* 在手機模式下，寬度佔滿整個視窗 */
+    /* *** 關鍵：不需要 left: 0，保持 right: 0 和 transform 邏輯一致 *** */
+    /* top: 0; */ /* 已經在頂部定義，可省略 */
+  }
 `;
 
 export const OverLay = styled.div`
@@ -34,11 +40,15 @@ export const OverLay = styled.div`
   background: rgba(0, 0, 0, 0.5);
   animation: ${fadeIn} 0.4s ease;
   z-index: 990;
+  opacity: ${({ $open }) => ($open ? 1 : 0)};
+  pointer-events: ${({ $open }) => ($open ? "auto" : "none")};
 `;
 
 //從這邊開始為可重構內容
 
 export const CartContainer = styled.div`
+  z-index: 1;
+
   padding: 1rem;
 
   height: 100%;

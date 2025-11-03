@@ -27,6 +27,11 @@ const DialogContainer = styled.dialog`
     background-color: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(3px);
   }
+
+  ${({ theme }) => theme.media.md} {
+    height: 50%;
+    width: 100%;
+  }
 `;
 
 // styled ContentBox

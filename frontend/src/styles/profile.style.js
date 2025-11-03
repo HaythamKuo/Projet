@@ -1,7 +1,20 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 import { MdDeleteForever, MdUpload } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { imgBasicStyle } from "./theme";
+
+//針對ProfileOptions and UserInteractionBox 所做的rwd重構
+const refactorRwd = css`
+  ${({ theme }) => theme.media.lg} {
+    width: 100%;
+    justify-content: space-around;
+  }
+  ${({ theme }) => theme.media.md} {
+    width: 100%;
+    justify-content: space-between;
+  }
+`;
 
 export const ProfileContainer = styled.div`
   display: flex;
@@ -16,11 +29,12 @@ export const ImgWrapper = styled.div`
   width: 100px;
 `;
 export const UserPhoto = styled.img`
-  display: block;
+  ${imgBasicStyle}
+  /* display: block;
   width: 100%;
   height: 100%;
+  object-fit: cover; */
   border-radius: 50%;
-  object-fit: cover;
 `;
 
 export const UserName = styled.h1`
@@ -38,6 +52,8 @@ export const UserInteractionBox = styled.div`
   align-items: center;
 
   gap: 1.75rem;
+
+  ${refactorRwd}
 `;
 export const ProfileBtns = styled.div`
   display: flex;
@@ -58,10 +74,10 @@ export const InfoDelete = styled(MdDeleteForever)`
 export const ProfileOptions = styled.div`
   display: flex;
   gap: 1rem;
-  /* margin-top: 1.75rem;
-  margin-bottom: 1rem; */
+
   margin: 1.75rem 0 1rem 0;
   color: ${({ theme }) => theme.colors.default};
+  ${refactorRwd}
 `;
 export const ProfileOption = styled.span`
   cursor: pointer;
@@ -69,11 +85,6 @@ export const ProfileOption = styled.span`
   font-weight: 500;
   border-bottom: ${({ active, theme }) =>
     active ? `3px solid ${theme.colors.default}` : "none"};
-
-  //bug
-  :hover {
-    color: red;
-  }
 `;
 
 export const OrderLink = styled(Link)`

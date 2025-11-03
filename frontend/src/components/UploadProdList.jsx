@@ -8,7 +8,7 @@ import {
   ProdListContainer,
   EmptyWrapper,
   PromptProd,
-  PromptTitle,
+  MyImgWrapper,
 } from "../styles/UploadProdList.style";
 
 import { Link } from "react-router-dom";
@@ -22,6 +22,8 @@ import Modal from "./Modal";
 import ProcessLoader from "../styles/UI/ProcessLoader";
 import { ConfirmTxt, BtnContainer } from "./Collections";
 import { SubmitBtn, CancelBtn } from "../styles/ProdImgGallery.style";
+import ShinyText from "./reactBit/ShinyText";
+import { useScrollBlock } from "../hooks/useScrollBlock";
 
 function UploadProdList() {
   const [target, setTarget] = useState(null);
@@ -30,16 +32,17 @@ function UploadProdList() {
   const [remove, { isLoading: deleting }] = useDeleteMyProdMutation();
 
   const [isOpen, setIsOpen] = useState(false);
-  const [isScroll, setIsScroll] = useState(false);
+
   const dialogRef = useRef();
+
+  //限制滾動
+  const [blockScroll, allowScroll] = useScrollBlock(dialogRef);
 
   //叫出Modal 二次確認是否要刪除產品
   function handleModal(target) {
     if (dialogRef.current && !dialogRef.current.open) {
       setTarget(target);
       setIsOpen(true);
-      //dialogRef.current.showModal();
-      setIsScroll(true);
     }
   }
 
@@ -61,23 +64,12 @@ function UploadProdList() {
   }
 
   useEffect(() => {
-    const dialogEl = dialogRef.current;
-    const handleModalClose = () => setIsScroll(false);
-
-    //監控modal是否存在 會間接影響Scroll條
-    if (dialogEl) {
-      dialogEl.addEventListener("close", handleModalClose);
+    if (isOpen) {
+      blockScroll();
+    } else {
+      allowScroll();
     }
-
-    if (isScroll) {
-      document.body.style.overflow = "hidden";
-    }
-    return () => {
-      if (dialogEl) dialogEl.removeEventListener("close", handleModalClose);
-
-      document.body.style.overflow = "";
-    };
-  }, [isScroll]);
+  }, [isOpen, blockScroll, allowScroll]);
 
   let content;
   if (isLoading) {
@@ -91,7 +83,7 @@ function UploadProdList() {
   } else if (!data || !Array.isArray(data) || data.length === 0) {
     content = (
       <EmptyWrapper>
-        <PromptTitle>該上傳自己的商品了吧</PromptTitle>
+        <ShinyText text="該上傳自己的商品了吧" />
         <PromptProd />
       </EmptyWrapper>
     );
@@ -100,12 +92,14 @@ function UploadProdList() {
       <ImageWrapper key={item._id}>
         <IconBox>
           <Delete onClick={() => handleModal(item._id)} />
-          <Link to={`/edit-product/${item._id}`}>
+          <Link to={`edit-product/${item._id}`}>
             <Edit />
           </Link>
         </IconBox>
         <Link to={`/products/${item._id}`}>
-          <MyImg src={item.images[0].url} alt={item.name} />
+          <MyImgWrapper>
+            <MyImg src={item.images[0].url} alt={item.name} />
+          </MyImgWrapper>
         </Link>
       </ImageWrapper>
     ));

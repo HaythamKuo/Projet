@@ -30,6 +30,7 @@ import {
   BtnBox,
   ConfineBox,
   ModalProdName,
+  SortBox,
 } from "../styles/order.style";
 import ProcessLoader from "../styles/UI/ProcessLoader";
 import ReviewStars from "../styles/UI/ReviewStars";
@@ -244,16 +245,20 @@ function Order() {
           </ModalBox>
         )}
       </Modal>
-      <ShowNewBtn onClick={() => setShowAll((pre) => !pre)}>
-        {showAll ? "最新訂單" : "全部訂單"}
-      </ShowNewBtn>
-      <ShowNewBtn
-        onClick={() => setSortOrder((pre) => (pre === "desc" ? "asc" : "desc"))}
-        disabled={!showAll}
-      >
-        {/* {sortOrder === "asc" ? "由新到舊" : "由舊到新"} */}
-        {sortOrder === "asc" ? "由舊到新" : "由新到舊"}
-      </ShowNewBtn>
+      <SortBox>
+        <ShowNewBtn onClick={() => setShowAll((pre) => !pre)}>
+          {showAll ? "最新訂單" : "全部訂單"}
+        </ShowNewBtn>
+        <ShowNewBtn
+          onClick={() =>
+            setSortOrder((pre) => (pre === "desc" ? "asc" : "desc"))
+          }
+          disabled={!showAll}
+        >
+          {/* {sortOrder === "asc" ? "由新到舊" : "由舊到新"} */}
+          {sortOrder === "asc" ? "由舊到新" : "由新到舊"}
+        </ShowNewBtn>
+      </SortBox>
 
       {data?.map((order) => (
         <OrderBlock key={order._id}>
