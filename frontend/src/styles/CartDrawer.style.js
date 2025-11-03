@@ -96,7 +96,7 @@ export const CartCenter = styled.div`
 
 export const ItemsContainer = styled.div`
   display: flex;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.default};
 
   //padding-bottom: 1rem;
   //margin-bottom: 1rem;
@@ -123,7 +123,8 @@ export const ItemsContainer = styled.div`
     .influxInfo-top {
       display: flex;
       justify-content: space-between;
-      //background-color: green;
+
+      color: ${({ theme }) => theme.colors.default};
     }
     .influxInfo-center {
       display: flex;
@@ -140,8 +141,10 @@ export const ItemsContainer = styled.div`
 
       & .influxInfo-bottom_span {
         border: 1px solid grey;
+
         border-radius: 10px;
         padding: 10px;
+        color: ${({ theme }) => theme.colors.default};
       }
     }
   }
@@ -214,7 +217,10 @@ export const NoProd = styled(EmptyCart)`
 
 export const IconBtn = styled.button.attrs({ type: "button" })`
   border: none;
-  background-color: white;
+  /* background-color: white; */
+  &:hover {
+    background: none;
+  }
 `;
 
 export const DeleteCart = styled(FaRegTrashCan)``;

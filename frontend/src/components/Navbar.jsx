@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { useLocation, useMatch, useNavigate } from "react-router-dom";
+import { useLocation, useMatch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AnimatePresence } from "framer-motion";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 
 import {
   MobileNav,
@@ -23,19 +23,20 @@ import SplitText from "./reactBit/SplitText";
 
 import LoginDropDown from "./LoginDropDown";
 
-import { openCart, toggleCart, clearCart } from "../store/slices/cartSlice";
-import { logout } from "../store/slices/authSlice";
-import { useLogoutUserMutation, usersApi } from "../store/apis/apiSlice";
+import { toggleCart } from "../store/slices/cartSlice";
+// import { logout } from "../store/slices/authSlice";
+// import { useLogoutUserMutation, usersApi } from "../store/apis/apiSlice";
 import useClickOutside from "../hooks/useClickOutside";
 import { useScrollBlock } from "../hooks/useScrollBlock";
 import useObserverInnerWidth from "../hooks/useObserverInnerWidth";
 import ProcessLoader from "../styles/UI/ProcessLoader";
-import SideMember from "./SideMember";
+// import SideMember from "./SideMember";
+import SideNavBar from "./SideNavBar";
 
 function Navbar({ onClick }) {
   const [open, setOpen] = useState(false);
   const controllRwdNav = useRef(null);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { pathname } = useLocation();
 
   //監控手機模式的nav  A → B 將關閉navbar
@@ -45,7 +46,7 @@ function Navbar({ onClick }) {
   const previousPath = useRef(pathname);
 
   const dispatch = useDispatch();
-  const { userInfo } = useSelector((state) => state.auth);
+  // const { userInfo } = useSelector((state) => state.auth);
 
   const { isOpen } = useSelector((state) => state.cart);
 
@@ -69,20 +70,20 @@ function Navbar({ onClick }) {
   const [blockScroll, allowScroll] = useScrollBlock(controlSearch);
 
   //處理rwd與全域登出的函式
-  const [callLogoutApi, { isLoading: logoutTing }] = useLogoutUserMutation();
-  async function handleRwdLogout() {
-    try {
-      await callLogoutApi();
-      dispatch(usersApi.util.resetApiState());
-      dispatch(clearCart());
-      dispatch(logout());
-      setOpen(false);
-      toast.success("成功登出");
-      navigate("/");
-    } catch (error) {
-      console.error(error?.data?.message || "登出失敗");
-    }
-  }
+  // const [callLogoutApi, { isLoading: logoutTing }] = useLogoutUserMutation();
+  // async function handleRwdLogout() {
+  //   try {
+  //     await callLogoutApi();
+  //     dispatch(usersApi.util.resetApiState());
+  //     dispatch(clearCart());
+  //     dispatch(logout());
+  //     setOpen(false);
+  //     toast.success("成功登出");
+  //     navigate("/");
+  //   } catch (error) {
+  //     console.error(error?.data?.message || "登出失敗");
+  //   }
+  // }
 
   useEffect(() => {
     setSearch(false);
@@ -130,8 +131,6 @@ function Navbar({ onClick }) {
   function handleOpen() {
     setOpen((pre) => !pre);
   }
-
-  if (logoutTing) return <ProcessLoader />;
 
   return (
     <NavContainer>
@@ -185,7 +184,13 @@ function Navbar({ onClick }) {
             <SideBar onClick={handleOpen} />
           )}
 
-          <MobileNav open={open} ref={controllRwdNav}>
+          <SideNavBar
+            isIncludePathname={!isIncludePathname}
+            onClick={onClick}
+            open={open}
+            setOpen={setOpen}
+          />
+          {/* <MobileNav open={open} ref={controllRwdNav}>
             <NavBtn ismobile name="首頁" />
             <NavBtn ismobile name="關於" />
             <NavBtn ismobile name="全部產品" />
@@ -215,7 +220,7 @@ function Navbar({ onClick }) {
             )}
 
             <Switch onClick={onClick} />
-          </MobileNav>
+          </MobileNav> */}
         </div>
       </div>
     </NavContainer>

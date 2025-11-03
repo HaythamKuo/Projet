@@ -108,10 +108,19 @@ const usersApi = createApi({
             })
           );
 
+          const patchToProfile = dispatch(
+            usersApi.util.updateQueryData("getProfile", undefined, (draft) => {
+              if (!draft.favorites) draft.favorites = [];
+              const idx = draft.favorites.indexOf(prodId);
+              if (idx !== -1) draft.favorites.splice(idx, 1);
+            })
+          );
+
           try {
             await queryFulfilled;
           } catch (error) {
             patchRes.undo();
+            patchToProfile.undo();
             console.log("無法刪除產品,將會回滾", error);
           }
         },

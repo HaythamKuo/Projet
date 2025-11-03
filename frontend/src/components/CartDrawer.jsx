@@ -38,6 +38,7 @@ import {
   cartTotalPrice,
 } from "../store/slices/cartSlice";
 import { useDeleteGood } from "../hooks/useDeleteGood";
+import { useFavorite } from "../hooks/useFavorite";
 
 function CartDrawer() {
   const controlCart = useRef(null);
@@ -54,6 +55,13 @@ function CartDrawer() {
 
   //購物車 → 限制滾動
   const [blockScroll, allowScroll] = useScrollBlock(controlCart);
+
+  //用於收藏/取消購物車內的商品
+  // const { saving, toggleSaved, isSaved } = useFavorite();
+
+  // async function saveProds() {
+  //   await toggleSaved();
+  // }
 
   useEffect(() => {
     if (isOpen) blockScroll();
@@ -133,46 +141,50 @@ function CartDrawer() {
             </DefaultBox>
 
             {userInfo &&
-              items.map((item) => (
-                <ItemsContainer key={item._id}>
-                  <div className="thumbNailWrapper">
-                    <img
-                      src={item.productId.images[0].url}
-                      alt={item.productId.images[0].alt}
-                    />
-                  </div>
-                  <div className="influxInfo">
-                    {/* 調整 */}
-                    <div className="influxInfo-top">
-                      <span>{item.productId.name}</span>
-                      <span>{item.unitPrice}</span>
-                    </div>
-                    <div className="influxInfo-center">
-                      <IconBtn
-                        onClick={() => handleDelete(item)}
-                        disabled={isLoading}
-                      >
-                        <DeleteCart />
-                      </IconBtn>
+              items.map((item) => {
+                // const { saving, toggleSaved, isSaved } = useFavorite(item.productId._id);
 
-                      <IconBtn disabled={isLoading}>
-                        <CartToSave />
-                      </IconBtn>
+                return (
+                  <ItemsContainer key={item._id}>
+                    <div className="thumbNailWrapper">
+                      <img
+                        src={item.productId.images[0].url}
+                        alt={item.productId.images[0].alt}
+                      />
                     </div>
-                    <div className="influxInfo-bottom">
-                      <span className="influxInfo-bottom_span">
-                        S x {item.selectedSizes["S"]}
-                      </span>
-                      <span className="influxInfo-bottom_span">
-                        M x {item.selectedSizes["M"]}
-                      </span>
-                      <span className="influxInfo-bottom_span">
-                        L x {item.selectedSizes["L"]}
-                      </span>
+                    <div className="influxInfo">
+                      {/* 調整 */}
+                      <div className="influxInfo-top">
+                        <span>{item.productId.name}</span>
+                        <span>{item.unitPrice}</span>
+                      </div>
+                      <div className="influxInfo-center">
+                        <IconBtn
+                          onClick={() => handleDelete(item)}
+                          disabled={isLoading}
+                        >
+                          <DeleteCart />
+                        </IconBtn>
+
+                        <IconBtn disabled={isLoading}>
+                          <CartToSave />
+                        </IconBtn>
+                      </div>
+                      <div className="influxInfo-bottom">
+                        <span className="influxInfo-bottom_span">
+                          S x {item.selectedSizes["S"]}
+                        </span>
+                        <span className="influxInfo-bottom_span">
+                          M x {item.selectedSizes["M"]}
+                        </span>
+                        <span className="influxInfo-bottom_span">
+                          L x {item.selectedSizes["L"]}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                </ItemsContainer>
-              ))}
+                  </ItemsContainer>
+                );
+              })}
           </CartCenter>
 
           <CartBottom>

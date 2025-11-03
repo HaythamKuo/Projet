@@ -56,8 +56,8 @@ const MemberList = styled(motion.div)`
   flex-direction: column;
   align-items: center;
   overflow: hidden;
-  padding: 0.25rem 0;
-  gap: 0.25rem;
+  padding: 1rem 0;
+  gap: 1rem;
 `;
 
 const MemberBtn = styled.button`

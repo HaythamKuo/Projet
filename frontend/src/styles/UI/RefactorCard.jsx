@@ -7,7 +7,7 @@ import { useFavorite } from "../../hooks/useFavorite";
 import { addGoods } from "../../store/thunks/addGoods";
 import { imgBasicStyle } from "../theme";
 import { SubmitBtn } from "../ProdImgGallery.style";
-import { FaRegBookmark, FaCartShopping } from "react-icons/fa6";
+import { FaBookmark, FaCartShopping } from "react-icons/fa6";
 import StarRating from "./StarRating";
 import ProcessLoader from "./ProcessLoader";
 
@@ -77,11 +77,10 @@ const Cart = styled(FaCartShopping)`
   color: ${({ theme }) => theme.colors.default};
 `;
 
-const BookMark = styled(FaRegBookmark)`
+const BookMark = styled(FaBookmark)`
   font-size: 1.5rem;
   cursor: pointer;
-  background-color: ${({ $isSaved }) => $isSaved && "red"};
-  color: ${({ theme }) => theme.colors.default};
+  color: ${({ theme, $isSaved }) => ($isSaved ? "red" : theme.colors.default)};
 `;
 function RefactorCard({ id, src, alt, name, price, rating, query }) {
   //宣告專區
@@ -89,9 +88,7 @@ function RefactorCard({ id, src, alt, name, price, rating, query }) {
   const [quantity, setQuantity] = useState(1);
   const { userInfo } = useSelector((state) => state.auth);
 
-  const { saving, isSaved, toggleSaved } = useFavorite(id);
-
-  //console.log(userInfo);
+  const { saving, isSaved, toggleSaved } = useFavorite();
 
   async function addToCart() {
     if (!userInfo) {
@@ -120,7 +117,7 @@ function RefactorCard({ id, src, alt, name, price, rating, query }) {
 
       return;
     }
-    await toggleSaved();
+    await toggleSaved(id);
   }
 
   if (saving) return <ProcessLoader />;
@@ -149,7 +146,7 @@ function RefactorCard({ id, src, alt, name, price, rating, query }) {
 
           <IconBox>
             <Cart onClick={() => addToCart()} />
-            <BookMark $isSaved={isSaved} onClick={saveProds} />
+            <BookMark $isSaved={isSaved(id)} onClick={saveProds} />
           </IconBox>
         </InfoBottom>
       </InfoContainer>

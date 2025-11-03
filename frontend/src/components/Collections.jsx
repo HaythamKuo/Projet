@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 import {
   useGetSaveProdsQuery,
@@ -100,11 +101,12 @@ const DeleteCollection = styled(Delete)`
   position: absolute;
   top: 6px;
   right: 6px;
-  z-index: 10;
+  z-index: 20;
   font-size: 1.5rem;
   cursor: pointer;
   background-color: rgba(255, 255, 255, 0.6);
   border-radius: 8px;
+  color: black;
 `;
 export const ConfirmTxt = styled.h2`
   font-weight: bold;
@@ -159,9 +161,11 @@ function Collections({ userId }) {
     content = prods.map((item) => (
       <StatusBox initial="rest" whileHover="hover" key={item._id}>
         <DeleteCollection onClick={() => handleModalAndRmTar(item._id)} />
-        <Wrapper>
-          <Img src={item.images[0].url} alt="img" />
-        </Wrapper>
+        <Link to={`/products/${item._id}`}>
+          <Wrapper>
+            <Img src={item.images[0].url} alt="img" />
+          </Wrapper>
+        </Link>
         <TitleName variants={titleNameVariants}>{item.name}</TitleName>
       </StatusBox>
     ));

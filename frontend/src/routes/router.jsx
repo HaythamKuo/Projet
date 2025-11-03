@@ -31,14 +31,6 @@ export const createRouter = (toggleTheme) => {
           index: true,
           element: <HomePage />,
         },
-        // {
-        //   path: "auth",
-        //   element: <AuthLayout />,
-        //   children: [
-        //     { index: true, element: <LoginPage /> },
-        //     { path: "register", element: <RegisterPage /> },
-        //   ],
-        // },
         {
           element: <PublicrouteHandle />, // 先檢查是否登入
           children: [
@@ -84,14 +76,6 @@ export const createRouter = (toggleTheme) => {
                 </CheckoutGuard>
               ),
             },
-            // {
-            //   path: "create-product",
-            //   element: <CreateProduct />,
-            // },
-            // {
-            //   path: "edit-product/:prodid",
-            //   element: <EditProduct />,
-            // },
             {
               path: "ecpayresult",
               element: <Ecpay />,
