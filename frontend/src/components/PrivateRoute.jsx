@@ -46,11 +46,12 @@ function PrivateRoute() {
 
   const isPassSuccess = !!userInfo || !!profile;
 
+  // console.log(isPassSuccess);
+
   if (!isPassSuccess)
     return <Navigate to="auth" replace state={{ from: location }} />;
 
   // 有 userInfo，放行
   return <Outlet />;
 }
-
 export default PrivateRoute;

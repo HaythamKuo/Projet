@@ -15,10 +15,10 @@ import {
 const userRouter = Router();
 
 userRouter.route("/profile").get(protect, getUserProfile);
+userRouter.route("/favorites").get(protect, getCollections);
 userRouter.route("/:id").get(protect, specificUser);
 userRouter.route("/editaddress").put(protect, editAddress);
-userRouter.route("/:id/favorites").get(protect, getCollections);
-// userRouter.route("/:id/favorites/:productId").delete(protect, removeFavorite);
+
 userRouter.route("/favorites/:productId").delete(protect, removeFavorite);
 userRouter.route("/logout").post(logoutUser);
 userRouter.route("/login").post(loginUser);

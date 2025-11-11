@@ -97,12 +97,9 @@ export const CartCenter = styled.div`
 export const ItemsContainer = styled.div`
   display: flex;
   border-bottom: 1px solid ${({ theme }) => theme.colors.default};
+  padding: 0.25rem;
 
-  //padding-bottom: 1rem;
-  //margin-bottom: 1rem;
-  padding-right: 1rem;
-
-  .thumbNailWrapper {
+  /* .thumbNailWrapper {
     flex: 1;
     width: 100%;
     overflow: hidden;
@@ -135,7 +132,6 @@ export const ItemsContainer = styled.div`
     }
 
     .influxInfo-bottom {
-      //background-color: yellow;
       display: flex;
       justify-content: space-between;
 
@@ -147,7 +143,7 @@ export const ItemsContainer = styled.div`
         color: ${({ theme }) => theme.colors.default};
       }
     }
-  }
+  } */
 `;
 
 //最下層
@@ -217,11 +213,12 @@ export const NoProd = styled(EmptyCart)`
 
 export const IconBtn = styled.button.attrs({ type: "button" })`
   border: none;
-  /* background-color: white; */
   &:hover {
     background: none;
   }
 `;
 
 export const DeleteCart = styled(FaRegTrashCan)``;
-export const CartToSave = styled(FaHeart)``;
+export const CartToSave = styled(FaHeart)`
+  color: ${({ $isSaved }) => $isSaved && "red"};
+`;

@@ -1,17 +1,21 @@
 import { fetchBaseQuery, createApi } from "@reduxjs/toolkit/query/react";
-import { pause } from "./prodApiSlice";
 
-const customBaseQuery = async (...args) => {
-  await pause(2000);
-  return fetchBaseQuery({
-    baseUrl: "http://localhost:5001",
-    credentials: "include",
-  })(...args);
-};
+// import { pause } from "./prodApiSlice";
+
+// const customBaseQuery = async (...args) => {
+//   await pause(2000);
+//   return fetchBaseQuery({
+//     baseUrl: "http://localhost:5001",
+//     credentials: "include",
+//   })(...args);
+// };
 
 const usersApi = createApi({
   reducerPath: "userInfo",
-  baseQuery: customBaseQuery,
+  baseQuery: fetchBaseQuery({
+    baseUrl: "http://localhost:5001",
+    credentials: "include",
+  }),
   tagTypes: ["User", "Collection"],
   endpoints(builder) {
     return {
@@ -55,37 +59,61 @@ const usersApi = createApi({
           body: address,
         }),
       }),
+
+      // 儲存/收藏產品
       saveProds: builder.mutation({
-        query: (productId) => ({
+        query: (prodId) => ({
           method: "POST",
-          url: `/api/users/favorite/${productId}`,
+          url: `/api/users/favorite/${prodId}`,
         }),
-        invalidatesTags: ["Collection"],
-        async onQueryStarted(id, { dispatch, queryFulfilled }) {
-          const patchRes = dispatch(
-            usersApi.util.updateQueryData("getProfile", undefined, (draft) => {
-              if (!draft.favorites) draft.favorites = [];
-              const idx = draft.favorites.indexOf(id);
-              if (idx === -1) {
-                draft.favorites.push(id);
-              } else {
-                draft.favorites.splice(idx, 1);
+        invalidatesTags: ["Collection", "User"],
+
+        //middleware
+        async onQueryStarted(productId, { dispatch, queryFulfilled }) {
+          // const { _id: userId } = store.getState().auth.userInfo;
+
+          // const patchRes = dispatch(
+          //   usersApi.util.updateQueryData("getProfile", undefined, (draft) => {
+          //     if (!draft.favorites) draft.favorites = [];
+          //     const idx = draft.favorites.indexOf(productId);
+          //     if (idx === -1) {
+          //       draft.favorites.push(productId);
+          //     } else {
+          //       draft.favorites.splice(idx, 1);
+          //     }
+          //   })
+          // );
+
+          const patchSaveprods = dispatch(
+            usersApi.util.updateQueryData(
+              "getSaveProds",
+              undefined,
+              (draft) => {
+                //draft → {物品id,名字, 圖片 }
+                const idx = draft.findIndex((p) => p._id === productId);
+
+                if (idx === -1) {
+                  draft.push(productId);
+                } else {
+                  draft.splice(idx, 1);
+                }
               }
-            })
+            )
           );
 
           try {
             await queryFulfilled;
           } catch (err) {
-            patchRes.undo();
+            // patchRes.undo();
+            patchSaveprods.undo();
             console.log("無法收藏產品,將會回滾", err);
           }
         },
       }),
       getSaveProds: builder.query({
-        query: (id) => ({
+        query: () => ({
           method: "GET",
-          url: `/api/users/${id}/favorites`,
+          url: `/api/users/favorites`,
         }),
         providesTags: ["Collection"],
       }),

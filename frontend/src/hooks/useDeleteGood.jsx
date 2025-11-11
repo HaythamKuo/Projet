@@ -1,10 +1,11 @@
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { removeItem, restoreItem } from "../store/slices/cartSlice";
 import { deleteGood } from "../store/thunks/deleteGood";
 
 export function useDeleteGood() {
   const dispatch = useDispatch();
+  const { isLoading } = useSelector((state) => state.cart);
 
   const handleDelete = async (item) => {
     dispatch(removeItem(item._id));
@@ -19,5 +20,5 @@ export function useDeleteGood() {
     }
   };
 
-  return { handleDelete };
+  return { handleDelete, isLoading };
 }

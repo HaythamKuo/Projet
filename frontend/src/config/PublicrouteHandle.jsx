@@ -1,9 +1,10 @@
-import { Navigate, useMatch, Outlet } from "react-router-dom";
+import { Navigate, useMatch, Outlet, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ProcessLoader from "../styles/UI/ProcessLoader";
 
 function PublicrouteHandle() {
   const { userInfo, isLoading } = useSelector((state) => state.auth);
+  const location = useLocation();
 
   const isAuthRoute = !!useMatch("/auth/*");
 
@@ -14,23 +15,10 @@ function PublicrouteHandle() {
 
   if (isLoading) return <ProcessLoader />;
 
-  if (userInfo && isAuthRoute) {
+  if (userInfo && isAuthRoute && !location.state?.from) {
     return <Navigate to="/" replace />;
   }
   return <Outlet />;
 }
 
 export default PublicrouteHandle;
-
-// function PublicrouteHandle() {
-//   const { userInfo } = useSelector((state) => state.auth);
-//   const isAuthRoute = !!useMatch("/auth/*");
-
-//   if (userInfo && isAuthRoute) {
-//     return <Navigate to="/" replace />;
-//   }
-
-//   return <Outlet />;
-// }
-
-// export default PublicrouteHandle;

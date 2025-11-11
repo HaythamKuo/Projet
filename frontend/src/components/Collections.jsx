@@ -120,7 +120,10 @@ export const BtnContainer = styled.div`
 `;
 
 function Collections({ userId }) {
-  const { data: prods, isLoading } = useGetSaveProdsQuery(userId);
+  const { data: prods, isLoading } = useGetSaveProdsQuery();
+
+  //一個陣列包涵id 名字 圖片
+  // console.log(prods);
 
   //進行移除動作
   const [target, setTarget] = useState(null);

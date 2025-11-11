@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -9,7 +9,6 @@ import {
   PickupBlock,
   PaddingCard,
   Top,
-  DeliverTitle,
   EditAddress,
   PaymentBlock,
   PayQuote,
@@ -18,9 +17,6 @@ import {
   ImgWrapper,
   ItemBottom,
   CkItemBox,
-  CkBtn,
-  CkSave,
-  CkDelete,
   PaymentMethod,
   CreditIcon,
   LineIcon,
@@ -32,6 +28,7 @@ import {
   SubtotalItems,
   Total,
   SubMit,
+  ConfirmAddress,
 } from "../styles/Checkout.style";
 import { SubmitBtn, CancelBtn } from "../styles/ProdImgGallery.style";
 import Modal from "./Modal";
@@ -43,16 +40,18 @@ import {
 } from "../store/apis/orderAPi";
 import { fetchGoods } from "../store/thunks/fetchGoods";
 import { updateAddress } from "../store/slices/authSlice";
-import { closeCart, selectCartItems } from "../store/slices/cartSlice";
+import { selectCartItems } from "../store/slices/cartSlice";
 
 import ProcessLoader from "../styles/UI/ProcessLoader";
 import { Arrow } from "./SelectOption";
 import { validateOrder } from "../utils/validation";
-import { useDeleteGood } from "../hooks/useDeleteGood";
+
+import RafactorUnpaidCard from "../styles/UI/RefactorUnpaidCard";
+
 function Checkout() {
   const dialogRef = useRef();
   const navigate = useNavigate();
-  const location = useLocation();
+  // const location = useLocation();
   const dispatch = useDispatch();
 
   const [method, setMethod] = useState("credit_card");
@@ -81,9 +80,6 @@ function Checkout() {
   const [createEcPayment, { isLoading: forwarding }] =
     useCreateEcPaymentMutation();
 
-  //hook
-  const { handleDelete } = useDeleteGood();
-
   useEffect(() => {
     if (!items || items.length === 0) {
       dispatch(fetchGoods());
@@ -101,11 +97,11 @@ function Checkout() {
   useEffect(() => {
     if (fetching) return;
 
-    if (!userInfo) {
-      toast.error("請先登入再結帳");
-      navigate("/auth", { replace: true });
-      return;
-    }
+    // if (!userInfo) {
+    //   toast.error("請先登入再結帳");
+    //   navigate("/auth", { replace: true });
+    //   return;
+    // }
 
     if (!errMes && !items && items.length === 0) {
       toast.error("購物車內沒有商品");
@@ -126,6 +122,7 @@ function Checkout() {
     }
   }
 
+  //處理地址
   async function hanldeAddress() {
     try {
       const { message, newAddress } = await saveAddress({ address }).unwrap();
@@ -167,8 +164,6 @@ function Checkout() {
     form.submit();
     document.body.removeChild(form);
   }
-
-  console.log(items);
 
   //製作訂單
   async function setOrder(e) {
@@ -280,6 +275,7 @@ function Checkout() {
       setProcessOfPaying(false);
     }
   }
+  console.log(cart);
 
   return (
     <>
@@ -328,7 +324,9 @@ function Checkout() {
                 <EditAddress onClick={() => showModal()} />
               </Top>
 
-              <p>{userInfo?.address || "請輸入你的取貨地址"}</p>
+              <ConfirmAddress>
+                {userInfo?.address || "請輸入你的取貨地址"}
+              </ConfirmAddress>
             </PaddingCard>
           </PickupBlock>
 
@@ -341,7 +339,7 @@ function Checkout() {
                 onClick={() => setMethod("credit_card")}
               >
                 <CreditIcon />
-                信用卡付款
+                <p>信用卡付款</p>
               </PaymentMethod>
               <PaymentMethod
                 disabled
@@ -349,7 +347,7 @@ function Checkout() {
                 onClick={() => setMethod("linePay")}
               >
                 <LineIcon />
-                LINE PAY 付款(即將開放)
+                <p>LINE PAY 付款(即將開放)</p>
               </PaymentMethod>
             </PaddingCard>
           </PaymentBlock>
@@ -379,7 +377,15 @@ function Checkout() {
                     items?.length > 0 &&
                     items.map((item) => (
                       <CkItemBox key={item._id}>
-                        <div className="thumbNailWrapper">
+                        <RafactorUnpaidCard
+                          src={item?.productId?.images[0].url}
+                          alt={item?.productId?.images[0].alt}
+                          prodName={item?.productId?.name}
+                          unitPrice={item?.unitPrice}
+                          item={item}
+                          $aspect
+                        />
+                        {/* <div className="thumbNailWrapper">
                           <img
                             src={item.productId.images[0].url}
                             alt={item.productId.images[0].alt}
@@ -413,7 +419,7 @@ function Checkout() {
                               L x {item.selectedSizes["L"]}
                             </span>
                           </div>
-                        </div>
+                        </div> */}
                       </CkItemBox>
                     ))}
                 </ItemBottom>

@@ -22,9 +22,9 @@ function LoginPage() {
   const [login, { isLoading }] = useLoginMutation();
 
   // 要進到需授權的頁面會跳轉至登入
-  const from = location.state?.from?.pathname || "/";
-
-  //const fromCart = location.state?.fromCart || false;
+  const from =
+    location.state?.from?.pathname + (location.state?.from?.search || "/") ||
+    "/";
 
   const [enterValue, setEnterValue] = useState({ email: "", password: "" });
 

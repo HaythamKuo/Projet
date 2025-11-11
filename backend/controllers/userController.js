@@ -110,7 +110,8 @@ export const specificUser = asyncHandler(async (req, res) => {
     throw new Error("請提供使用者id");
   }
 
-  const user = await userModel.findOne({ _id: id });
+  // const user = await userModel.findOne({ _id: id });
+  const user = await userModel.findById(id);
 
   res.status(200).json(user);
 });
@@ -195,10 +196,10 @@ export const saveProducts = asyncHandler(async (req, res) => {
 });
 
 export const getCollections = asyncHandler(async (req, res) => {
-  const { id } = req.params;
+  const userId = req.user._id;
 
   const user = await userModel
-    .findById(id)
+    .findById(userId)
     .populate("favorites", "name images");
 
   if (!user) {
@@ -224,9 +225,7 @@ export const removeFavorite = asyncHandler(async (req, res) => {
   user.favorites = user.favorites.filter(
     (item) => item._id.toString() !== productId
   );
-  //user.favorites = [...newCollections];
-  //console.log(newCollections);
+
   await user.save();
   res.json(user);
 });
-//68c38c6a6829fa76cd69387d

@@ -51,6 +51,7 @@ export const lightTheme = {
     hoverSearch: "#d6d6d6",
     backGround: "#007bff",
     direct: "#707070",
+    ckBackGround: "#E9E9ED",
   },
 
   breakpoints,
@@ -89,6 +90,7 @@ export const darkTheme = {
     hoverSearch: "#111111",
     backGround: "#0ea5e9",
     direct: "#e6e6ff",
+    ckBackGround: "#686464",
   },
   breakpoints,
   media: generateMedia(breakpoints),

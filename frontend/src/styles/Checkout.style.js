@@ -28,12 +28,16 @@ export const LeftContainer = styled.div`
 
 //block
 export const PickupBlock = styled.div`
-  background-color: white;
   border-radius: 8px;
   border: 1px solid black;
+  background-color: ${({ theme }) => theme.card.specificBack};
 `;
 export const PaddingCard = styled.div`
   margin: 1rem;
+
+  span {
+    color: ${({ theme }) => theme.colors.default};
+  }
 `;
 
 // styled-component
@@ -49,6 +53,11 @@ export const PaymentMethod = styled.button.attrs({ type: "button" })`
     ${({ $isselected }) => ($isselected ? "black" : "transparent")};
   cursor: pointer;
   width: 100%; /* 讓它像選項一樣佔滿可點擊區域 */
+  background-color: ${({ theme }) => theme.button.ckBackGround};
+
+  p {
+    color: ${({ theme }) => theme.colors.default};
+  }
 
   &:disabled {
     opacity: 0.5;
@@ -58,6 +67,7 @@ export const PaymentMethod = styled.button.attrs({ type: "button" })`
 
 export const CreditIcon = styled(MdOutlineCreditScore)`
   font-size: 1.5rem;
+  color: ${({ theme }) => theme.colors.default};
 `;
 export const LineIcon = styled(FaLine)`
   font-size: ${(props) => props.size || "1.5rem"};
@@ -67,16 +77,23 @@ export const LineIcon = styled(FaLine)`
 export const Top = styled.div`
   display: flex;
   justify-content: space-between;
+  span {
+    color: ${({ theme }) => theme.colors.default};
+  }
+`;
+export const ConfirmAddress = styled.p`
+  color: ${({ theme }) => theme.colors.default};
+  font-weight: bold;
+  font-size: 1.25rem;
 `;
 
-export const DeliverTitle = styled.span``;
 export const EditAddress = styled(MdEdit)`
   cursor: pointer;
+  color: ${({ theme }) => theme.colors.default};
 `;
 
 export const PaymentBlock = styled(PickupBlock)``;
 export const PayQuote = styled.blockquote`
-  //padding-left: 1rem; /* 與文字的間距 */
   padding: 1rem;
   margin: 1rem 0;
 
@@ -84,7 +101,7 @@ export const PayQuote = styled.blockquote`
   font-size: 1rem;
   line-height: 1.6;
 
-  background-color: #ededed;
+  background-color: ${({ theme }) => theme.colors.backGround};
   border-radius: 0.25rem;
 `;
 
@@ -105,9 +122,14 @@ export const ImgWrapper = styled.div`
 
   overflow: hidden;
 
+  aspect-ratio: 1/1;
+
+  p {
+    color: ${({ theme }) => theme.colors.default};
+  }
+
   img {
-    ${imgBasicStyle}
-    height:auto;
+    ${imgBasicStyle}/* height:auto; */
   }
 `;
 export const ItemBottom = styled.div`
@@ -121,15 +143,11 @@ export const ItemBottom = styled.div`
 export const CkItemBox = styled(ItemsContainer)`
   display: flex;
 `;
-export const CkBtn = styled(IconBtn)`
-  background: transparent;
-`;
-export const CkDelete = styled(DeleteCart)``;
-export const CkSave = styled(CartToSave)``;
 
 export const RightContainer = styled.div`
   flex: 1;
-  background-color: white;
+  background-color: ${({ theme }) => theme.card.specificBack};
+
   position: sticky;
   top: var(--nav-height);
   align-self: flex-start;
@@ -138,12 +156,12 @@ export const RightContainer = styled.div`
   display: flex;
   flex-direction: column;
   border-radius: 0.25rem;
+  border-radius: 1rem;
   border: 2px solid ${({ theme }) => theme.spotLight.border};
-  //padding: 1rem;
 `;
 
 export const RightTop = styled.div`
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.default};
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -152,16 +170,18 @@ export const RightTop = styled.div`
 export const OrderTitle = styled.h1`
   font-size: 2rem;
   font-weight: bold;
+  color: ${({ theme }) => theme.colors.default};
 `;
 export const OrderAmount = styled.div`
   display: flex;
   justify-content: space-between;
   font-size: 20px;
+  color: ${({ theme }) => theme.colors.default};
 `;
 export const RightCenter = styled.div`
   display: flex;
   flex-direction: column;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.default};
 
   gap: 0.5rem;
 

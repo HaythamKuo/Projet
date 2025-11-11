@@ -68,13 +68,17 @@ export const createRouter = (toggleTheme) => {
                 { path: "edit-product/:prodid", element: <EditProduct /> },
               ],
             },
+            // {
+            //   path: "checkout",
+            //   element: (
+            //     <CheckoutGuard>
+            //       <Checkout />
+            //     </CheckoutGuard>
+            //   ),
+            // },
             {
               path: "checkout",
-              element: (
-                <CheckoutGuard>
-                  <Checkout />
-                </CheckoutGuard>
-              ),
+              element: <Checkout />,
             },
             {
               path: "ecpayresult",

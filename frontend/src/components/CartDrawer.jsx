@@ -6,6 +6,12 @@ import { toast } from "react-toastify";
 
 import ProcessLoader from "../styles/UI/ProcessLoader";
 import useClickOutside from "../hooks/useClickOutside";
+import { useSelector, useDispatch } from "react-redux";
+import { useScrollBlock } from "../hooks/useScrollBlock";
+// import { useDeleteGood } from "../hooks/useDeleteGood";
+
+import { fetchGoods } from "../store/thunks/fetchGoods";
+// import { useFavorite } from "../hooks/useFavorite";
 import {
   Drawer,
   OverLay,
@@ -22,23 +28,14 @@ import {
   NoProdSpan,
   RemindToLoginSpan,
   RemindToLoginBtn,
-  DeleteCart,
-  CartToSave,
-  IconBtn,
 } from "../styles/CartDrawer.style";
-
-import { useSelector, useDispatch } from "react-redux";
-import { useScrollBlock } from "../hooks/useScrollBlock";
-
-import { fetchGoods } from "../store/thunks/fetchGoods";
+import RafactorUnpaidCard from "../styles/UI/RefactorUnpaidCard";
 
 import {
   closeCart,
   selectCartItems,
   cartTotalPrice,
 } from "../store/slices/cartSlice";
-import { useDeleteGood } from "../hooks/useDeleteGood";
-import { useFavorite } from "../hooks/useFavorite";
 
 function CartDrawer() {
   const controlCart = useRef(null);
@@ -57,10 +54,10 @@ function CartDrawer() {
   const [blockScroll, allowScroll] = useScrollBlock(controlCart);
 
   //用於收藏/取消購物車內的商品
-  // const { saving, toggleSaved, isSaved } = useFavorite();
+  //const { saving, toggleSaved, isStored } = useFavorite();
 
-  // async function saveProds() {
-  //   await toggleSaved();
+  // async function saveProds(id) {
+  //   await toggleSaved(id);
   // }
 
   useEffect(() => {
@@ -69,7 +66,7 @@ function CartDrawer() {
   }, [isOpen, blockScroll, allowScroll]);
 
   //hook
-  const { handleDelete } = useDeleteGood();
+  // const { handleDelete } = useDeleteGood();
   useClickOutside(controlCart, () => {
     dispatch(closeCart());
   });
@@ -94,6 +91,9 @@ function CartDrawer() {
       toast.error(err.message || "載入失敗", { toastId });
     }
   }, [err]);
+
+  // if (isLoading) return <ProcessLoader />;
+  // console.log(items);
 
   return createPortal(
     <>
@@ -142,18 +142,23 @@ function CartDrawer() {
 
             {userInfo &&
               items.map((item) => {
-                // const { saving, toggleSaved, isSaved } = useFavorite(item.productId._id);
-
                 return (
                   <ItemsContainer key={item._id}>
-                    <div className="thumbNailWrapper">
+                    <RafactorUnpaidCard
+                      src={item?.productId?.images[0].url}
+                      alt={item?.productId?.images[0].alt}
+                      prodName={item?.productId?.name}
+                      unitPrice={item?.unitPrice}
+                      item={item}
+                    />
+                    {/* <div className="thumbNailWrapper">
                       <img
                         src={item.productId.images[0].url}
                         alt={item.productId.images[0].alt}
                       />
                     </div>
                     <div className="influxInfo">
-                      {/* 調整 */}
+                      
                       <div className="influxInfo-top">
                         <span>{item.productId.name}</span>
                         <span>{item.unitPrice}</span>
@@ -166,8 +171,11 @@ function CartDrawer() {
                           <DeleteCart />
                         </IconBtn>
 
-                        <IconBtn disabled={isLoading}>
-                          <CartToSave />
+                        <IconBtn
+                          disabled={saving}
+                          onClick={() => saveProds(item.productId._id)}
+                        >
+                          <CartToSave $isSaved={isStored(item.productId._id)} />
                         </IconBtn>
                       </div>
                       <div className="influxInfo-bottom">
@@ -181,7 +189,7 @@ function CartDrawer() {
                           L x {item.selectedSizes["L"]}
                         </span>
                       </div>
-                    </div>
+                    </div> */}
                   </ItemsContainer>
                 );
               })}

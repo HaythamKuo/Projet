@@ -32,6 +32,7 @@ const SelectSpan = styled.span`
 `;
 
 export const Arrow = styled(MdOutlineKeyboardArrowRight)`
+  color: ${({ theme }) => theme.colors.default};
   transition: transform 0.25s ease;
   transform-origin: center;
   transform: rotate(${(p) => (p.$rottate ? "90deg" : "0deg")});

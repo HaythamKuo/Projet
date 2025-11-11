@@ -48,9 +48,8 @@ const cartSlice = createSlice({
     closeCart: (state) => {
       state.isOpen = false;
     },
-    toggleCart: (state, action) => {
+    toggleCart: (state) => {
       state.isOpen = !state.isOpen;
-      console.log("closeCart called by:", action); // 打印完整 action
     },
     removeItem: (state, action) => {
       state.cart.items = state.cart.items.filter(
