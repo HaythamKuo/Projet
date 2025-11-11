@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector, shallowEqual } from "react-redux";
 import {
   CheckoutContainer,
   RightContainer,
@@ -68,7 +68,7 @@ function Checkout() {
     cart,
     isLoading: fetching,
     error: errMes,
-  } = useSelector((state) => state.cart);
+  } = useSelector((state) => state.cart, shallowEqual);
 
   const [address, setAddress] = useState(userInfo?.address || "");
 
@@ -80,13 +80,17 @@ function Checkout() {
   const [createEcPayment, { isLoading: forwarding }] =
     useCreateEcPaymentMutation();
 
+  // useEffect(() => {
+  //   if (!items || items.length === 0) {
+  //     dispatch(fetchGoods());
+  //   }
+  // }, [dispatch, items]);
+
   useEffect(() => {
     if (!items || items.length === 0) {
       dispatch(fetchGoods());
     }
-  }, [dispatch, items]);
-
-  // console.log(cart);
+  }, [dispatch]);
 
   // useEffect(() => {
   //   if (location.pathname === "/checkout") {
@@ -276,6 +280,7 @@ function Checkout() {
     }
   }
   console.log(cart);
+  console.log(items);
 
   return (
     <>

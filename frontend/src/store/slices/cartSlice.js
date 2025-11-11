@@ -116,7 +116,13 @@ const cartSlice = createSlice({
         // 保留 isOpen，只更新 cart 內容
         // state.cart = { ...state.cart, ...action.payload };
 
-        Object.assign(state.cart, action.payload);
+        // Object.assign(state.cart, action.payload);
+        state.cart = {
+          _id: action.payload._id ?? null,
+          userId: action.payload.userId ?? null,
+          items: action.payload.items ?? [],
+          totalPrice: action.payload.totalPrice ?? 0,
+        };
       })
       .addCase(fetchGoods.rejected, (state, action) => {
         state.isLoading = false;
@@ -149,8 +155,20 @@ const cartSlice = createSlice({
       .addCase(deleteGood.fulfilled, (state, action) => {
         state.isLoading = false;
 
+        // if (action.payload) {
+        //   Object.assign(state.cart, action.payload);
+        // }
+        console.log(state.cart);
+
+        console.log("這裡是action.apyload", action.payload);
+
         if (action.payload) {
-          Object.assign(state.cart, action.payload);
+          state.cart = {
+            _id: action.payload._id ?? null,
+            userId: action.payload.userId ?? null,
+            items: action.payload.items ?? [],
+            totalPrice: action.payload.totalPrice ?? 0,
+          };
         }
       })
       .addCase(deleteGood.rejected, (state, action) => {

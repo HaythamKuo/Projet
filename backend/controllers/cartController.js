@@ -113,6 +113,10 @@ export const removeCart = asyncHandler(async (req, res) => {
   const originLen = cart.items.length;
 
   cart.items = cart.items.filter((item) => item._id.toString() !== productId);
+  cart.totalPrice = cart.items.reduce(
+    (acc, cur) => acc + cur.quantity * cur.unitPrice,
+    0
+  );
 
   if (cart.items.length === originLen) {
     res.status(404);
@@ -120,7 +124,7 @@ export const removeCart = asyncHandler(async (req, res) => {
   }
 
   await cart.save();
-  await cart.populate("item.productId");
+  await cart.populate("items.productId");
 
   res.status(201).json(cart);
 });
