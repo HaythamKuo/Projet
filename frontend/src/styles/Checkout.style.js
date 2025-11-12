@@ -2,12 +2,7 @@ import { MdEdit, MdOutlineCreditScore } from "react-icons/md";
 import { FaLine } from "react-icons/fa";
 import styled from "styled-components";
 import { imgBasicStyle } from "./theme";
-import {
-  ItemsContainer,
-  IconBtn,
-  DeleteCart,
-  CartToSave,
-} from "./CartDrawer.style";
+import { ItemsContainer } from "./CartDrawer.style";
 import { SubmitBtn, CancelBtn } from "./ProdImgGallery.style";
 
 export const CheckoutContainer = styled.form`
@@ -15,6 +10,10 @@ export const CheckoutContainer = styled.form`
   gap: 2rem;
   margin: 0 auto;
   //align-items: flex-start; /* 避免 flex 拉伸 */
+
+  ${({ theme }) => theme.media.md} {
+    flex-direction: column;
+  }
 `;
 
 export const LeftContainer = styled.div`
@@ -137,11 +136,17 @@ export const ItemBottom = styled.div`
   gap: 1rem;
   flex-direction: ${(prop) =>
     prop.$direction === "flexibility" ? "column" : "row"};
+
+  /* overflow-x: scroll; */
+  flex-wrap: wrap; // 自動換行
 `;
 
-//以下似乎可以重構
 export const CkItemBox = styled(ItemsContainer)`
   display: flex;
+
+  ${({ theme }) => theme.media.md} {
+    flex-direction: column;
+  }
 `;
 
 export const RightContainer = styled.div`
@@ -158,6 +163,10 @@ export const RightContainer = styled.div`
   border-radius: 0.25rem;
   border-radius: 1rem;
   border: 2px solid ${({ theme }) => theme.spotLight.border};
+
+  ${({ theme }) => theme.media.md} {
+    width: 100%;
+  }
 `;
 
 export const RightTop = styled.div`

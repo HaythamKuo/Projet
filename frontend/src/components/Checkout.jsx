@@ -38,7 +38,7 @@ import {
   useCreateOrderMutation,
   useCreateEcPaymentMutation,
 } from "../store/apis/orderAPi";
-import { fetchGoods } from "../store/thunks/fetchGoods";
+
 import { updateAddress } from "../store/slices/authSlice";
 import { selectCartItems } from "../store/slices/cartSlice";
 
@@ -84,28 +84,10 @@ function Checkout() {
   //   if (!items || items.length === 0) {
   //     dispatch(fetchGoods());
   //   }
-  // }, [dispatch, items]);
-
-  useEffect(() => {
-    if (!items || items.length === 0) {
-      dispatch(fetchGoods());
-    }
-  }, [dispatch]);
-
-  // useEffect(() => {
-  //   if (location.pathname === "/checkout") {
-  //     dispatch(closeCart());
-  //   }
-  // }, [dispatch, location.pathname]);
+  // }, [dispatch]);
 
   useEffect(() => {
     if (fetching) return;
-
-    // if (!userInfo) {
-    //   toast.error("請先登入再結帳");
-    //   navigate("/auth", { replace: true });
-    //   return;
-    // }
 
     if (!errMes && !items && items.length === 0) {
       toast.error("購物車內沒有商品");
@@ -279,8 +261,6 @@ function Checkout() {
       setProcessOfPaying(false);
     }
   }
-  console.log(cart);
-  console.log(items);
 
   return (
     <>
@@ -390,41 +370,6 @@ function Checkout() {
                           item={item}
                           $aspect
                         />
-                        {/* <div className="thumbNailWrapper">
-                          <img
-                            src={item.productId.images[0].url}
-                            alt={item.productId.images[0].alt}
-                          />
-                        </div>
-                        <div className="influxInfo">
-                          <div className="influxInfo-top">
-                            <span>{item.productId.name}</span>
-                            <span>{item.unitPrice}</span>
-                          </div>
-                          <div className="influxInfo-center">
-                            <CkBtn
-                              onClick={() => handleDelete(item)}
-                              disabled={fetching}
-                            >
-                              <CkDelete />
-                            </CkBtn>
-
-                            <CkBtn disabled={fetching}>
-                              <CkSave />
-                            </CkBtn>
-                          </div>
-                          <div className="influxInfo-bottom">
-                            <span className="influxInfo-bottom_span">
-                              S x {item.selectedSizes["S"]}
-                            </span>
-                            <span className="influxInfo-bottom_span">
-                              M x {item.selectedSizes["M"]}
-                            </span>
-                            <span className="influxInfo-bottom_span">
-                              L x {item.selectedSizes["L"]}
-                            </span>
-                          </div>
-                        </div> */}
                       </CkItemBox>
                     ))}
                 </ItemBottom>

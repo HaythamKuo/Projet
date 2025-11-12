@@ -8,10 +8,9 @@ import ProcessLoader from "../styles/UI/ProcessLoader";
 import useClickOutside from "../hooks/useClickOutside";
 import { useSelector, useDispatch } from "react-redux";
 import { useScrollBlock } from "../hooks/useScrollBlock";
-// import { useDeleteGood } from "../hooks/useDeleteGood";
 
 import { fetchGoods } from "../store/thunks/fetchGoods";
-// import { useFavorite } from "../hooks/useFavorite";
+
 import {
   Drawer,
   OverLay,
@@ -53,20 +52,11 @@ function CartDrawer() {
   //購物車 → 限制滾動
   const [blockScroll, allowScroll] = useScrollBlock(controlCart);
 
-  //用於收藏/取消購物車內的商品
-  //const { saving, toggleSaved, isStored } = useFavorite();
-
-  // async function saveProds(id) {
-  //   await toggleSaved(id);
-  // }
-
   useEffect(() => {
     if (isOpen) blockScroll();
     else allowScroll();
   }, [isOpen, blockScroll, allowScroll]);
 
-  //hook
-  // const { handleDelete } = useDeleteGood();
   useClickOutside(controlCart, () => {
     dispatch(closeCart());
   });
@@ -92,14 +82,9 @@ function CartDrawer() {
     }
   }, [err]);
 
-  // if (isLoading) return <ProcessLoader />;
-  // console.log(items);
-
   return createPortal(
     <>
       {isOpen && <OverLay $open={isOpen} />}
-
-      {/* <OverLay $open={isOpen} onClick={() => dispatch(closeCart())} /> */}
       <Drawer $open={isOpen} ref={controlCart} className="outter">
         <CartContainer className="inner">
           {isLoading && (
@@ -151,45 +136,6 @@ function CartDrawer() {
                       unitPrice={item?.unitPrice}
                       item={item}
                     />
-                    {/* <div className="thumbNailWrapper">
-                      <img
-                        src={item.productId.images[0].url}
-                        alt={item.productId.images[0].alt}
-                      />
-                    </div>
-                    <div className="influxInfo">
-                      
-                      <div className="influxInfo-top">
-                        <span>{item.productId.name}</span>
-                        <span>{item.unitPrice}</span>
-                      </div>
-                      <div className="influxInfo-center">
-                        <IconBtn
-                          onClick={() => handleDelete(item)}
-                          disabled={isLoading}
-                        >
-                          <DeleteCart />
-                        </IconBtn>
-
-                        <IconBtn
-                          disabled={saving}
-                          onClick={() => saveProds(item.productId._id)}
-                        >
-                          <CartToSave $isSaved={isStored(item.productId._id)} />
-                        </IconBtn>
-                      </div>
-                      <div className="influxInfo-bottom">
-                        <span className="influxInfo-bottom_span">
-                          S x {item.selectedSizes["S"]}
-                        </span>
-                        <span className="influxInfo-bottom_span">
-                          M x {item.selectedSizes["M"]}
-                        </span>
-                        <span className="influxInfo-bottom_span">
-                          L x {item.selectedSizes["L"]}
-                        </span>
-                      </div>
-                    </div> */}
                   </ItemsContainer>
                 );
               })}

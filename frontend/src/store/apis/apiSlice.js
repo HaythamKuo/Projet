@@ -104,7 +104,6 @@ const usersApi = createApi({
           try {
             await queryFulfilled;
           } catch (err) {
-            // patchRes.undo();
             patchSaveprods.undo();
             console.log("無法收藏產品,將會回滾", err);
           }

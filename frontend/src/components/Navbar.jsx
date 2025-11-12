@@ -24,13 +24,12 @@ import SplitText from "./reactBit/SplitText";
 import LoginDropDown from "./LoginDropDown";
 
 import { toggleCart } from "../store/slices/cartSlice";
-// import { logout } from "../store/slices/authSlice";
-// import { useLogoutUserMutation, usersApi } from "../store/apis/apiSlice";
+
 import useClickOutside from "../hooks/useClickOutside";
 import { useScrollBlock } from "../hooks/useScrollBlock";
 import useObserverInnerWidth from "../hooks/useObserverInnerWidth";
 import ProcessLoader from "../styles/UI/ProcessLoader";
-// import SideMember from "./SideMember";
+
 import SideNavBar from "./SideNavBar";
 
 function Navbar({ onClick }) {
@@ -156,7 +155,7 @@ function Navbar({ onClick }) {
 
           <LoginDropDown />
 
-          <IconContainer>
+          <IconContainer $position={!isIncludePathname}>
             {!isIncludePathname && (
               <>
                 <SearchIcon onClick={() => setSearch(true)} />

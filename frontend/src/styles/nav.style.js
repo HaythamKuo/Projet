@@ -141,6 +141,7 @@ export const IconContainer = styled.div`
   align-items: center;
   justify-content: space-around;
 
+  justify-content: ${({ $position }) => !$position && "flex-end"};
   position: relative;
 `;
 

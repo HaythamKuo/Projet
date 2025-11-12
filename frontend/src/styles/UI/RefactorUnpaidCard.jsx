@@ -14,6 +14,10 @@ const ThumbWrapper = styled.div`
   border-radius: 2rem;
   padding: 0.5rem;
   aspect-ratio: ${({ $aspect }) => ($aspect ? 16 / 9 : 4 / 3)};
+
+  ${({ theme }) => theme.media.md} {
+    aspect-ratio: 16/9;
+  }
 `;
 const ThumbImg = styled.img`
   ${imgBasicStyle}
@@ -24,6 +28,11 @@ const ThumbBox = styled.div`
   flex-direction: column;
   justify-content: space-around;
   flex: 2;
+
+  ${({ theme }) => theme.media.md} {
+    flex: 1;
+    gap: 1rem;
+  }
 `;
 
 const ThumbTop = styled.div`
@@ -33,15 +42,30 @@ const ThumbTop = styled.div`
 
 const ThumbTopSpan = styled.span`
   color: ${({ theme }) => theme.colors.default};
+
+  ${({ theme }) => theme.media.md} {
+    font-size: 1.5rem;
+  }
 `;
 
 const ThumbCenter = styled.div`
   display: flex;
   gap: 1.5rem;
+
+  ${({ theme }) => theme.media.md} {
+    flex-direction: row-reverse;
+    gap: 3rem;
+  }
 `;
 const ThumbBottom = styled.div`
   display: flex;
   justify-content: space-between;
+
+  ${({ theme }) => theme.media.md} {
+    justify-content: flex-end;
+
+    gap: 3rem;
+  }
 `;
 
 const ThumbBottomSpan = styled.span`
@@ -55,6 +79,10 @@ const ThumbBottomSpan = styled.span`
 const IconBtn = styled.button.attrs({ type: "button" })`
   border: none;
   background: none;
+
+  ${({ theme }) => theme.media.md} {
+    font-size: 1.25rem;
+  }
 
   &:hover {
     background: none;

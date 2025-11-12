@@ -1,9 +1,9 @@
 import styled, { keyframes } from "styled-components";
 import { FiX } from "react-icons/fi";
-import { flexCenter, flexContainer, imgBasicStyle } from "./theme";
+import { flexCenter, flexContainer } from "./theme";
 
 import EmptyCart from "../assets/emptyCart.svg?react";
-import { FaHeart, FaRegTrashCan } from "react-icons/fa6";
+// import { FaHeart, FaRegTrashCan } from "react-icons/fa6";
 import { SubmitBtn } from "./ProdImgGallery.style";
 
 //控制overlay淡出/淡入
@@ -98,52 +98,6 @@ export const ItemsContainer = styled.div`
   display: flex;
   border-bottom: 1px solid ${({ theme }) => theme.colors.default};
   padding: 0.25rem;
-
-  /* .thumbNailWrapper {
-    flex: 1;
-    width: 100%;
-    overflow: hidden;
-    border-radius: 2rem;
-    padding: 0.5rem;
-
-    img {
-      ${imgBasicStyle}
-    }
-  }
-
-  .influxInfo {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    flex: 2;
-
-    .influxInfo-top {
-      display: flex;
-      justify-content: space-between;
-
-      color: ${({ theme }) => theme.colors.default};
-    }
-    .influxInfo-center {
-      display: flex;
-      gap: 1.5rem;
-      & svg {
-        cursor: pointer;
-      }
-    }
-
-    .influxInfo-bottom {
-      display: flex;
-      justify-content: space-between;
-
-      & .influxInfo-bottom_span {
-        border: 1px solid grey;
-
-        border-radius: 10px;
-        padding: 10px;
-        color: ${({ theme }) => theme.colors.default};
-      }
-    }
-  } */
 `;
 
 //最下層
@@ -209,16 +163,4 @@ export const RemindToLoginBtn = styled(SubmitBtn)`
 export const NoProd = styled(EmptyCart)`
   width: 350px;
   height: 350px;
-`;
-
-export const IconBtn = styled.button.attrs({ type: "button" })`
-  border: none;
-  &:hover {
-    background: none;
-  }
-`;
-
-export const DeleteCart = styled(FaRegTrashCan)``;
-export const CartToSave = styled(FaHeart)`
-  color: ${({ $isSaved }) => $isSaved && "red"};
 `;
