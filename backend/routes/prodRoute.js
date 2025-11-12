@@ -1,3 +1,5 @@
+import fs from "fs";
+import path from "path";
 import { Router } from "express";
 import {
   uploadProd,
@@ -10,7 +12,11 @@ import {
 } from "../controllers/prodController.js";
 import upload from "../middlewares/multerConfig.js";
 import { protect } from "../middlewares/authMiddle.js";
-import categoryData from "../utils/categories.json" assert { type: "json" };
+// import categoryData from "../utils/categories.json" assert { type: "json" };
+
+const categoryData = JSON.parse(
+  fs.readFileSync(path.resolve("../utils/categories.json"), "utf-8")
+);
 
 const prodRouter = Router();
 
