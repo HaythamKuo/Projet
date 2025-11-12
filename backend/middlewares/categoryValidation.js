@@ -1,5 +1,11 @@
+import fs from "fs";
+import path from "path";
 import Joi from "joi";
-import categoryData from "../utils/categories.json" assert { type: "json" };
+// import categoryData from "../utils/categories.json" assert { type: "json" };
+
+const categoryData = JSON.parse(
+  fs.readFileSync(path.resolve("../utils/categories.json"), "utf-8")
+);
 
 const categoryMap = categoryData.reduce((acc, item) => {
   acc[item.id] = item.subCategory;
