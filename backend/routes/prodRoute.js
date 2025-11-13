@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 import { Router } from "express";
 import {
   uploadProd,
@@ -12,10 +13,12 @@ import {
 } from "../controllers/prodController.js";
 import upload from "../middlewares/multerConfig.js";
 import { protect } from "../middlewares/authMiddle.js";
-// import categoryData from "../utils/categories.json" assert { type: "json" };
+
+const __fileName = fileURLToPath(import.meta.url);
+const __dirName = path.dirname(__fileName);
 
 const categoryData = JSON.parse(
-  fs.readFileSync(path.resolve("../utils/categories.json"), "utf-8")
+  fs.readFileSync(path.resolve(__dirName, "../utils/categories.json"), "utf-8")
 );
 
 const prodRouter = Router();

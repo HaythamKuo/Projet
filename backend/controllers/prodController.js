@@ -15,7 +15,24 @@ import { selectedRuleSchema } from "../middlewares/categoryValidation.js";
 //const keyFilePath = path.resolve(process.env.KEY_FILE_PATH);
 
 //const storage = new Storage({ keyFilename: keyFilePath });
-const storage = new Storage();
+
+// const storage = new Storage();
+// const buck = storage.bucket(process.env.BUCKET_NAME);
+
+let storage;
+
+if (process.env.NODE_ENV === "production") {
+  const credentials = JSON.parse(process.env.GOOGLE_CLOUD_CREDENTIALS);
+  storage = new Storage({
+    projectId: process.env.PROJECT_ID,
+    credentials,
+  });
+} else {
+  storage = new Storage({
+    projectId: process.env.PROJECT_ID,
+  });
+}
+
 const buck = storage.bucket(process.env.BUCKET_NAME);
 
 export const uploadProd = asyncHandler(async (req, res) => {
