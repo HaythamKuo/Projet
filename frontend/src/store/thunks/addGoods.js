@@ -2,12 +2,17 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const isProd = import.meta.env.DEV
+  ? import.meta.env.VITE_SERVER_DEV
+  : import.meta.env.VITE_SERVER_PRODUCTION;
+
 export const addGoods = createAsyncThunk(
   "cart/addGoods",
   async (payload, thunkApi) => {
     try {
       const response = await axios.post(
-        "http://localhost:5001/api/cart/addgoods",
+        // "http://localhost:5001/api/cart/addgoods",
+        isProd + "/api/cart/addgoods",
         payload,
         { withCredentials: true }
       );
@@ -40,7 +45,8 @@ export const emptiedCart = createAsyncThunk(
   async (_, thunkApi) => {
     try {
       const response = await axios.delete(
-        "http://localhost:5001/api/cart/emptiedcart",
+        // "http://localhost:5001/api/cart/emptiedcart",
+        isProd + "/api/cart/emptiedcart",
         { withCredentials: true }
       );
 

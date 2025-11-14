@@ -3,7 +3,10 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const reviewApi = createApi({
   reducerPath: "review",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5001/api/review",
+    baseUrl: import.meta.env.DEV
+      ? import.meta.env.VITE_SERVER_DEV
+      : import.meta.env.VITE_SERVER_PRODUCTION,
+
     credentials: "include",
   }),
   tagTypes: ["Review"],
@@ -13,7 +16,7 @@ const reviewApi = createApi({
       fetchSpecificReviews: builder.query({
         query: (orderId) => ({
           method: "GET",
-          url: `/order/${orderId}`,
+          url: `/api/review/order/${orderId}`,
         }),
         providesTags: ["Review"],
       }),
@@ -22,7 +25,7 @@ const reviewApi = createApi({
         query: (data) => ({
           method: "POST",
           body: data,
-          url: "/create-review",
+          url: "/api/review/create-review",
         }),
         invalidatesTags: ["Review"],
         async onQueryStarted(arg, { dispatch, queryFulfilled }) {
@@ -53,7 +56,7 @@ const reviewApi = createApi({
       fetchGroupsReview: builder.query({
         query: (id) => ({
           method: "GET",
-          url: `/fetchjointreview/${id}`,
+          url: `/api/review/fetchjointreview/${id}`,
         }),
       }),
     };

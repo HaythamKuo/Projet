@@ -3,7 +3,9 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const orderApi = createApi({
   reducerPath: "order",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5001",
+    baseUrl: import.meta.env.DEV
+      ? import.meta.env.VITE_SERVER_DEV
+      : import.meta.env.VITE_SERVER_PRODUCTION,
     credentials: "include",
   }),
 

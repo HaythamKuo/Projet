@@ -133,7 +133,6 @@ export const getAllProds = asyncHandler(async (req, res) => {
   res.status(200).json(products);
 });
 
-//待修正
 export const getSpecificProd = asyncHandler(async (req, res) => {
   const { id } = req.params;
 

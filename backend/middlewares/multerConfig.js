@@ -13,19 +13,14 @@ import multerGoogleStorage from "multer-cloud-storage";
 const keyPath = path.join(process.cwd(), "gcs-key-temp.json");
 
 if (process.env.NODE_ENV === "production") {
-  // 1. 判斷是否為生產環境
-
   const credentials = process.env.GOOGLE_CLOUD_CREDENTIALS;
 
-  // 2. 檢查生產環境所需的變數是否確實存在
   if (!credentials) {
-    // 如果變數在生產環境中未設置，拋出明確錯誤
     throw new Error(
       "生產環境錯誤：GOOGLE_CLOUD_CREDENTIALS 環境變數未定義。請檢查部署配置。"
     );
   }
 
-  // 3. 只有在生產環境且變數存在時，才寫入臨時金鑰檔案
   fs.writeFileSync(keyPath, credentials);
 }
 

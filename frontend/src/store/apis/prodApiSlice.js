@@ -5,7 +5,9 @@ const pause = (duration) =>
 const customBaseQuery = async (...args) => {
   await pause(2000);
   return fetchBaseQuery({
-    baseUrl: "http://localhost:5001",
+    baseUrl: import.meta.env.DEV
+      ? import.meta.env.VITE_SERVER_DEV
+      : import.meta.env.VITE_SERVER_PRODUCTION,
     credentials: "include",
   })(...args);
 };

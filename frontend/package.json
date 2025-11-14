@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "build:registry": "jsrepo build"
+    "build:registry": "jsrepo build",
+    "start": "serve -s dist -l $PORT"
   },
   "dependencies": {
     "@imagekit/react": "^5.0.1",
@@ -35,6 +36,7 @@
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^15.15.0",
+    "serve": "^14.2.5",
     "vite": "^6.2.0",
     "vite-plugin-svgr": "^4.3.0"
   }
