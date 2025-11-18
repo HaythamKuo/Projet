@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { useState } from "react";
 import { useFavorite } from "../../hooks/useFavorite";
-import { useIsaved } from "../../hooks/useisSaved";
+import { useIsSaved } from "../../hooks/useIsSaved";
 import { addGoods } from "../../store/thunks/addGoods";
 import { imgBasicStyle } from "../theme";
 import { SubmitBtn } from "../ProdImgGallery.style";
@@ -90,7 +90,7 @@ function RefactorCard({ id, src, alt, name, price, rating, query }) {
   const { userInfo } = useSelector((state) => state.auth);
 
   const { saving, toggleSaved } = useFavorite();
-  const { isLoading, isSaved } = useIsaved(id);
+  const { isSaved } = useIsSaved(id);
 
   async function addToCart() {
     if (!userInfo) {

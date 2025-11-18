@@ -1,6 +1,6 @@
 import { useGetSaveProdsQuery } from "../store/apis/apiSlice";
 
-export function useIsaved(prodId) {
+export function useIsSaved(prodId) {
   return useGetSaveProdsQuery(undefined, {
     selectFromResult: ({ data, isLoading }) => ({
       isLoading,

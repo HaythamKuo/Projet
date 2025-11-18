@@ -4,7 +4,7 @@ import { imgBasicStyle } from "../theme";
 import { FaRegTrashCan, FaHeart } from "react-icons/fa6";
 import { useDeleteGood } from "../../hooks/useDeleteGood";
 import { useFavorite } from "../../hooks/useFavorite";
-import { useIsaved } from "../../hooks/useisSaved";
+import { useIsSaved } from "../../hooks/useIsSaved";
 
 //裡面夾一張圖片
 const ThumbWrapper = styled.div`
@@ -105,7 +105,7 @@ function RafactorUnpaidCard({ src, alt, prodName, unitPrice, item, $aspect }) {
   const { handleDelete, isLoading: deleting } = useDeleteGood();
 
   //負責商品是否有被收藏的狀態
-  const { isSaved, isLoading: isChecking } = useIsaved(item.productId._id);
+  const { isSaved, isLoading: isChecking } = useIsSaved(item.productId._id);
 
   //用於收藏/取消購物車內的商品
   const { saving, toggleSaved } = useFavorite();
