@@ -190,8 +190,8 @@ function Checkout() {
       totalPrice: cleanValue.totalPrice,
       paymentMethod: cleanValue.paymentMethod,
     });
-    console.log("cart.totalPrice", cart.totalPrice);
-    console.log("payload", payload);
+    // console.log("cart.totalPrice", cart.totalPrice);
+    // console.log("payload", payload);
 
     try {
       toast.info("正在製作訂單", { autoClose: 1500 });

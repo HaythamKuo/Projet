@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-import { flexCenter, flexContainer } from "./theme";
+import { flexCenter, flexContainer, imgBasicStyle } from "./theme";
 import { FaSearch, FaShoppingCart } from "react-icons/fa";
 import { FaAlignJustify, FaXmark } from "react-icons/fa6";
 
@@ -56,12 +56,19 @@ export const NavContainer = styled.nav`
   }
 
   .logo {
-    ${flexContainer}
-    gap: 1rem;
-    img {
+    /* ${flexContainer}
+    justify-content:space-around; */
+    /* gap: 1rem; */
+    /* img {
       width: 3rem;
       height: 3rem;
-    }
+    } */
+
+    display: flex;
+    align-items: center;
+    /* overflow: hidden; */
+    cursor: pointer;
+
     span {
       font-size: 2rem;
     }
@@ -162,4 +169,16 @@ export const SideBar = styled(FaAlignJustify)`
 `;
 export const CloseSideBar = styled(FaXmark)`
   color: ${({ theme }) => theme.colors.default};
+`;
+
+export const LogoWrapper = styled.div`
+  height: 5rem; /* 與 navbar 一致 */
+  width: auto; /* 自動依照 logo 寬度 */
+  aspect-ratio: 1 / 1;
+  aspect-ratio: 16 / 9;
+  max-height: 100%;
+  overflow: hidden;
+`;
+export const Logo = styled.img`
+  ${imgBasicStyle}
 `;

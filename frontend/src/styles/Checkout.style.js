@@ -128,7 +128,7 @@ export const ImgWrapper = styled.div`
   }
 
   img {
-    ${imgBasicStyle}/* height:auto; */
+    ${imgBasicStyle}
   }
 `;
 export const ItemBottom = styled.div`

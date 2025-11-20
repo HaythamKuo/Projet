@@ -12,9 +12,12 @@ import {
   IconContainer,
   SideBar,
   CloseSideBar,
+  LogoWrapper,
+  Logo,
 } from "../styles/nav.style";
 
-import Image from "./Image";
+// import Image from "./Image";
+import LogoIcon from "../assets/logo.png";
 import Switch from "../styles/UI/Switch";
 import NavBtn from "../styles/UI/NavBtn";
 import SearchQuery from "./SearchQuery";
@@ -28,18 +31,13 @@ import { toggleCart } from "../store/slices/cartSlice";
 import useClickOutside from "../hooks/useClickOutside";
 import { useScrollBlock } from "../hooks/useScrollBlock";
 import useObserverInnerWidth from "../hooks/useObserverInnerWidth";
-import ProcessLoader from "../styles/UI/ProcessLoader";
 
 import SideNavBar from "./SideNavBar";
 
 function Navbar({ onClick }) {
   const [open, setOpen] = useState(false);
   const controllRwdNav = useRef(null);
-  // const navigate = useNavigate();
   const { pathname } = useLocation();
-
-  //監控手機模式的nav  A → B 將關閉navbar
-  // const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   const isMobile = useObserverInnerWidth(768);
   const previousPath = useRef(pathname);
@@ -135,8 +133,10 @@ function Navbar({ onClick }) {
     <NavContainer>
       <div className="navContent">
         <div className="logo">
-          <Image src="/logo.png" alt="pics" w={48} h={48} />
-          {/* <img src="https://ik.imagekit.io/tokujl07r/logo.png" alt="logo" /> */}
+          <LogoWrapper>
+            <Logo src={LogoIcon} alt="logo" />
+          </LogoWrapper>
+
           <SplitText
             text="Haytham"
             className="text-2xl font-semibold text-center"
@@ -189,37 +189,6 @@ function Navbar({ onClick }) {
             open={open}
             setOpen={setOpen}
           />
-          {/* <MobileNav open={open} ref={controllRwdNav}>
-            <NavBtn ismobile name="首頁" />
-            <NavBtn ismobile name="關於" />
-            <NavBtn ismobile name="全部產品" />
-
-            {userInfo ? (
-              <>
-                <SideMember />
-                <NavBtn
-                  name="登出"
-                  ismobile
-                  btn
-                  onClick={() => handleRwdLogout()}
-                />
-              </>
-            ) : (
-              <NavBtn name="登入/註冊" ismobile address="auth" />
-            )}
-            {!isIncludePathname && (
-              <NavBtn
-                ismobile
-                name="購物車"
-                onClick={() => {
-                  dispatch(openCart());
-                  setOpen(false);
-                }}
-              />
-            )}
-
-            <Switch onClick={onClick} />
-          </MobileNav> */}
         </div>
       </div>
     </NavContainer>
