@@ -242,7 +242,7 @@ function Checkout() {
         customerEmail: userInfo.email,
       }).unwrap();
 
-      console.log(paymentResult);
+      // console.log(paymentResult);
 
       if (paymentResult.success) {
         toast.success("訂單建立成功，即將導向付款介面", { autoClose: 1000 });
@@ -401,7 +401,9 @@ function Checkout() {
               <p>總額</p>
               <p>$ {cart.totalPrice}</p>
             </Total>
-            <SubMit>{updatting ? "生成中" : "前往結帳"}</SubMit>
+            <SubMit disabled={updatting}>
+              {updatting ? "生成中" : "前往結帳"}
+            </SubMit>
           </RightBottom>
         </RightContainer>
       </CheckoutContainer>

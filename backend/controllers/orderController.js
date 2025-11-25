@@ -79,6 +79,7 @@ export const getOrderInfo = asyncHandler(async (req, res) => {
   if (all === "true") {
     orders = await OrderModal.find({ user: userId, status: "paid" })
       .sort({ createdAt: sortOrder })
+      .populate({ path: "orderItems.product", select: "images" })
       .lean();
 
     if (!orders) {
@@ -97,6 +98,7 @@ export const getOrderInfo = asyncHandler(async (req, res) => {
   } else {
     orders = await OrderModal.findOne({ user: userId, status: "paid" })
       .sort({ createdAt: -1 })
+      .populate({ path: "orderItems.product", select: "images" })
       .lean();
 
     if (!orders) {

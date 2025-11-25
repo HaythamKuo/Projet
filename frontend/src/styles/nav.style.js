@@ -56,17 +56,8 @@ export const NavContainer = styled.nav`
   }
 
   .logo {
-    /* ${flexContainer}
-    justify-content:space-around; */
-    /* gap: 1rem; */
-    /* img {
-      width: 3rem;
-      height: 3rem;
-    } */
-
     display: flex;
     align-items: center;
-    /* overflow: hidden; */
     cursor: pointer;
 
     span {

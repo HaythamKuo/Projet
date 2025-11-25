@@ -15,7 +15,7 @@ import {
   OrderDate,
   OrderItems,
   OrderRight,
-  TestImg,
+  OrderImg,
   ImgWrapper,
   Prodname,
   Quantity,
@@ -31,12 +31,15 @@ import {
   ConfineBox,
   ModalProdName,
   SortBox,
+  DistractSvg,
+  NoOrderBox,
 } from "../styles/order.style";
 import ProcessLoader from "../styles/UI/ProcessLoader";
 import ReviewStars from "../styles/UI/ReviewStars";
 import Modal from "./Modal";
 import { useScrollBlock } from "../hooks/useScrollBlock";
 import { ValidateReviews } from "../utils/validation";
+import ShinyText from "./reactBit/ShinyText";
 
 function Order() {
   const dialogRef = useRef();
@@ -159,7 +162,14 @@ function Order() {
   if (isLoading) return <ProcessLoader />;
   if (creating) return <p>上傳中</p>;
   if (fetching) return <p>串連中</p>;
-  if (!data || data.length === 0) return <p>沒有訂單</p>;
+  if (!data || data.length === 0)
+    return (
+      <NoOrderBox>
+        <DistractSvg />
+
+        <ShinyText text="目前沒有訂單喔" />
+      </NoOrderBox>
+    );
 
   return (
     <OrderContainer>
@@ -273,7 +283,7 @@ function Order() {
             {order.orderItems?.map((prod) => (
               <OrderItems key={prod._id}>
                 <ImgWrapper>
-                  <TestImg alt={"pic"} />
+                  <OrderImg src={prod?.product.images[0].url} alt={"pic"} />
                 </ImgWrapper>
                 <OrderRight>
                   <Prodname>{prod.name}</Prodname>
@@ -284,7 +294,10 @@ function Order() {
           </Left>
 
           <Right>
-            <OrderId>訂單編號: #{order._id}</OrderId>
+            <OrderId>
+              訂單編號 ↓
+              <br />#{order._id}
+            </OrderId>
             <OrderTotal>總額: ${order.totalPrice}</OrderTotal>
             <CommentConfirm onClick={() => showModal(order._id)}>
               給予評價

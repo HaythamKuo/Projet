@@ -36,7 +36,9 @@ const fadeInSlideDown = keyframes`
 export const DropDownMenu = styled.div`
   position: absolute;
   top: 150%;
-  right: 0;
+  /* right: 0; */
+  left: -100%;
+
   width: 260px;
   //background-color: #fff;
   background-color: ${({ theme }) => theme.spotLight.border};

@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { useLocation, useMatch } from "react-router-dom";
+import { Link, useLocation, useMatch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AnimatePresence } from "framer-motion";
+
 // import { toast } from "react-toastify";
 
 import {
@@ -132,22 +133,24 @@ function Navbar({ onClick }) {
   return (
     <NavContainer>
       <div className="navContent">
-        <div className="logo">
-          <LogoWrapper>
-            <Logo src={LogoIcon} alt="logo" />
-          </LogoWrapper>
+        <Link to="/">
+          <div className="logo">
+            <LogoWrapper>
+              <Logo src={LogoIcon} alt="logo" />
+            </LogoWrapper>
 
-          <SplitText
-            text="Haytham"
-            className="text-2xl font-semibold text-center"
-            delay={150}
-            animationFrom={{ opacity: 0, transform: "translate3d(0,50px,0)" }}
-            animationTo={{ opacity: 1, transform: "translate3d(0,0,0)" }}
-            easing="easeOutCubic"
-            threshold={0.2}
-            rootMargin="-50px"
-          />
-        </div>
+            <SplitText
+              text="Haytham"
+              className="text-2xl font-semibold text-center"
+              delay={150}
+              animationFrom={{ opacity: 0, transform: "translate3d(0,50px,0)" }}
+              animationTo={{ opacity: 1, transform: "translate3d(0,0,0)" }}
+              easing="easeOutCubic"
+              threshold={0.2}
+              rootMargin="-50px"
+            />
+          </div>
+        </Link>
         <div className="navLinks">
           <NavBtn name="首頁" address="/" />
           <NavBtn name="關於" address="" />

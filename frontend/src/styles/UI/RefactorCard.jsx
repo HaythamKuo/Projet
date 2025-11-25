@@ -142,6 +142,7 @@ function RefactorCard({ id, src, alt, name, price, rating, query }) {
             as={Link}
             to={`/products/${id}`}
             state={{ fromQuery: query }}
+            target={"_blank"}
           >
             更多資訊
           </GoIoProd>

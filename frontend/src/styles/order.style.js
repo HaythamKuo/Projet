@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import { flexCenter } from "./theme";
+import { flexCenter, imgBasicStyle } from "./theme";
 import { SubmitBtn, CancelBtn } from "./ProdImgGallery.style";
+import distract from "../assets/distract.svg?react";
 
 export const OrderContainer = styled.div`
   display: flex;
@@ -41,10 +42,19 @@ export const OrderDate = styled.p`
 
 export const OrderItems = styled.div`
   display: flex;
-  gap: 1.5rem;
+
+  padding: 0.5rem;
 `;
-export const ImgWrapper = styled.div``;
-export const TestImg = styled.img``;
+export const ImgWrapper = styled.div`
+  width: 10%;
+  margin-right: 1rem;
+  aspect-ratio: 4 / 3;
+  border-radius: 5px;
+  overflow: hidden;
+`;
+export const OrderImg = styled.img`
+  ${imgBasicStyle}
+`;
 export const OrderRight = styled.div`
   display: flex;
   flex-direction: column;
@@ -162,4 +172,12 @@ export const SortBox = styled.div`
   ${({ theme }) => theme.media.lg} {
     flex-direction: row;
   }
+`;
+export const NoOrderBox = styled.div`
+  ${flexCenter}
+  flex-direction:column;
+`;
+export const DistractSvg = styled(distract)`
+  width: 500px;
+  height: 500px;
 `;
