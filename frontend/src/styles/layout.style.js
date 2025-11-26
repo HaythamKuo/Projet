@@ -8,21 +8,21 @@ export const LayoutContainer = styled.div`
 
   ${(props) => props.theme.media.xxl} {
     padding: 0 16rem;
-    background-color: gold;
+    /* background-color: gold; */
   }
 
   ${(props) => props.theme.media.xl} {
     padding: 0 8rem;
-    background-color: cadetblue;
+    /* background-color: cadetblue; */
   }
 
   ${(props) => props.theme.media.lg} {
     padding: 0 4rem;
-    background-color: blue;
+    /* background-color: blue; */
   }
 
   ${(props) => props.theme.media.md} {
     padding: 0 2rem;
-    background-color: brown;
+    /* background-color: brown; */
   }
 `;

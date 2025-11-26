@@ -67,22 +67,6 @@ function Navbar({ onClick }) {
 
   const [blockScroll, allowScroll] = useScrollBlock(controlSearch);
 
-  //處理rwd與全域登出的函式
-  // const [callLogoutApi, { isLoading: logoutTing }] = useLogoutUserMutation();
-  // async function handleRwdLogout() {
-  //   try {
-  //     await callLogoutApi();
-  //     dispatch(usersApi.util.resetApiState());
-  //     dispatch(clearCart());
-  //     dispatch(logout());
-  //     setOpen(false);
-  //     toast.success("成功登出");
-  //     navigate("/");
-  //   } catch (error) {
-  //     console.error(error?.data?.message || "登出失敗");
-  //   }
-  // }
-
   useEffect(() => {
     setSearch(false);
   }, [pathname]);
