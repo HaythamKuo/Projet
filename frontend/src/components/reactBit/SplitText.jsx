@@ -6,10 +6,13 @@ const SplitParent = styled.p`
   text-align: ${(props) => props.textAlign || "center"};
   overflow: hidden;
   display: inline;
+
   white-space: normal;
   word-wrap: break-word;
   color: ${({ theme }) => theme.colors.default};
   ${(props) => props.$customStyles};
+  font-size: 23px;
+  font-weight: bold;
 `;
 
 const WordWrapper = styled.span`

@@ -4,6 +4,8 @@ import styled from "styled-components";
 const ParallaxContainer = styled.section`
   margin-top: 1rem;
 
+  overflow: hidden;
+
   display: flex;
   flex-direction: column;
   ${({ theme }) => theme.media.md} {
@@ -18,10 +20,14 @@ const Section = styled.div`
 
   display: grid;
   place-content: center;
-  background-size: cover;
+  background-size: contain;
   background-position: center;
   background-attachment: fixed;
   background-image: url(${(props) => props.$bg});
+
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
 
   //rwd
   ${({ theme }) => theme.media.xl} {

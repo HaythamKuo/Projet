@@ -124,7 +124,7 @@ function Navbar({ onClick }) {
             </LogoWrapper>
 
             <SplitText
-              text="Haytham"
+              text="x 娃娃兵"
               className="text-2xl font-semibold text-center"
               delay={150}
               animationFrom={{ opacity: 0, transform: "translate3d(0,50px,0)" }}

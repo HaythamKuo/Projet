@@ -61,7 +61,7 @@ export const NavContainer = styled.nav`
     cursor: pointer;
 
     span {
-      font-size: 2rem;
+      /* font-size: 2rem; */
     }
 
     ${({ theme }) => theme.media.lg} {
