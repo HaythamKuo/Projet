@@ -4,22 +4,16 @@ import styled from "styled-components";
 // 建立一個背景容器，僅限於 navbar 下方（例如高度設定為剩餘視窗高度）
 const BackgroundWrapper = styled.div`
   position: relative;
-  //width: 100%;
-  //flex: 3;
-  //height: calc(100vh - 6rem); /* 假設 navbar 高度為 5rem */
-  //height: 20vh; /* 假設 navbar 高度為 5rem */
+
   overflow: hidden;
 
-  //test
   aspect-ratio: 1 / 1;
-  max-width: 20vh; /* 不让宽度超过高度 */
+  max-width: 20vh;
   height: 20vh;
   border-radius: 50%;
 
   ${({ theme }) => theme.media.md} {
-    min-height: 250px;
-
-    min-height: 200px;
+    min-height: 120px;
   }
 
   /* 定義自訂屬性，並讓它們支援過渡 */

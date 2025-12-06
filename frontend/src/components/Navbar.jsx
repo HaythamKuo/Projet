@@ -123,7 +123,7 @@ function Navbar({ onClick }) {
               <Logo src={LogoIcon} alt="logo" />
             </LogoWrapper>
 
-            <SplitText
+            {/* <SplitText
               text="x 娃娃兵"
               className="text-2xl font-semibold text-center"
               delay={150}
@@ -132,7 +132,7 @@ function Navbar({ onClick }) {
               easing="easeOutCubic"
               threshold={0.2}
               rootMargin="-50px"
-            />
+            /> */}
           </div>
         </Link>
         <div className="navLinks">

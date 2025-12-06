@@ -11,8 +11,6 @@ const SplitParent = styled.p`
   word-wrap: break-word;
   color: ${({ theme }) => theme.colors.default};
   ${(props) => props.$customStyles};
-  font-size: 23px;
-  font-weight: bold;
 `;
 
 const WordWrapper = styled.span`

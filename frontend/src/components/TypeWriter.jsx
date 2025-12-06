@@ -9,29 +9,37 @@ export const TypeWriterContainer = styled.div`
 
   // RWD
   ${({ theme }) => theme.media.md} {
-    flex-direction: row;
+    /* flex-direction: row; */
     align-items: center;
-    gap: 1.5rem;
-  }
+    /* gap: 1.5rem; */
 
-  span {
-    color: ${({ theme }) => theme.colors.default};
-    font-size: 3.5rem;
-
-    //RWD to "I am"
-    ${({ theme }) => theme.media.lg} {
-      font-size: 2.5rem;
-    }
-
-    ${({ theme }) => theme.media.md} {
-      font-size: 2rem;
-    }
+    /* min-height: 32px;
+    line-height: 32px; */
   }
 `;
 
-const MinorContainer = styled.span`
+export const TypeSapn = styled.span`
+  color: ${({ theme }) => theme.colors.default};
+  font-size: 3.5rem;
+
+  //RWD to "I am"
+  ${({ theme }) => theme.media.xxl} {
+    font-size: 2.5rem;
+  }
+  ${({ theme }) => theme.media.lg} {
+    font-size: 2.5rem;
+  }
+
+  ${({ theme }) => theme.media.md} {
+    display: block;
+    font-size: 2rem;
+  }
+`;
+
+const MinorContainer = styled.div`
   display: inline-block;
   position: relative;
+  /* align-items: baseline; */
 `;
 
 const TypeWriterText = styled.h1`
@@ -53,16 +61,21 @@ const TypeWriterText = styled.h1`
   }
 
   ${({ theme }) => theme.media.md} {
-    font-size: 2rem;
+    font-size: 2.5rem;
   }
 `;
 
 const Cursor = styled.span`
   display: inline-block;
+  /* align-items: baseline; */
   width: 2px;
   height: 3rem;
 
   //RWD to cursor
+
+  ${({ theme }) => theme.media.xxl} {
+    height: 2.25rem;
+  }
 
   ${({ theme }) => theme.media.xl} {
     height: 1.5rem;
@@ -70,6 +83,9 @@ const Cursor = styled.span`
 
   ${({ theme }) => theme.media.md} {
     height: 1.5rem;
+  }
+  ${({ theme }) => theme.media.lg} {
+    height: 2rem;
   }
 
   background-color: ${({ theme }) => theme.colors.cursor};

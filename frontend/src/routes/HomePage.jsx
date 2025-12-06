@@ -17,7 +17,10 @@ import {
   RwdBox,
 } from "../styles/homePage.style";
 
-import TypeWriter, { TypeWriterContainer } from "../components/TypeWriter";
+import TypeWriter, {
+  TypeSapn,
+  TypeWriterContainer,
+} from "../components/TypeWriter";
 import Attribute from "../components/Attribute";
 import IntroTitle from "../components/reactBit/IntroTitle";
 import SpotlightCard from "../components/SpotlightCard";
@@ -30,11 +33,12 @@ function HomePage() {
       <HeaderLayout>
         <HighLight />
         <TypeWriterContainer>
-          <span>I am</span>
+          <TypeSapn>這裡有</TypeSapn>
+
           <TypeWriter
-            phrases={["a developer", "a designer", "an innovator"]}
-            typingSpeed={80}
-            deletingSpeed={40}
+            phrases={["富含溫暖", "質地柔順", "眼底都是你"]}
+            typingSpeed={130}
+            deletingSpeed={80}
             delayAfterPhrase={2000}
           />
         </TypeWriterContainer>
