@@ -9,21 +9,23 @@
     "dev": "nodemon index.js"
   },
   "dependencies": {
-    "express": "^4.21.2",
-    "mongoose": "^8.11.0",
-    "jsonwebtoken": "^9.0.2",
+    "@google-cloud/storage": "^7.16.0",
+    "axios": "^1.13.2",
     "bcryptjs": "^3.0.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
+    "dayjs": "^1.11.18",
     "dotenv": "^16.4.7",
-    "@google-cloud/storage": "^7.16.0",
+    "express": "^4.21.2",
+    "express-async-handler": "^1.2.0",
+    "express-session": "^1.18.2",
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.11.0",
     "multer": "^2.0.1",
     "multer-cloud-storage": "^4.1.0",
     "passport": "^0.7.0",
-    "passport-google-oauth20": "^2.0.0",
-    "dayjs": "^1.11.18",
-    "express-async-handler": "^1.2.0",
-    "joi": "^17.13.3"
+    "passport-google-oauth20": "^2.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"

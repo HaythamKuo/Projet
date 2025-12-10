@@ -4,12 +4,8 @@ import styled from "styled-components";
 import { FaGoogle } from "react-icons/fa";
 import { LineIcon } from "../styles/Checkout.style";
 import { flexCenter } from "../styles/theme";
-//import { toast } from "react-toastify";
 
 const BindContainer = styled.div`
-  /* display: flex;
-  align-items: center;
-  justify-content: center; */
   ${flexCenter}
   gap: 2rem;
 `;

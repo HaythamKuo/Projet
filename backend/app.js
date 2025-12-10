@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import cookieParser from "cookie-parser";
 import passport from "passport";
+import session from "express-session";
 
 import errHandler from "./middlewares/ErrMiddleware.js";
 
@@ -16,6 +17,7 @@ import reviewRouter from "./routes/reviewRoute.js";
 import ecPayRouter from "./routes/ecpayRoute.js";
 
 import googleAuthRouter from "./routes/googleAuthRoute.js";
+import lineAuthRouter from "./routes/lineAuthRoute.js";
 
 const app = express();
 
@@ -31,11 +33,28 @@ app.use(
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(
+  session({
+    secret: "super secret",
+    resave: false,
+    // saveUninitialized: true,
+    saveUninitialized: false,
+
+    cookie: {
+      domain: "d829337c43dd.ngrok-free.app",
+      httpOnly: true,
+      secure: true, // ngrok 是 HTTPS
+      // sameSite: "lax", // JWT cookie 可用
+      sameSite: "none",
+    },
+  })
+);
 app.use(express.urlencoded({ extended: true }));
 
 //passport
 app.use(passport.initialize());
 app.use("/api/google", googleAuthRouter);
+app.use("/api/line", lineAuthRouter);
 
 // 路由 (示例)
 

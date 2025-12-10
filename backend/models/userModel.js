@@ -26,9 +26,10 @@ const userSchema = Schema(
     },
     address: { type: String },
     googleId: { type: String, unique: true, sparse: true },
+    lineId: { type: String, unique: true, sparse: true },
     authProvider: {
       type: String,
-      enum: ["local", "google", "local+google"],
+      enum: ["local", "google", "local+google", "line"],
       default: "local",
     },
   },

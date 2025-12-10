@@ -14,6 +14,8 @@ import { useLoginMutation } from "../store/apis/apiSlice";
 import { setCredentials } from "../store/slices/authSlice";
 import { toast } from "react-toastify";
 import ProcessLoader from "../styles/UI/ProcessLoader";
+import LineLoginConfig from "../config/LineLoginConfig";
+import { LineIcon } from "../styles/Checkout.style";
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -116,15 +118,35 @@ function LoginPage() {
           />
 
           <button>登入</button>
-          {/* <Link to="register">
-            <OptText>沒有帳號嗎？立刻註冊</OptText>
-          </Link> */}
+
           <OptText to="register">沒有帳號嗎？立刻註冊</OptText>
         </FormContainer>
         <Divider>或是選擇</Divider>
-        <a href="http://localhost:5001/api/google/auth/google">
+        {import.meta.env.DEV ? (
+          <a href="http://localhost:5001/api/google/auth/google">
+            <Google />
+          </a>
+        ) : (
+          <a href="https://dollserver.zeabur.app/api/google/auth/google">
+            <Google />
+          </a>
+        )}
+
+        {/* <a href="http://localhost:5001/api/google/auth/google">
           <Google />
-        </a>
+        </a> */}
+
+        {/* <LineLoginConfig /> */}
+
+        {import.meta.env.DEV ? (
+          <a href="http://localhost:5001/api/line/lineauth">
+            <LineIcon size="2.2rem" />
+          </a>
+        ) : (
+          <a href="https://dollserver.zeabur.app/api/line/lineauth">
+            <LineIcon size="2.2rem" />
+          </a>
+        )}
       </Container>
     </>
   );
