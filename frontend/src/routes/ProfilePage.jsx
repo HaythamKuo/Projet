@@ -80,7 +80,7 @@ function Profile() {
   } else if (currentTab === "saved") {
     content = <Collections userId={data?._id} />;
   } else if (currentTab === "third-party") {
-    content = <BindAcc googleId={data?.googleId} />;
+    content = <BindAcc googleId={data?.googleId} lineId={data?.lineId} />;
   }
 
   return (

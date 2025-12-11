@@ -2,15 +2,6 @@ import dotenv from "dotenv";
 dotenv.config();
 import mongoose from "mongoose";
 
-// const env = process.env.NODE_ENV || "development";
-// let mongoUri = "";
-
-// if (env === "production") {
-//   mongoUri = process.env.MONGODB_URI_PROD;
-// } else {
-//   mongoUri = process.env.MONGODB_URI_DEV;
-// }
-
 const mongoUri =
   process.env.NODE_ENV === "production"
     ? process.env.MONGODB_URI_PROD

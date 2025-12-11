@@ -28,9 +28,9 @@ const userSchema = Schema(
     googleId: { type: String, unique: true, sparse: true },
     lineId: { type: String, unique: true, sparse: true },
     authProvider: {
-      type: String,
+      type: [String],
       enum: ["local", "google", "local+google", "line"],
-      default: "local",
+      default: ["local"],
     },
   },
   { timestamps: true }

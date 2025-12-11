@@ -22,7 +22,6 @@ const lintStr = new URLSearchParams({
       ? process.env.ECPAYRETURN_URL_PRODUCTION
       : "http://localhost:5001"
   }/api/line/callback`,
-  // resirect_uri: "http://localhost:5001/api/line/callback",
   state: STATE,
   scope: "email openid profile",
 }).toString();
@@ -73,9 +72,9 @@ lineAuthRouter.get("/callback", async (req, res) => {
     if (!lineUser) {
       lineUser = await userModel.create({
         name: decodeUser.name,
-        email: decodeUser.email,
+        email: decodeUser.email || null,
         lineId: decodeUser.sub,
-        authProvider: "line",
+        authProvider: ["line"],
       });
     }
     generateToken(res, lineUser._id);

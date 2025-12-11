@@ -71,7 +71,7 @@ export const CreditIcon = styled(MdOutlineCreditScore)`
 export const LineIcon = styled(FaLine)`
   font-size: ${(props) => props.size || "1.5rem"};
   color: ${({ theme }) => theme.colors.default};
-  cursor: pointer;
+  cursor: ${({ $isCursor }) => ($isCursor ? "default" : "pointer")};
 `;
 
 export const Top = styled.div`

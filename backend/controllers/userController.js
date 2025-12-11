@@ -129,6 +129,7 @@ export const getUserProfile = asyncHandler(async (req, res) => {
     name: user.name,
     email: user.email,
     googleId: user?.googleId || null,
+    lineId: user?.lineId || null,
     address: user?.address || "",
     favorites: user?.favorites || [],
   });

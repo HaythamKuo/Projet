@@ -155,6 +155,12 @@ const usersApi = createApi({
           }
         },
       }),
+      third_party_unbind: builder.mutation({
+        query: () => ({
+          method: "delete",
+          url: "/api/google/auth/google/unbind",
+        }),
+      }),
     };
   },
 });
@@ -167,5 +173,6 @@ export const {
   useSaveProdsMutation,
   useGetSaveProdsQuery,
   useRemoveProdsMutation,
+  useThird_party_unbindMutation,
 } = usersApi;
 export { usersApi };

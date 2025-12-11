@@ -14,6 +14,7 @@ googleAuthRouter.get(
   })
 );
 
+//指向綁定
 googleAuthRouter.get(
   "/auth/google/bind/",
   passport.authenticate("google-bind", {
@@ -26,9 +27,8 @@ googleAuthRouter.get(
 googleAuthRouter.get(
   "/auth/google/callback",
   passport.authenticate("google", {
-    //failureRedirect: "http://localhost:5173/products",
     failureRedirect: `${process.env.CLIENT_ROUTE_DEV}/products`,
-    //successRedirect: "/",
+
     session: false,
   }),
   //透過google登入
@@ -45,16 +45,6 @@ googleAuthRouter.get(
           googleId: req.user.id,
           authProvider: "google",
         });
-
-        // user = await userModel.findOneAndUpdate(
-        //   { email: req.user.emails[0].value },
-        //   {
-        //     name: req.user.displayName,
-        //     googleId: req.user.id,
-        //     authProvider: "google",
-        //   },
-        //   { new: true, upsert: true }
-        // );
       }
 
       // 這裡才發 token
@@ -127,5 +117,35 @@ googleAuthRouter.get(
     }
   }
 );
+
+//解除綁定
+googleAuthRouter.delete("/auth/google/unbind", async (req, res) => {
+  try {
+    const googleToken = req.cookies.jwt;
+    if (!googleToken) return res.sendStatus(401);
+
+    const { userId } = jwt.verify(googleToken, process.env.JWT_SECRET);
+    const user = await userModel.findById(userId);
+    if (!user) return res.sendStatus(401);
+    if (!user.googleId)
+      return res.status(400).json({ message: "沒有綁定google帳戶" });
+    if (!user.password)
+      return res
+        .status(400)
+        .json({ message: "Please set a password before unbinding Google." });
+
+    user.googleId = null;
+
+    const newIdentity = user.authProvider.filter((item) => item !== "google");
+    // console.log(newIdentity);
+
+    user.authProvider = [...newIdentity];
+    await user.save();
+
+    //console.log(who);
+  } catch (error) {
+    console.error(error);
+  }
+});
 
 export default googleAuthRouter;

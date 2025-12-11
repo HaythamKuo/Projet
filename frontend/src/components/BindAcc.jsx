@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { FaGoogle } from "react-icons/fa";
 import { LineIcon } from "../styles/Checkout.style";
 import { flexCenter } from "../styles/theme";
+import { useThird_party_unbindMutation } from "../store/apis/apiSlice";
 
 const BindContainer = styled.div`
   ${flexCenter}
@@ -38,23 +39,41 @@ const AnchorLink = styled.a`
   color: ${({ theme }) => theme.colors.default};
 `;
 
-export default function BindAcc({ googleId }) {
+const UnBindBtn = styled.button``;
+
+export default function BindAcc({ googleId, lineId }) {
+  const [unBindAcc] = useThird_party_unbindMutation();
+
   return (
     <BindContainer>
       <BindBox>
         <GoogleIcon />
-        {/* <BindDesc disabled={!!googleId}>
-          <a href="http://localhost:5001/api/google/auth/google">
-            綁定至Google
-          </a>
-        </BindDesc> */}
-        {/* <a href="http://localhost:5001/api/google/auth/google">綁定至Google</a> */}
-
         {googleId ? (
-          <BindSuccess>成功綁定</BindSuccess>
+          <>
+            <BindSuccess>成功綁定</BindSuccess>
+            <UnBindBtn
+              // as="a"
+              // href={`${
+              //   import.meta.env.DEV
+              //     ? import.meta.env.VITE_SERVER_DEV
+              //     : import.meta.env.VITE_SERVER_PRODUCTION
+              // }/api/google/auth/google/unbind`}
+              onClick={() => unBindAcc()}
+            >
+              解除綁定
+            </UnBindBtn>
+          </>
         ) : (
           <BindDesc>
-            <AnchorLink href="http://localhost:5001/api/google/auth/google/bind">
+            <AnchorLink
+              href={`
+                ${
+                  import.meta.env.DEV
+                    ? import.meta.env.VITE_SERVER_DEV
+                    : import.meta.env.VITE_SERVER_PRODUCTION
+                }/api/google/auth/google/bind
+                `}
+            >
               綁定至Google
             </AnchorLink>
           </BindDesc>
@@ -62,9 +81,14 @@ export default function BindAcc({ googleId }) {
       </BindBox>
 
       <BindBox>
-        <LineIcon size="2.2rem" />
-        {/* <a href="">綁定至Line</a> */}
-        <BindDesc disabled>即將開放</BindDesc>
+        <LineIcon size="2.2rem" $isCursor />
+        {lineId ? (
+          <BindSuccess>成功綁定</BindSuccess>
+        ) : (
+          <BindDesc>
+            <AnchorLink href="">綁定至Line</AnchorLink>
+          </BindDesc>
+        )}
       </BindBox>
     </BindContainer>
   );
