@@ -1,10 +1,11 @@
-//import { useEffect } from "react";
+import { toast } from "react-toastify";
 import styled from "styled-components";
 
 import { FaGoogle } from "react-icons/fa";
 import { LineIcon } from "../styles/Checkout.style";
 import { flexCenter } from "../styles/theme";
 import { useThird_party_unbindMutation } from "../store/apis/apiSlice";
+import ProcessLoader from "../styles/UI/ProcessLoader";
 
 const BindContainer = styled.div`
   ${flexCenter}
@@ -42,7 +43,18 @@ const AnchorLink = styled.a`
 const UnBindBtn = styled.button``;
 
 export default function BindAcc({ googleId, lineId }) {
-  const [unBindAcc] = useThird_party_unbindMutation();
+  const [unBindAcc, { isLoading: unBindind }] = useThird_party_unbindMutation();
+
+  async function unBind() {
+    try {
+      const res = await unBindAcc().unwrap();
+      toast.success(res?.message);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  if (unBindind) return <ProcessLoader />;
 
   return (
     <BindContainer>
@@ -51,15 +63,7 @@ export default function BindAcc({ googleId, lineId }) {
         {googleId ? (
           <>
             <BindSuccess>成功綁定</BindSuccess>
-            <UnBindBtn
-              // as="a"
-              // href={`${
-              //   import.meta.env.DEV
-              //     ? import.meta.env.VITE_SERVER_DEV
-              //     : import.meta.env.VITE_SERVER_PRODUCTION
-              // }/api/google/auth/google/unbind`}
-              onClick={() => unBindAcc()}
-            >
+            <UnBindBtn disabled={unBindind} onClick={() => unBind()}>
               解除綁定
             </UnBindBtn>
           </>
@@ -86,7 +90,17 @@ export default function BindAcc({ googleId, lineId }) {
           <BindSuccess>成功綁定</BindSuccess>
         ) : (
           <BindDesc>
-            <AnchorLink href="">綁定至Line</AnchorLink>
+            <AnchorLink
+              href={`
+                ${
+                  import.meta.env.DEV
+                    ? import.meta.env.VITE_SERVER_DEV
+                    : import.meta.env.VITE_SERVER_PRODUCTION
+                }/api/line/bind
+                `}
+            >
+              綁定至Line
+            </AnchorLink>
           </BindDesc>
         )}
       </BindBox>

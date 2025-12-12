@@ -29,7 +29,7 @@ const userSchema = Schema(
     lineId: { type: String, unique: true, sparse: true },
     authProvider: {
       type: [String],
-      enum: ["local", "google", "local+google", "line"],
+      enum: ["local", "google", "line"],
       default: ["local"],
     },
   },

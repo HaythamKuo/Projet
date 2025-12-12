@@ -1,5 +1,15 @@
-import crypto, { randomBytes } from "crypto";
+const google = {
+  type: "code",
+  client: 123,
+  url: "http://localhost:5001/google",
+};
 
-const test = crypto.randomBytes(16).toString("hex");
+const line = {
+  ...google,
+  url: "http://localhost:5001/line",
+};
 
-console.log(test);
+const one = new URLSearchParams(google).toString();
+const two = new URLSearchParams(line).toString();
+
+console.log(two);

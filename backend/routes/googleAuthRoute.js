@@ -58,6 +58,7 @@ googleAuthRouter.get(
   }
 );
 
+//指向綁定
 googleAuthRouter.get(
   "/auth/google/bind/callback",
   passport.authenticate("google-bind", {
@@ -103,9 +104,12 @@ googleAuthRouter.get(
         );
       }
 
+      console.log(req.user);
+
       // 綁定 Google
       localUser.googleId = req.user.id;
-      localUser.authProvider = "local+google";
+      // localUser.authProvider = "local+google";
+      localUser.authProvider.push("google");
       localUser.optionMail = req.user.emails[0].value;
       localUser.optionName = req.user.displayName;
       await localUser.save();
@@ -135,13 +139,15 @@ googleAuthRouter.delete("/auth/google/unbind", async (req, res) => {
         .json({ message: "Please set a password before unbinding Google." });
 
     user.googleId = null;
+    user.optionMail = null;
+    user.optionName = null;
 
     const newIdentity = user.authProvider.filter((item) => item !== "google");
     // console.log(newIdentity);
 
     user.authProvider = [...newIdentity];
     await user.save();
-
+    res.status(201).json({ message: "成功解除綁定" });
     //console.log(who);
   } catch (error) {
     console.error(error);

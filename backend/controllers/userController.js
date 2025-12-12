@@ -20,6 +20,13 @@ export const registerUser = asyncHandler(async (req, res) => {
   }
 
   const existUser = await userModel.findOne({ email: value.email });
+  let third_party = ["google", "line"];
+
+  /**
+   *原有的line帳戶轉向使用不同郵件綁定line帳戶
+   本地帳戶想綁定line
+   */
+
   if (existUser) {
     if (
       existUser.authProvider.includes("google") &&

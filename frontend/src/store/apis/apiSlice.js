@@ -13,7 +13,6 @@ import { fetchBaseQuery, createApi } from "@reduxjs/toolkit/query/react";
 const usersApi = createApi({
   reducerPath: "userInfo",
   baseQuery: fetchBaseQuery({
-    // baseUrl: "http://localhost:5001",
     baseUrl: import.meta.env.DEV
       ? import.meta.env.VITE_SERVER_DEV
       : import.meta.env.VITE_SERVER_PRODUCTION,
@@ -160,6 +159,19 @@ const usersApi = createApi({
           method: "delete",
           url: "/api/google/auth/google/unbind",
         }),
+        invalidatesTags: ["User"],
+        async onQueryStarted(_, { dispatch, queryFulfilled }) {
+          const patch = dispatch(
+            usersApi.util.updateQueryData("getProfile", undefined, (draft) => {
+              draft.googleId = null;
+            })
+          );
+          try {
+            await queryFulfilled();
+          } catch {
+            patch.undo();
+          }
+        },
       }),
     };
   },
