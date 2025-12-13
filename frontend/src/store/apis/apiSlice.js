@@ -155,15 +155,23 @@ const usersApi = createApi({
         },
       }),
       third_party_unbind: builder.mutation({
-        query: () => ({
-          method: "delete",
-          url: "/api/google/auth/google/unbind",
+        query: (provider) => ({
+          method: "DELETE",
+          body: { provider },
+          url:
+            provider === "google"
+              ? "/api/google/auth/google/unbind"
+              : "/api/line/unbind",
         }),
         invalidatesTags: ["User"],
-        async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        async onQueryStarted(provider, { dispatch, queryFulfilled }) {
           const patch = dispatch(
             usersApi.util.updateQueryData("getProfile", undefined, (draft) => {
-              draft.googleId = null;
+              if (provider === "google") {
+                draft.googleId = null;
+              } else if (provider === "line") {
+                draft.lineId = null;
+              }
             })
           );
           try {

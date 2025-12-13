@@ -43,18 +43,18 @@ const AnchorLink = styled.a`
 const UnBindBtn = styled.button``;
 
 export default function BindAcc({ googleId, lineId }) {
-  const [unBindAcc, { isLoading: unBindind }] = useThird_party_unbindMutation();
+  const [unBindAcc, { isLoading: unBinding }] = useThird_party_unbindMutation();
 
-  async function unBind() {
+  async function unBind(provider) {
     try {
-      const res = await unBindAcc().unwrap();
+      const res = await unBindAcc(provider).unwrap();
       toast.success(res?.message);
     } catch (error) {
       console.error(error);
     }
   }
 
-  if (unBindind) return <ProcessLoader />;
+  if (unBinding) return <ProcessLoader />;
 
   return (
     <BindContainer>
@@ -63,7 +63,7 @@ export default function BindAcc({ googleId, lineId }) {
         {googleId ? (
           <>
             <BindSuccess>成功綁定</BindSuccess>
-            <UnBindBtn disabled={unBindind} onClick={() => unBind()}>
+            <UnBindBtn disabled={unBinding} onClick={() => unBind("google")}>
               解除綁定
             </UnBindBtn>
           </>
@@ -87,7 +87,12 @@ export default function BindAcc({ googleId, lineId }) {
       <BindBox>
         <LineIcon size="2.2rem" $isCursor />
         {lineId ? (
-          <BindSuccess>成功綁定</BindSuccess>
+          <>
+            <BindSuccess>成功綁定</BindSuccess>
+            <UnBindBtn disabled={unBinding} onClick={() => unBind("line")}>
+              解除綁定
+            </UnBindBtn>
+          </>
         ) : (
           <BindDesc>
             <AnchorLink

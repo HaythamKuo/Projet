@@ -1,3 +1,4 @@
+import jwt from "jsonwebtoken";
 import generateToken from "../utils/generateToken.js";
 import asyncHandler from "express-async-handler";
 import userModel from "../models/userModel.js";
@@ -236,4 +237,88 @@ export const removeFavorite = asyncHandler(async (req, res) => {
 
   await user.save();
   res.json(user);
+});
+
+export const unbindThird_party = asyncHandler(async (req, res) => {
+  // const { provider } = req.body;
+  // const token = req.cookies.jwt;
+  // if (!provider || !token) throw new Error("無識別符或cookie");
+
+  // const { userId } = jwt.verify(token, process.env.JWT_SECRET);
+  // const user = await userModel.findById(userId);
+
+  // if (!user) throw new Error("無使用者資料");
+
+  // if (provider === "google" && !user.googleId) {
+  //   throw new Error("請先設定密碼");
+  // } else {
+  //   user.googleId = null;
+  //   user.optionMail = null;
+  //   user.optionName = null;
+
+  //   const newIdentity = user.authProvider.filter((item) => item !== "google");
+  //   user.authProvider = [...newIdentity];
+  // }
+
+  // if (provider === "line" && !user.lineId) {
+  //   throw new Error("沒有綁定line帳戶");
+  // } else {
+  //   user.lineId = null;
+  //   user.optionMail = null;
+  //   user.optionName = null;
+
+  //   const newIdentity = user.authProvider.filter((item) => item !== "line");
+  //   user.authProvider = [...newIdentity];
+  // }
+  // await user.save();
+  // res.status(201).json({ message: "成功解除綁定" });
+  const { provider } = req.body;
+  const token = req.cookies.jwt;
+
+  if (!provider || !token) {
+    res.status(400);
+    throw new Error("缺少 provider 或 token");
+  }
+
+  const { userId } = jwt.verify(token, process.env.JWT_SECRET);
+  const user = await userModel.findById(userId);
+  if (!user) {
+    res.status(401);
+    throw new Error("無使用者資料");
+  }
+
+  if (!user.password) {
+    res.status(400);
+    throw new Error("請先設定密碼");
+  }
+
+  switch (provider) {
+    case "google":
+      if (!user.googleId) {
+        res.status(400);
+        throw new Error("沒有綁定 Google 帳戶");
+      }
+      user.googleId = null;
+      user.authProvider = user.authProvider.filter((p) => p !== "google");
+      break;
+
+    case "line":
+      if (!user.lineId) {
+        res.status(400);
+        throw new Error("沒有綁定 Line 帳戶");
+      }
+      user.lineId = null;
+      user.authProvider = user.authProvider.filter((p) => p !== "line");
+      break;
+
+    default:
+      res.status(400);
+      throw new Error("不支援的第三方登入類型");
+  }
+
+  user.optionMail = null;
+  user.optionName = null;
+
+  await user.save();
+  res.status(200).json({ message: "成功解除綁定" });
 });
