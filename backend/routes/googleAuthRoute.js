@@ -6,6 +6,8 @@ import generateToken from "../utils/generateToken.js";
 
 const googleAuthRouter = Router();
 
+const isProduction = process.env.NODE_ENV === "production";
+
 //指向登入
 googleAuthRouter.get(
   "/auth/google/",
@@ -27,7 +29,11 @@ googleAuthRouter.get(
 googleAuthRouter.get(
   "/auth/google/callback",
   passport.authenticate("google", {
-    failureRedirect: `${process.env.CLIENT_ROUTE_DEV}/products`,
+    failureRedirect: `${
+      isProduction
+        ? process.env.CLIENT_PRODUCTION
+        : process.env.CLIENT_ROUTE_DEV
+    }/products`,
 
     session: false,
   }),
@@ -50,10 +56,22 @@ googleAuthRouter.get(
       // 這裡才發 token
       generateToken(res, user._id);
 
-      return res.redirect(`${process.env.CLIENT_ROUTE_DEV}/profile`);
+      return res.redirect(
+        `${
+          isProduction
+            ? process.env.CLIENT_PRODUCTION
+            : process.env.CLIENT_ROUTE_DEV
+        }/profile`
+      );
     } catch (err) {
       console.error("Google login error:", err);
-      return res.redirect(`${process.env.CLIENT_ROUTE_DEV}/products`);
+      return res.redirect(
+        `${
+          isProduction
+            ? process.env.CLIENT_PRODUCTION
+            : process.env.CLIENT_ROUTE_DEV
+        }/products`
+      );
     }
   }
 );
@@ -62,7 +80,11 @@ googleAuthRouter.get(
 googleAuthRouter.get(
   "/auth/google/bind/callback",
   passport.authenticate("google-bind", {
-    failureRedirect: `${process.env.CLIENT_ROUTE_DEV}/products`,
+    failureRedirect: `${
+      isProduction
+        ? process.env.CLIENT_PRODUCTION
+        : process.env.CLIENT_ROUTE_DEV
+    }/products`,
     session: false,
   }),
   async (req, res) => {
@@ -71,14 +93,26 @@ googleAuthRouter.get(
 
       const token = req.cookies.jwt;
       if (!token) {
-        return res.redirect(`${process.env.CLIENT_ROUTE_DEV}/auth`);
+        return res.redirect(
+          `${
+            isProduction
+              ? process.env.CLIENT_PRODUCTION
+              : process.env.CLIENT_ROUTE_DEV
+          }/auth`
+        );
       }
 
       const { userId } = jwt.verify(token, process.env.JWT_SECRET);
       const localUser = await userModel.findById(userId);
       //除錯 避免不必要的錯誤
       if (!localUser)
-        return res.redirect(`${process.env.CLIENT_ROUTE_DEV}/auth`);
+        return res.redirect(
+          `${
+            isProduction
+              ? process.env.CLIENT_PRODUCTION
+              : process.env.CLIENT_ROUTE_DEV
+          }/auth`
+        );
 
       /**
        * 註冊google -> 註冊本地-> 註冊google(綁原來帳戶)
@@ -89,7 +123,11 @@ googleAuthRouter.get(
 
       if (GooUser) {
         return res.redirect(
-          `${process.env.CLIENT_ROUTE_DEV}/profile?bind=failed`
+          `${
+            isProduction
+              ? process.env.CLIENT_PRODUCTION
+              : process.env.CLIENT_ROUTE_DEV
+          }/profile?bind=failed`
         );
       }
 
@@ -100,11 +138,15 @@ googleAuthRouter.get(
       });
       if (mailUser) {
         return res.redirect(
-          `${process.env.CLIENT_ROUTE_DEV}/profile?bind=email-conflict`
+          `${
+            isProduction
+              ? process.env.CLIENT_PRODUCTION
+              : process.env.CLIENT_ROUTE_DEV
+          }/profile?tab=third-party&error=google_same_email`
         );
       }
 
-      console.log(req.user);
+      // console.log(req.user);
 
       // 綁定 Google
       localUser.googleId = req.user.id;
@@ -114,44 +156,56 @@ googleAuthRouter.get(
       localUser.optionName = req.user.displayName;
       await localUser.save();
 
-      return res.redirect(`${process.env.CLIENT_ROUTE_DEV}/profile`);
+      return res.redirect(
+        `${
+          isProduction
+            ? process.env.CLIENT_PRODUCTION
+            : process.env.CLIENT_ROUTE_DEV
+        }/profile`
+      );
     } catch (err) {
       console.error("Google bind error:", err);
-      return res.redirect(`${process.env.CLIENT_ROUTE_DEV}/login`);
+      return res.redirect(
+        `${
+          isProduction
+            ? process.env.CLIENT_PRODUCTION
+            : process.env.CLIENT_ROUTE_DEV
+        }/auth`
+      );
     }
   }
 );
 
 //解除綁定
-googleAuthRouter.delete("/auth/google/unbind", async (req, res) => {
-  try {
-    const googleToken = req.cookies.jwt;
-    if (!googleToken) return res.sendStatus(401);
+// googleAuthRouter.delete("/auth/google/unbind", async (req, res) => {
+//   try {
+//     const googleToken = req.cookies.jwt;
+//     if (!googleToken) return res.sendStatus(401);
 
-    const { userId } = jwt.verify(googleToken, process.env.JWT_SECRET);
-    const user = await userModel.findById(userId);
-    if (!user) return res.sendStatus(401);
-    if (!user.googleId)
-      return res.status(400).json({ message: "沒有綁定google帳戶" });
-    if (!user.password)
-      return res
-        .status(400)
-        .json({ message: "Please set a password before unbinding Google." });
+//     const { userId } = jwt.verify(googleToken, process.env.JWT_SECRET);
+//     const user = await userModel.findById(userId);
+//     if (!user) return res.sendStatus(401);
+//     if (!user.googleId)
+//       return res.status(400).json({ message: "沒有綁定google帳戶" });
+//     if (!user.password)
+//       return res
+//         .status(400)
+//         .json({ message: "Please set a password before unbinding Google." });
 
-    user.googleId = null;
-    user.optionMail = null;
-    user.optionName = null;
+//     user.googleId = null;
+//     user.optionMail = null;
+//     user.optionName = null;
 
-    const newIdentity = user.authProvider.filter((item) => item !== "google");
-    // console.log(newIdentity);
+//     const newIdentity = user.authProvider.filter((item) => item !== "google");
+//     // console.log(newIdentity);
 
-    user.authProvider = [...newIdentity];
-    await user.save();
-    res.status(201).json({ message: "成功解除綁定" });
-    //console.log(who);
-  } catch (error) {
-    console.error(error);
-  }
-});
+//     user.authProvider = [...newIdentity];
+//     await user.save();
+//     res.status(201).json({ message: "成功解除綁定" });
+//     //console.log(who);
+//   } catch (error) {
+//     console.error(error);
+//   }
+// });
 
 export default googleAuthRouter;

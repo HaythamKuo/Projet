@@ -23,6 +23,10 @@ const AUTH_ERROR_MAP = {
     title: "無法獲得授權",
     message: "無法獲得你的 line 帳戶授權",
   },
+  google_same_email: {
+    title: "重複郵件",
+    message: "該郵件已有其他人使用",
+  },
 };
 
 export default function useHandleErr() {
