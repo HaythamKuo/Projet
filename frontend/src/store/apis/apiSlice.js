@@ -72,20 +72,6 @@ const usersApi = createApi({
 
         //middleware
         async onQueryStarted(productId, { dispatch, queryFulfilled }) {
-          // const { _id: userId } = store.getState().auth.userInfo;
-
-          // const patchRes = dispatch(
-          //   usersApi.util.updateQueryData("getProfile", undefined, (draft) => {
-          //     if (!draft.favorites) draft.favorites = [];
-          //     const idx = draft.favorites.indexOf(productId);
-          //     if (idx === -1) {
-          //       draft.favorites.push(productId);
-          //     } else {
-          //       draft.favorites.splice(idx, 1);
-          //     }
-          //   })
-          // );
-
           const patchSaveprods = dispatch(
             usersApi.util.updateQueryData(
               "getSaveProds",

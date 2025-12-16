@@ -14,7 +14,7 @@ import { useLoginMutation } from "../store/apis/apiSlice";
 import { setCredentials } from "../store/slices/authSlice";
 import { toast } from "react-toastify";
 import ProcessLoader from "../styles/UI/ProcessLoader";
-import LineLoginConfig from "../config/LineLoginConfig";
+
 import { LineIcon } from "../styles/Checkout.style";
 
 function LoginPage() {
@@ -131,12 +131,6 @@ function LoginPage() {
             <Google />
           </a>
         )}
-
-        {/* <a href="http://localhost:5001/api/google/auth/google">
-          <Google />
-        </a> */}
-
-        {/* <LineLoginConfig /> */}
 
         {import.meta.env.DEV ? (
           <a href="http://localhost:5001/api/line/lineauth">

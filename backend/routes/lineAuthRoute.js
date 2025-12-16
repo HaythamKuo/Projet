@@ -11,65 +11,136 @@ import generateToken from "../utils/generateToken.js";
 import { unbindThird_party } from "../controllers/userController.js";
 
 const isProduction = process.env.NODE_ENV === "production";
-const STATE = crypto.randomBytes(16).toString("hex");
-const line_obj = {
-  response_type: "code",
-  client_id: process.env.LINE_CLIENT_ID,
-  redirect_uri: `${
-    isProduction
-      ? process.env.ECPAYRETURN_URL_PRODUCTION
-      : "http://localhost:5001"
-  }/api/line/callback`,
-  state: STATE,
-  scope: "email openid profile",
-};
 
-const line_bind = {
-  ...line_obj,
-  redirect_uri: `${
-    isProduction
-      ? process.env.ECPAYRETURN_URL_PRODUCTION
-      : "http://localhost:5001"
-  }/api/line/bind/callback`,
-};
+async function getLineToken(code, ckPath) {
+  const tokenUrl = "https://api.line.me/oauth2/v2.1/token";
+
+  const options = {
+    grant_type: "authorization_code",
+    code,
+    redirect_uri: `${
+      isProduction
+        ? process.env.ECPAYRETURN_URL_PRODUCTION
+        : "http://localhost:5001"
+    }${ckPath}`,
+    client_id: process.env.LINE_CLIENT_ID,
+    client_secret: process.env.LINE_CLIENT_SECRET,
+  };
+
+  const lineRes = await axios.post(tokenUrl, qs.stringify(options), {
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+  });
+  return lineRes.data;
+}
+
+// const line_obj = {
+//   response_type: "code",
+//   client_id: process.env.LINE_CLIENT_ID,
+//   redirect_uri: `${
+//     isProduction
+//       ? process.env.ECPAYRETURN_URL_PRODUCTION
+//       : "http://localhost:5001"
+//   }/api/line/callback`,
+//   state: STATE,
+//   scope: "email openid profile",
+// };
+
+// const line_bind = {
+//   ...line_obj,
+//   redirect_uri: `${
+//     isProduction
+//       ? process.env.ECPAYRETURN_URL_PRODUCTION
+//       : "http://localhost:5001"
+//   }/api/line/bind/callback`,
+// };
 
 const lineAuthRouter = Router();
 
 lineAuthRouter.get("/lineauth", async (req, res) => {
-  const lintStr = new URLSearchParams(line_obj).toString();
+  const state = crypto.randomBytes(16).toString("hex");
+  res.cookie("line_auth_state", state, {
+    httpOnly: true,
+    secure: isProduction,
+    maxAge: 5 * 60 * 1000,
+  });
 
-  const finalUrl = `https://access.line.me/oauth2/v2.1/authorize?${lintStr}`;
+  // const lintStr = new URLSearchParams(line_obj).toString();
+
+  const query = qs.stringify({
+    response_type: "code",
+    client_id: process.env.LINE_CLIENT_ID,
+    redirect_uri: `${
+      isProduction
+        ? process.env.ECPAYRETURN_URL_PRODUCTION
+        : "http://localhost:5001"
+    }/api/line/callback`,
+    state,
+    scope: "email openid profile",
+  });
+
+  // const finalUrl = `https://access.line.me/oauth2/v2.1/authorize?${lintStr}`;
+  const finalUrl = `https://access.line.me/oauth2/v2.1/authorize?${query}`;
 
   res.redirect(finalUrl);
 });
 
 lineAuthRouter.get("/callback", async (req, res) => {
-  const { code } = req.query;
+  const { code, state, error } = req.query;
 
-  try {
-    const lineRes = await axios.post(
-      "https://api.line.me/oauth2/v2.1/token",
-      qs.stringify({
-        grant_type: "authorization_code",
-        code,
-        redirect_uri: `${
-          isProduction
-            ? process.env.ECPAYRETURN_URL_PRODUCTION
-            : "http://localhost:5001"
-        }/api/line/callback`,
-        client_id: process.env.LINE_CLIENT_ID,
-        client_secret: process.env.LINE_CLIENT_SECRET,
-      }),
-      {
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      }
+  const storeState = req.cookies.line_auth_state;
+
+  if (!code || error)
+    return res.redirect(
+      `${
+        isProduction
+          ? process.env.CLIENT_PRODUCTION
+          : process.env.CLIENT_ROUTE_DEV
+      }/auth?error=user_denied`
+    );
+  if (!state || state !== storeState)
+    return res.redirect(
+      `${
+        isProduction
+          ? process.env.CLIENT_PRODUCTION
+          : process.env.CLIENT_ROUTE_DEV
+      }/auth?error=invalid_state`
     );
 
-    const { id_token } = lineRes.data;
+  try {
+    // const lineRes = await axios.post(
+    //   "https://api.line.me/oauth2/v2.1/token",
+    //   qs.stringify({
+    //     grant_type: "authorization_code",
+    //     code,
+    //     redirect_uri: `${
+    //       isProduction
+    //         ? process.env.ECPAYRETURN_URL_PRODUCTION
+    //         : "http://localhost:5001"
+    //     }/api/line/callback`,
+    //     client_id: process.env.LINE_CLIENT_ID,
+    //     client_secret: process.env.LINE_CLIENT_SECRET,
+    //   }),
+    //   {
+    //     headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    //   }
+    // );
+
+    const data = await getLineToken(code, "/api/line/callback");
+    // console.log(data);
+
+    const { id_token } = data;
+    // const { id_token } = lineRes.data;
 
     if (!id_token) {
       res.status(400);
-      throw new Error("登入過程中發生一些錯誤");
+      // throw new Error("登入過程中發生一些錯誤");
+      return res.redirect(
+        `${
+          isProduction
+            ? process.env.CLIENT_PRODUCTION
+            : process.env.CLIENT_ROUTE_DEV
+        }/auth?error=line_login_failed`
+      );
     }
 
     const decodeUser = jwt.decode(id_token);
@@ -89,8 +160,13 @@ lineAuthRouter.get("/callback", async (req, res) => {
       });
     }
     generateToken(res, lineUser._id);
-    return res.redirect(`${process.env.CLIENT_ROUTE_DEV}/profile`);
-    // res.json({ success: true, name: lineUser.name, email: lineUser.email });
+    return res.redirect(
+      `${
+        isProduction
+          ? process.env.CLIENT_PRODUCTION
+          : process.env.CLIENT_ROUTE_DEV
+      }/profile`
+    );
   } catch (error) {
     console.error("跟 LINE 溝通失敗:", error.response?.data || error.message);
     res.status(400).json({ success: false, message: "登入失敗" });
@@ -99,22 +175,59 @@ lineAuthRouter.get("/callback", async (req, res) => {
 
 //指向綁定
 lineAuthRouter.get("/bind", protect, async (req, res) => {
-  const lineStr = new URLSearchParams(line_bind).toString();
+  const state = crypto.randomBytes(16).toString("hex");
+  res.cookie("line_bind_state", state, {
+    httpOnly: true,
+    secure: isProduction,
+    maxAge: 5 * 60 * 1000,
+  });
 
-  const finalUrl = `https://access.line.me/oauth2/v2.1/authorize?${lineStr}`;
+  const query = qs.stringify({
+    response_type: "code",
+    client_id: process.env.LINE_CLIENT_ID,
+    redirect_uri: `${
+      isProduction
+        ? process.env.ECPAYRETURN_URL_PRODUCTION
+        : "http://localhost:5001"
+    }/api/line/bind/callback`,
+    state,
+    scope: "email openid profile",
+  });
+
+  // const lineStr = new URLSearchParams(line_bind).toString();
+
+  const finalUrl = `https://access.line.me/oauth2/v2.1/authorize?${query}`;
 
   res.redirect(finalUrl);
 });
 
 lineAuthRouter.get("/bind/callback", async (req, res) => {
-  const { code } = req.query;
+  const { code, state, error } = req.query;
+
+  const storeState = req.cookies.line_bind_state;
+
   const token = req.cookies.jwt;
 
   if (!token) {
     return res.redirect(
-      `${process.env.CLIENT_ROUTE_DEV}/auth?error=not_logged_in`
+      `${
+        isProduction
+          ? process.env.CLIENT_PRODUCTION
+          : process.env.CLIENT_ROUTE_DEV
+      }/auth?error=not_logged_in`
     );
   }
+
+  if (error || !state || state !== storeState) {
+    return res.redirect(
+      `${
+        isProduction
+          ? process.env.CLIENT_PRODUCTION
+          : process.env.CLIENT_ROUTE_DEV
+      }/auth?error=invalid_state`
+    );
+  }
+
   try {
     const { userId } = jwt.verify(token, process.env.JWT_SECRET);
 
@@ -122,38 +235,52 @@ lineAuthRouter.get("/bind/callback", async (req, res) => {
 
     if (!localUser) throw new Error("找不到該使用者");
 
-    const lineRes = await axios.post(
-      "https://api.line.me/oauth2/v2.1/token",
-      qs.stringify({
-        grant_type: "authorization_code",
-        code,
-        redirect_uri: `${
-          isProduction
-            ? process.env.ECPAYRETURN_URL_PRODUCTION
-            : "http://localhost:5001"
-        }/api/line/bind/callback`,
-        client_id: process.env.LINE_CLIENT_ID,
-        client_secret: process.env.LINE_CLIENT_SECRET,
-      }),
-      {
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      }
-    );
+    // const lineRes = await axios.post(
+    //   "https://api.line.me/oauth2/v2.1/token",
+    //   qs.stringify({
+    //     grant_type: "authorization_code",
+    //     code,
+    //     redirect_uri: `${
+    //       isProduction
+    //         ? process.env.ECPAYRETURN_URL_PRODUCTION
+    //         : "http://localhost:5001"
+    //     }/api/line/bind/callback`,
+    //     client_id: process.env.LINE_CLIENT_ID,
+    //     client_secret: process.env.LINE_CLIENT_SECRET,
+    //   }),
+    //   {
+    //     headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    //   }
+    // );
+    const data = await getLineToken(code, "/api/line/bind/callback");
 
-    const { id_token } = lineRes.data;
+    const { id_token } = data;
     if (!id_token) throw new Error("登入過程中發生一些錯誤");
 
     const decodeUser = jwt.decode(id_token);
+    const lineUserId = decodeUser.sub;
 
-    const existingUser = await userModel.findOne({ lineId: decodeUser.sub });
+    const existingUser = await userModel.findOne({ lineId: lineUserId });
 
-    if (
-      existingUser &&
-      existingUser._id.toString() === localUser._id.toString()
-    ) {
-      res.redirect(
-        `${process.env.CLIENT_ROUTE_DEV}/profile?error=line_already_bound`
-      );
+    if (existingUser) {
+      //本地使用者轉向綁定已擁有的lineacc
+      if (existingUser._id.toString() !== localUser._id.toString()) {
+        return res.redirect(
+          `${
+            isProduction
+              ? process.env.CLIENT_PRODUCTION
+              : process.env.CLIENT_ROUTE_DEV
+          }/profile?tab=third-party&error=conflict`
+        );
+      } else {
+        return res.redirect(
+          `${
+            isProduction
+              ? process.env.CLIENT_PRODUCTION
+              : process.env.CLIENT_ROUTE_DEV
+          }/profile?tab=third-party&error=line_already_bound`
+        );
+      }
     }
 
     localUser.lineId = decodeUser.sub;
@@ -163,11 +290,21 @@ lineAuthRouter.get("/bind/callback", async (req, res) => {
 
     await localUser.save();
 
-    res.redirect(`${process.env.CLIENT_ROUTE_DEV}/profile`);
+    res.redirect(
+      `${
+        isProduction
+          ? process.env.CLIENT_PRODUCTION
+          : process.env.CLIENT_ROUTE_DEV
+      }/profile`
+    );
   } catch (error) {
     console.error("LINE Bind Error:", error);
     return res.redirect(
-      `${process.env.CLIENT_ROUTE_DEV}/profile?error=bind_failed`
+      `${
+        isProduction
+          ? process.env.CLIENT_PRODUCTION
+          : process.env.CLIENT_ROUTE_DEV
+      }/profile?tab=third-party&error=bind_failed`
     );
   }
 });

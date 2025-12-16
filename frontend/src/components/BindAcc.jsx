@@ -6,6 +6,7 @@ import { LineIcon } from "../styles/Checkout.style";
 import { flexCenter } from "../styles/theme";
 import { useThird_party_unbindMutation } from "../store/apis/apiSlice";
 import ProcessLoader from "../styles/UI/ProcessLoader";
+import useHandleErr from "../hooks/userHandleErr";
 
 const BindContainer = styled.div`
   ${flexCenter}
@@ -43,6 +44,10 @@ const AnchorLink = styled.a`
 const UnBindBtn = styled.button``;
 
 export default function BindAcc({ googleId, lineId }) {
+  // const { data, isLoading } = useThird_party_bindQuery();
+
+  useHandleErr();
+
   const [unBindAcc, { isLoading: unBinding }] = useThird_party_unbindMutation();
 
   async function unBind(provider) {
@@ -50,7 +55,8 @@ export default function BindAcc({ googleId, lineId }) {
       const res = await unBindAcc(provider).unwrap();
       toast.success(res?.message);
     } catch (error) {
-      console.error(error);
+      // console.error(error?.data?.message);
+      toast.error(error?.data?.message);
     }
   }
 
@@ -106,6 +112,7 @@ export default function BindAcc({ googleId, lineId }) {
             >
               綁定至Line
             </AnchorLink>
+            {/* <button onClick={() => bind()}>綁定至Line</button> */}
           </BindDesc>
         )}
       </BindBox>
