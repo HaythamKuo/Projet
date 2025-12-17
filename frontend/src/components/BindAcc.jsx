@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import { toast } from "react-toastify";
 import styled from "styled-components";
 
@@ -7,6 +8,10 @@ import { flexCenter } from "../styles/theme";
 import { useThird_party_unbindMutation } from "../store/apis/apiSlice";
 import ProcessLoader from "../styles/UI/ProcessLoader";
 import useHandleErr from "../hooks/userHandleErr";
+import Modal from "./Modal";
+import { SubmitBtn, CancelBtn } from "../styles/ProdImgGallery.style";
+import UnbindBtn from "../styles/UI/UnbindBtn";
+import BindBtn from "../styles/UI/BindBtn";
 
 const BindContainer = styled.div`
   ${flexCenter}
@@ -23,97 +28,119 @@ const BindBox = styled.div`
   align-items: center;
   gap: 1rem;
 `;
-const BindDesc = styled.button`
-  border: none;
-  background-color: transparent;
 
-  &:hover {
-    background-color: none;
-  }
+//Modal
+const NotifyTitle = styled.h3`
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
 `;
-
-const BindSuccess = styled.span`
-  color: ${({ theme }) => theme.colors.default};
-  font-size: 1rem;
-`;
-
-const AnchorLink = styled.a`
-  color: ${({ theme }) => theme.colors.default};
-`;
-
-const UnBindBtn = styled.button``;
 
 export default function BindAcc({ googleId, lineId }) {
-  // const { data, isLoading } = useThird_party_bindQuery();
+  const dialogRef = useRef(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isDirect, setIsDirect] = useState(false);
+  const [currentProvider, setCurrentProvider] = useState(null);
 
   useHandleErr();
 
   const [unBindAcc, { isLoading: unBinding }] = useThird_party_unbindMutation();
 
+  function showModal(provider) {
+    if (dialogRef.current && !dialogRef.current.open) {
+      setCurrentProvider(provider);
+      setIsOpen(true);
+    }
+  }
+
   async function unBind(provider) {
     try {
       const res = await unBindAcc(provider).unwrap();
+      // console.log(res);
+
       toast.success(res?.message);
+      setCurrentProvider(null);
+      setIsOpen(false);
     } catch (error) {
-      // console.error(error?.data?.message);
+      console.error(error?.data?.message);
       toast.error(error?.data?.message);
     }
+  }
+
+  //實現跳轉 → google/line
+  function handleForward(provider) {
+    if (isDirect) return;
+    const option =
+      provider === "google" ? "/api/google/auth/google/bind" : "/api/line/bind";
+
+    const finalUrl =
+      (import.meta.env.DEV
+        ? import.meta.env.VITE_SERVER_DEV
+        : import.meta.env.VITE_SERVER_PRODUCTION) + option;
+    setIsDirect(true);
+    window.location.href = finalUrl;
   }
 
   if (unBinding) return <ProcessLoader />;
 
   return (
     <BindContainer>
+      <Modal
+        ref={dialogRef}
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        height="500px"
+        width="600px"
+      >
+        <NotifyTitle>確定要解除綁定嗎？</NotifyTitle>
+        <div
+          style={{
+            display: "flex",
+            gap: "2rem",
+          }}
+        >
+          <SubmitBtn
+            disabled={unBinding}
+            onClick={() => unBind(currentProvider)}
+          >
+            確定
+          </SubmitBtn>
+          <CancelBtn onClick={() => setIsOpen(false)}>取消</CancelBtn>
+        </div>
+      </Modal>
+
       <BindBox>
         <GoogleIcon />
+
         {googleId ? (
-          <>
-            <BindSuccess>成功綁定</BindSuccess>
-            <UnBindBtn disabled={unBinding} onClick={() => unBind("google")}>
-              解除綁定
-            </UnBindBtn>
-          </>
+          <UnbindBtn
+            content="解除綁定"
+            disabled={unBinding}
+            onClick={() => showModal("google")}
+          />
         ) : (
-          <BindDesc>
-            <AnchorLink
-              href={`
-                ${
-                  import.meta.env.DEV
-                    ? import.meta.env.VITE_SERVER_DEV
-                    : import.meta.env.VITE_SERVER_PRODUCTION
-                }/api/google/auth/google/bind
-                `}
-            >
-              綁定至Google
-            </AnchorLink>
-          </BindDesc>
+          <BindBtn
+            disabled={isDirect}
+            content="綁定至Google"
+            onClick={() => handleForward("google")}
+          />
         )}
       </BindBox>
 
       <BindBox>
         <LineIcon size="2.2rem" $isCursor />
         {lineId ? (
-          <>
-            <BindSuccess>成功綁定</BindSuccess>
-            <UnBindBtn disabled={unBinding} onClick={() => unBind("line")}>
-              解除綁定
-            </UnBindBtn>
-          </>
+          <UnbindBtn
+            content="解除綁定"
+            disabled={unBinding}
+            onClick={() => showModal("line")}
+          />
         ) : (
-          <BindDesc>
-            <AnchorLink
-              href={`
-                ${
-                  import.meta.env.DEV
-                    ? import.meta.env.VITE_SERVER_DEV
-                    : import.meta.env.VITE_SERVER_PRODUCTION
-                }/api/line/bind
-                `}
-            >
-              綁定至Line
-            </AnchorLink>
-            {/* <button onClick={() => bind()}>綁定至Line</button> */}
-          </BindDesc>
+          <BindBtn
+            content="綁定至Line"
+            disabled={isDirect}
+            onClick={() => handleForward("line")}
+          />
         )}
       </BindBox>
     </BindContainer>

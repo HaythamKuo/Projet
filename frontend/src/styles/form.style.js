@@ -112,3 +112,10 @@ export const ErrMes = styled.p`
 export const Google = styled(GoogleIcon)`
   color: ${({ theme }) => theme.colors.default};
 `;
+
+export const ThirdBox = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+`;

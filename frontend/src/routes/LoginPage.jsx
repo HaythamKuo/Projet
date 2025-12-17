@@ -8,6 +8,7 @@ import {
   FormContainer,
   OptText,
   Google,
+  ThirdBox,
 } from "../styles/form.style";
 
 import { useLoginMutation } from "../store/apis/apiSlice";
@@ -122,25 +123,27 @@ function LoginPage() {
           <OptText to="register">沒有帳號嗎？立刻註冊</OptText>
         </FormContainer>
         <Divider>或是選擇</Divider>
-        {import.meta.env.DEV ? (
-          <a href="http://localhost:5001/api/google/auth/google">
-            <Google />
-          </a>
-        ) : (
-          <a href="https://dollserver.zeabur.app/api/google/auth/google">
-            <Google />
-          </a>
-        )}
+        <ThirdBox>
+          {import.meta.env.DEV ? (
+            <a href="http://localhost:5001/api/google/auth/google">
+              <Google />
+            </a>
+          ) : (
+            <a href="https://dollserver.zeabur.app/api/google/auth/google">
+              <Google />
+            </a>
+          )}
 
-        {import.meta.env.DEV ? (
-          <a href="http://localhost:5001/api/line/lineauth">
-            <LineIcon size="2.2rem" />
-          </a>
-        ) : (
-          <a href="https://dollserver.zeabur.app/api/line/lineauth">
-            <LineIcon size="2.2rem" />
-          </a>
-        )}
+          {import.meta.env.DEV ? (
+            <a href="http://localhost:5001/api/line/lineauth">
+              <LineIcon size="2.2rem" />
+            </a>
+          ) : (
+            <a href="https://dollserver.zeabur.app/api/line/lineauth">
+              <LineIcon size="2.2rem" />
+            </a>
+          )}
+        </ThirdBox>
       </Container>
     </>
   );

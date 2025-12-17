@@ -309,34 +309,6 @@ lineAuthRouter.get("/bind/callback", async (req, res) => {
   }
 });
 
-//指向解除綁定
-// lineAuthRouter.delete("/unbind", async (req, res) => {
-//   try {
-//     const lineToken = req.cookies.jwt;
-//     //應該可以拋錯
-//     if (!lineToken) return res.sendStatus(401);
-//     const { userId } = jwt.verify(lineToken, process.env.JWT_SECRET);
-
-//     const user = await userModel.findById(userId);
-//     if (!user) return res.sendStatus(401);
-//     if (!user.lineId) throw new Error("沒有綁定line帳戶");
-
-//     //導向到設定密碼頁面 res.redirect(...)
-//     if (!user.password) throw new Error("請先設定密碼");
-
-//     user.lineId = null;
-//     user.optionMail = null;
-//     user.optionName = null;
-
-//     const newIdentity = user.authProvider.filter((item) => item !== "line");
-//     user.authProvider = [...newIdentity];
-//     await user.save();
-//     res.status(201).json({ message: "成功解除綁定" });
-//   } catch (error) {
-//     console.error(error);
-//   }
-// });
-
 lineAuthRouter.delete("/unbind", unbindThird_party);
 
 export default lineAuthRouter;

@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import passport from "../config/passport.js";
 import userModel from "../models/userModel.js";
 import generateToken from "../utils/generateToken.js";
+import { unbindThird_party } from "../controllers/userController.js";
 
 const googleAuthRouter = Router();
 
@@ -39,21 +40,70 @@ googleAuthRouter.get(
   }),
   //透過google登入
   async (req, res) => {
+    // try {
+    //   // 這裡完全不管 cookie，因為使用者是登出狀態
+    //   let user = await userModel.findOne({ googleId: req.user.id });
+
+    //   if (!user) {
+    //     // 第一次用 Google 登入 → 建立帳號
+    //     user = await userModel.create({
+    //       name: req.user.displayName,
+    //       email: req.user.emails[0].value,
+    //       googleId: req.user.id,
+    //       authProvider: "google",
+    //     });
+    //   }
+
+    //   // 這裡才發 token
+    //   generateToken(res, user._id);
+
+    //   return res.redirect(
+    //     `${
+    //       isProduction
+    //         ? process.env.CLIENT_PRODUCTION
+    //         : process.env.CLIENT_ROUTE_DEV
+    //     }/profile`
+    //   );
+    // } catch (err) {
+    //   console.error("Google login error:", err);
+    //   return res.redirect(
+    //     `${
+    //       isProduction
+    //         ? process.env.CLIENT_PRODUCTION
+    //         : process.env.CLIENT_ROUTE_DEV
+    //     }/products`
+    //   );
+    // }
+
     try {
-      // 這裡完全不管 cookie，因為使用者是登出狀態
-      let user = await userModel.findOne({ googleId: req.user.id });
+      const googleId = req.user.id;
+      const email = req.user.emails[0].value;
+      const name = req.user.displayName;
+
+      // ① 先用 email 找人（最重要）
+      let user = await userModel.findOne({ email });
 
       if (!user) {
-        // 第一次用 Google 登入 → 建立帳號
+        // ② 完全新用戶
         user = await userModel.create({
-          name: req.user.displayName,
-          email: req.user.emails[0].value,
-          googleId: req.user.id,
-          authProvider: "google",
+          name,
+          email,
+          googleId,
+          authProvider: ["google"],
         });
+      } else {
+        // ③ 已存在帳戶（本地 or 其他）
+        if (!user.googleId) {
+          user.googleId = googleId;
+        }
+
+        if (!user.authProvider.includes("google")) {
+          user.authProvider.push("google");
+        }
+
+        await user.save();
       }
 
-      // 這裡才發 token
       generateToken(res, user._id);
 
       return res.redirect(
@@ -176,36 +226,6 @@ googleAuthRouter.get(
   }
 );
 
-//解除綁定
-// googleAuthRouter.delete("/auth/google/unbind", async (req, res) => {
-//   try {
-//     const googleToken = req.cookies.jwt;
-//     if (!googleToken) return res.sendStatus(401);
-
-//     const { userId } = jwt.verify(googleToken, process.env.JWT_SECRET);
-//     const user = await userModel.findById(userId);
-//     if (!user) return res.sendStatus(401);
-//     if (!user.googleId)
-//       return res.status(400).json({ message: "沒有綁定google帳戶" });
-//     if (!user.password)
-//       return res
-//         .status(400)
-//         .json({ message: "Please set a password before unbinding Google." });
-
-//     user.googleId = null;
-//     user.optionMail = null;
-//     user.optionName = null;
-
-//     const newIdentity = user.authProvider.filter((item) => item !== "google");
-//     // console.log(newIdentity);
-
-//     user.authProvider = [...newIdentity];
-//     await user.save();
-//     res.status(201).json({ message: "成功解除綁定" });
-//     //console.log(who);
-//   } catch (error) {
-//     console.error(error);
-//   }
-// });
+googleAuthRouter.delete("/auth/google/unbind", unbindThird_party);
 
 export default googleAuthRouter;

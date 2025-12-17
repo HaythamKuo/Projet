@@ -273,6 +273,8 @@ export const unbindThird_party = asyncHandler(async (req, res) => {
   // await user.save();
   // res.status(201).json({ message: "成功解除綁定" });
   const { provider } = req.body;
+  console.log(provider);
+
   const token = req.cookies.jwt;
 
   if (!provider || !token) {
