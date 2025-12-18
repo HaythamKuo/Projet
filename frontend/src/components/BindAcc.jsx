@@ -10,8 +10,9 @@ import ProcessLoader from "../styles/UI/ProcessLoader";
 import useHandleErr from "../hooks/userHandleErr";
 import Modal from "./Modal";
 import { SubmitBtn, CancelBtn } from "../styles/ProdImgGallery.style";
-import UnbindBtn from "../styles/UI/UnbindBtn";
+import UnbindBtn from "../styles/UI/UnBindBtn";
 import BindBtn from "../styles/UI/BindBtn";
+import BehaveBtn from "../styles/UI/BehaveBtn.style";
 
 const BindContainer = styled.div`
   ${flexCenter}
@@ -113,34 +114,69 @@ export default function BindAcc({ googleId, lineId }) {
         <GoogleIcon />
 
         {googleId ? (
-          <UnbindBtn
-            content="解除綁定"
-            disabled={unBinding}
+          // <UnbindBtn
+          //   content="解除綁定"
+          //   disabled={unBinding}
+          //   onClick={() => showModal("google")}
+          // />
+          <BehaveBtn
+            beforeTop="0"
+            beforeLeft="0"
+            beforeHeight="100%"
             onClick={() => showModal("google")}
-          />
+          >
+            解除綁定
+          </BehaveBtn>
         ) : (
-          <BindBtn
+          // <BindBtn
+          //   disabled={isDirect}
+          //   content="綁定至Google"
+          //   onClick={() => handleForward("google")}
+          // />
+
+          <BehaveBtn
+            border="0"
+            scaleOnClick
             disabled={isDirect}
-            content="綁定至Google"
             onClick={() => handleForward("google")}
-          />
+          >
+            綁定至Google
+          </BehaveBtn>
         )}
       </BindBox>
 
       <BindBox>
         <LineIcon size="2.2rem" $isCursor />
         {lineId ? (
-          <UnbindBtn
-            content="解除綁定"
-            disabled={unBinding}
+          // <UnbindBtn
+          //   content="解除綁定"
+          //   disabled={unBinding}
+          //   onClick={() => showModal("line")}
+          // />
+
+          <BehaveBtn
+            beforeTop="0"
+            beforeLeft="0"
+            beforeHeight="100%"
             onClick={() => showModal("line")}
-          />
+          >
+            解除綁定
+          </BehaveBtn>
         ) : (
-          <BindBtn
-            content="綁定至Line"
+          // <BindBtn
+          //   content="綁定至Line"
+          //   disabled={isDirect}
+          //   onClick={() => handleForward("line")}
+          // />
+
+          <BehaveBtn
+            border="0"
+            scaleOnClick
             disabled={isDirect}
             onClick={() => handleForward("line")}
-          />
+          >
+            綁定至Line
+          </BehaveBtn>
         )}
       </BindBox>
     </BindContainer>

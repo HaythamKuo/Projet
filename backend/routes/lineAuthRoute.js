@@ -33,27 +33,6 @@ async function getLineToken(code, ckPath) {
   return lineRes.data;
 }
 
-// const line_obj = {
-//   response_type: "code",
-//   client_id: process.env.LINE_CLIENT_ID,
-//   redirect_uri: `${
-//     isProduction
-//       ? process.env.ECPAYRETURN_URL_PRODUCTION
-//       : "http://localhost:5001"
-//   }/api/line/callback`,
-//   state: STATE,
-//   scope: "email openid profile",
-// };
-
-// const line_bind = {
-//   ...line_obj,
-//   redirect_uri: `${
-//     isProduction
-//       ? process.env.ECPAYRETURN_URL_PRODUCTION
-//       : "http://localhost:5001"
-//   }/api/line/bind/callback`,
-// };
-
 const lineAuthRouter = Router();
 
 lineAuthRouter.get("/lineauth", async (req, res) => {
@@ -63,8 +42,6 @@ lineAuthRouter.get("/lineauth", async (req, res) => {
     secure: isProduction,
     maxAge: 5 * 60 * 1000,
   });
-
-  // const lintStr = new URLSearchParams(line_obj).toString();
 
   const query = qs.stringify({
     response_type: "code",
@@ -78,7 +55,6 @@ lineAuthRouter.get("/lineauth", async (req, res) => {
     scope: "email openid profile",
   });
 
-  // const finalUrl = `https://access.line.me/oauth2/v2.1/authorize?${lintStr}`;
   const finalUrl = `https://access.line.me/oauth2/v2.1/authorize?${query}`;
 
   res.redirect(finalUrl);
@@ -107,24 +83,6 @@ lineAuthRouter.get("/callback", async (req, res) => {
     );
 
   try {
-    // const lineRes = await axios.post(
-    //   "https://api.line.me/oauth2/v2.1/token",
-    //   qs.stringify({
-    //     grant_type: "authorization_code",
-    //     code,
-    //     redirect_uri: `${
-    //       isProduction
-    //         ? process.env.ECPAYRETURN_URL_PRODUCTION
-    //         : "http://localhost:5001"
-    //     }/api/line/callback`,
-    //     client_id: process.env.LINE_CLIENT_ID,
-    //     client_secret: process.env.LINE_CLIENT_SECRET,
-    //   }),
-    //   {
-    //     headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    //   }
-    // );
-
     const data = await getLineToken(code, "/api/line/callback");
     // console.log(data);
 
@@ -133,7 +91,7 @@ lineAuthRouter.get("/callback", async (req, res) => {
 
     if (!id_token) {
       res.status(400);
-      // throw new Error("登入過程中發生一些錯誤");
+
       return res.redirect(
         `${
           isProduction
@@ -145,11 +103,13 @@ lineAuthRouter.get("/callback", async (req, res) => {
 
     const decodeUser = jwt.decode(id_token);
 
-    // console.log(decodeUser);
-
     // 有分新會員跟已註冊會員
 
     let lineUser = await userModel.findOne({ lineId: decodeUser.sub });
+
+    if (!lineUser && decodeUser.email) {
+      lineUser = await userModel.findOne({ email: decodeUser.email });
+    }
 
     if (!lineUser) {
       lineUser = await userModel.create({
@@ -158,6 +118,11 @@ lineAuthRouter.get("/callback", async (req, res) => {
         lineId: decodeUser.sub,
         authProvider: ["line"],
       });
+    } else {
+      if (!lineUser.lineId) lineUser.lineId = decodeUser.sub;
+      if (!lineUser.authProvider.includes("line"))
+        lineUser.authProvider.push("line");
+      await lineUser.save();
     }
     generateToken(res, lineUser._id);
     return res.redirect(
@@ -193,8 +158,6 @@ lineAuthRouter.get("/bind", protect, async (req, res) => {
     state,
     scope: "email openid profile",
   });
-
-  // const lineStr = new URLSearchParams(line_bind).toString();
 
   const finalUrl = `https://access.line.me/oauth2/v2.1/authorize?${query}`;
 
@@ -235,23 +198,6 @@ lineAuthRouter.get("/bind/callback", async (req, res) => {
 
     if (!localUser) throw new Error("找不到該使用者");
 
-    // const lineRes = await axios.post(
-    //   "https://api.line.me/oauth2/v2.1/token",
-    //   qs.stringify({
-    //     grant_type: "authorization_code",
-    //     code,
-    //     redirect_uri: `${
-    //       isProduction
-    //         ? process.env.ECPAYRETURN_URL_PRODUCTION
-    //         : "http://localhost:5001"
-    //     }/api/line/bind/callback`,
-    //     client_id: process.env.LINE_CLIENT_ID,
-    //     client_secret: process.env.LINE_CLIENT_SECRET,
-    //   }),
-    //   {
-    //     headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    //   }
-    // );
     const data = await getLineToken(code, "/api/line/bind/callback");
 
     const { id_token } = data;

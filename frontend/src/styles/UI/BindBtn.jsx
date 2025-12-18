@@ -8,11 +8,11 @@ const FeatureBtn = styled.button`
   padding: 15px 25px;
   border: 0;
   border-radius: 15px;
-  color: #212121;
+
   color: ${({ theme }) => theme.colors.backGround};
 
   z-index: 1;
-  background: #e8e8e8;
+
   background: ${({ theme }) => theme.colors.default};
 
   position: relative;
@@ -33,7 +33,7 @@ const FeatureBtn = styled.button`
     height: 0;
     width: 0;
     border-radius: 15px;
-    background-color: #212121;
+
     background-color: ${({ theme }) => theme.spotLight.backGround};
 
     z-index: -1;
@@ -42,7 +42,6 @@ const FeatureBtn = styled.button`
     transition: all 250ms;
   }
   &:hover {
-    color: #e8e8e8;
     color: ${({ theme }) => theme.colors.default};
 
     &::before {
