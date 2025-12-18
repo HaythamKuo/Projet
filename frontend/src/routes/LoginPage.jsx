@@ -9,6 +9,7 @@ import {
   OptText,
   Google,
   ThirdBox,
+  ThirdBtn,
 } from "../styles/form.style";
 
 import { useLoginMutation } from "../store/apis/apiSlice";
@@ -19,6 +20,8 @@ import ProcessLoader from "../styles/UI/ProcessLoader";
 import { LineIcon } from "../styles/Checkout.style";
 
 function LoginPage() {
+  const [click, setClick] = useState(false);
+
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -42,8 +45,6 @@ function LoginPage() {
     (enterValue.password.length < 6 || enterValue.password.length > 15);
 
   //非同步登入處理
-
-  // const { userInfo } = useSelector((state) => state.auth);
 
   //處理登入function與拋出錯誤
   async function handleSubmit(e) {
@@ -82,9 +83,25 @@ function LoginPage() {
     }));
   }
 
+  //自定義處理第三方Oauth導向
+
+  function directToOauth(provider) {
+    if (click) return;
+    const url = import.meta.env.DEV
+      ? "http://localhost:5001"
+      : "https://dollserver.zeabur.app";
+    const route =
+      provider === "google" ? "/api/google/auth/google" : "/api/line/lineauth";
+
+    const finalUrl = url + route;
+    setClick(true);
+
+    window.location.href = finalUrl;
+  }
+
   return (
     <>
-      {isLoading && <ProcessLoader />}
+      {(isLoading || click) && <ProcessLoader />}
 
       <Container>
         <h1>登入你的帳戶</h1>
@@ -124,25 +141,12 @@ function LoginPage() {
         </FormContainer>
         <Divider>或是選擇</Divider>
         <ThirdBox>
-          {import.meta.env.DEV ? (
-            <a href="http://localhost:5001/api/google/auth/google">
-              <Google />
-            </a>
-          ) : (
-            <a href="https://dollserver.zeabur.app/api/google/auth/google">
-              <Google />
-            </a>
-          )}
-
-          {import.meta.env.DEV ? (
-            <a href="http://localhost:5001/api/line/lineauth">
-              <LineIcon size="2.2rem" />
-            </a>
-          ) : (
-            <a href="https://dollserver.zeabur.app/api/line/lineauth">
-              <LineIcon size="2.2rem" />
-            </a>
-          )}
+          <ThirdBtn disabled={click} onClick={() => directToOauth("google")}>
+            <Google />
+          </ThirdBtn>
+          <ThirdBtn disabled={click} onClick={() => directToOauth("line")}>
+            <LineIcon size="2.2rem" />
+          </ThirdBtn>
         </ThirdBox>
       </Container>
     </>

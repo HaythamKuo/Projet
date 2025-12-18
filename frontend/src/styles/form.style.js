@@ -113,9 +113,23 @@ export const Google = styled(GoogleIcon)`
   color: ${({ theme }) => theme.colors.default};
 `;
 
+//第三授權-button樣式
 export const ThirdBox = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-around;
+`;
+
+export const ThirdBtn = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 0.3s;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
 `;
