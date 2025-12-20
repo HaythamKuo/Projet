@@ -23,6 +23,12 @@ import { toast } from "react-toastify";
 import useClickOutside from "../hooks/useClickOutside";
 import useObserverInnerWidth from "../hooks/useObserverInnerWidth";
 
+const units = [
+  { label: "我的帳戶", path: "profile" },
+  { label: "我的清單", path: "profile/?tab=saved" },
+  { label: "我的訂單", path: "profile/orders" },
+];
+
 // import ProcessLoader from "../styles/UI/ProcessLoader";
 
 function LoginDropDown() {
@@ -75,11 +81,12 @@ function LoginDropDown() {
   }
 
   async function handleLogout() {
+    dispatch(logout());
+    dispatch(clearCart());
     try {
       await callLogoutApi().unwrap();
       dispatch(usersApi.util.resetApiState());
-      dispatch(clearCart());
-      dispatch(logout());
+
       toast.success("成功登出");
       navigate("/");
     } catch (error) {
@@ -112,15 +119,11 @@ function LoginDropDown() {
       <DropDownMenu $isOpen={openUser}>
         <MenuSection>
           <MenuList>
-            <MenuItem as={Link} to="profile">
-              我的帳戶
-            </MenuItem>
-            <MenuItem as={Link} to="profile/?tab=saved">
-              我的清單
-            </MenuItem>
-            <MenuItem as={Link} to="profile/orders">
-              我的訂單
-            </MenuItem>
+            {units.map(({ label, path }) => (
+              <MenuItem as={Link} to={path} key={label}>
+                {label}
+              </MenuItem>
+            ))}
           </MenuList>
         </MenuSection>
 

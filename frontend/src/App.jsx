@@ -8,7 +8,11 @@ import Footer from "./components/Footer";
 import { CopyRight, CopyRightContainer } from "./styles/Footer.style";
 import { ContentContainer, LayoutWrapper, MainContent } from "./styles/index";
 import { useGetProfileQuery } from "./store/apis/apiSlice";
-import { setCredentials, setLoadingFalse } from "./store/slices/authSlice";
+import {
+  logout,
+  setCredentials,
+  setLoadingFalse,
+} from "./store/slices/authSlice";
 import RouteHandle from "./config/RouteHandle";
 
 function App({ toggleTheme }) {
@@ -21,7 +25,8 @@ function App({ toggleTheme }) {
   useEffect(() => {
     if (isSuccess && data) {
       dispatch(setCredentials(data));
-    } else if (!isLoading) {
+    } else if (!isLoading && !data) {
+      dispatch(logout());
       dispatch(setLoadingFalse());
     }
   }, [data, dispatch, isSuccess, isLoading]);
@@ -31,7 +36,7 @@ function App({ toggleTheme }) {
       <ToastContainer
         className="toastContainer"
         position="top-right" // 通知顯示位置，可選 top-left, top-center, bottom-left...
-        autoClose={3000} // 自動關閉時間 (ms)，設為 false 則不自動關閉
+        autoClose={1500} // 自動關閉時間 (ms)，設為 false 則不自動關閉
         hideProgressBar={false} // 是否隱藏進度條
         newestOnTop={false} // 最新通知是否顯示在最上層
         closeOnClick // 點擊後是否關閉

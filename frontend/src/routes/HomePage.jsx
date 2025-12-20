@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import HighLight from "../styles/UI/HighLight";
 import { HeaderLayout } from "../styles/header.style";
 import {
@@ -24,10 +26,26 @@ import TypeWriter, {
 import Attribute from "../components/Attribute";
 import IntroTitle from "../components/reactBit/IntroTitle";
 import SpotlightCard from "../components/SpotlightCard";
+import SearchQuery from "../components/SearchQuery";
+import useClickOutside from "../hooks/useClickOutside";
+import { useScrollBlock } from "../hooks/useScrollBlock";
 
 const titles = ["娃娃", "運送服務", "情緒價值"];
 
 function HomePage() {
+  const [search, setSearch] = useState(false);
+  const controlSearch = useRef(null);
+  useClickOutside(controlSearch, () => setSearch(false));
+  const [blockScroll, allowScroll] = useScrollBlock(controlSearch);
+
+  useEffect(() => {
+    if (search) {
+      blockScroll();
+    } else {
+      allowScroll();
+    }
+  }, [allowScroll, blockScroll, search]);
+
   return (
     <HomeContainer>
       <HeaderLayout>
@@ -127,10 +145,13 @@ function HomePage() {
             </ImgHoverWrapper>
           </RwdBox>
 
-          <TextWrapper>
+          <TextWrapper onClick={() => setSearch(true)}>
             <TextSearch />
             <TextHover>Search</TextHover>
           </TextWrapper>
+          <AnimatePresence>
+            {search && <SearchQuery ref={controlSearch} />}
+          </AnimatePresence>
         </ImgHoverBox>
       </ImgHoverContainer>
     </HomeContainer>
