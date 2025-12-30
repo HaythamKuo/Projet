@@ -124,7 +124,7 @@ function Navbar({ onClick }) {
         </Link>
         <div className="navLinks">
           <NavBtn name="首頁" address="/" />
-          <NavBtn name="關於" address="" />
+          <NavBtn name="關於" address="aboutus" />
           <NavBtn name="全部產品" address="products" />
 
           <LoginDropDown />

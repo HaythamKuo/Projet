@@ -53,6 +53,12 @@ export const lightTheme = {
     direct: "#707070",
     ckBackGround: "#E9E9ED",
   },
+  about: {
+    backGround: "#FFF",
+    title: "#4A9B8E",
+    subtitle: "#5a5a5a",
+    text: "#666",
+  },
 
   breakpoints,
   media: generateMedia(breakpoints),
@@ -91,6 +97,12 @@ export const darkTheme = {
     backGround: "#0ea5e9",
     direct: "#e6e6ff",
     ckBackGround: "#686464",
+  },
+  about: {
+    backGround: "#686464",
+    title: "#dad4d3",
+    subtitle: "white",
+    text: "white",
   },
   breakpoints,
   media: generateMedia(breakpoints),

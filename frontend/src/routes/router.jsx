@@ -13,6 +13,7 @@ import Profile from "./ProfilePage";
 import CreateProduct from "../components/CreateProduct";
 import EditProduct from "../components/EditProduct";
 import ErrPage from "./ErrPage";
+import AboutUs from "../components/AboutUs";
 
 import Checkout from "../components/Checkout";
 import PublicrouteHandle from "../config/PublicrouteHandle";
@@ -53,6 +54,7 @@ export const createRouter = (toggleTheme) => {
             { path: ":prodid", element: <ProdPage /> },
           ],
         },
+        { path: "aboutus", element: <AboutUs /> },
         { path: "search", element: <SearchRespage /> },
 
         {

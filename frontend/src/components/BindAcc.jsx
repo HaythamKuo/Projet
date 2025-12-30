@@ -10,8 +10,8 @@ import ProcessLoader from "../styles/UI/ProcessLoader";
 import useHandleErr from "../hooks/userHandleErr";
 import Modal from "./Modal";
 import { SubmitBtn, CancelBtn } from "../styles/ProdImgGallery.style";
-import UnbindBtn from "../styles/UI/UnBindBtn";
-import BindBtn from "../styles/UI/BindBtn";
+// import UnbindBtn from "../styles/UI/UnBindBtn";
+// import BindBtn from "../styles/UI/BindBtn";
 import BehaveBtn from "../styles/UI/BehaveBtn.style";
 
 const BindContainer = styled.div`
@@ -114,11 +114,6 @@ export default function BindAcc({ googleId, lineId }) {
         <GoogleIcon />
 
         {googleId ? (
-          // <UnbindBtn
-          //   content="解除綁定"
-          //   disabled={unBinding}
-          //   onClick={() => showModal("google")}
-          // />
           <BehaveBtn
             beforeTop="0"
             beforeLeft="0"
@@ -128,12 +123,6 @@ export default function BindAcc({ googleId, lineId }) {
             解除綁定
           </BehaveBtn>
         ) : (
-          // <BindBtn
-          //   disabled={isDirect}
-          //   content="綁定至Google"
-          //   onClick={() => handleForward("google")}
-          // />
-
           <BehaveBtn
             border="0"
             scaleOnClick
@@ -148,12 +137,6 @@ export default function BindAcc({ googleId, lineId }) {
       <BindBox>
         <LineIcon size="2.2rem" $isCursor />
         {lineId ? (
-          // <UnbindBtn
-          //   content="解除綁定"
-          //   disabled={unBinding}
-          //   onClick={() => showModal("line")}
-          // />
-
           <BehaveBtn
             beforeTop="0"
             beforeLeft="0"
@@ -163,12 +146,6 @@ export default function BindAcc({ googleId, lineId }) {
             解除綁定
           </BehaveBtn>
         ) : (
-          // <BindBtn
-          //   content="綁定至Line"
-          //   disabled={isDirect}
-          //   onClick={() => handleForward("line")}
-          // />
-
           <BehaveBtn
             border="0"
             scaleOnClick
