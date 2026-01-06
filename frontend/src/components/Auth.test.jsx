@@ -62,4 +62,30 @@ describe("測試LoginPage component", () => {
     const toastFailed = await screen.findByRole("alert");
     expect(toastFailed).toHaveTextContent("登入失敗");
   });
+
+  it("測試 toast應該要出現", async () => {
+    const user = userEvent.setup();
+
+    renderWithProviders(<LoginPage />);
+
+    const mail = await screen.findByLabelText(/電子郵件/i);
+    const password = await screen.findByLabelText(/密碼/i);
+    const submitBtn = await screen.findByRole("button", { name: /登入/i });
+
+    await user.type(mail, "123456@gmail.com");
+    await user.type(password, "123456");
+    await user.click(submitBtn);
+
+    try {
+      const successMes = await screen.findByText(
+        /登入成功/i,
+        {},
+        { timeout: 5000 }
+      );
+      expect(successMes).toBeInTheDocument();
+    } catch (error) {
+      screen.debug();
+      throw error; // 記得把錯誤拋出去，不然測試會被誤判為通過
+    }
+  });
 });
