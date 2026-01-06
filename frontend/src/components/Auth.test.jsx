@@ -26,7 +26,7 @@ describe("測試LoginPage component", () => {
     const successMes = await screen.findByText(
       /登入成功/i,
       {},
-      { timeout: 5000 }
+      { timeout: 3000 }
     );
     // const toastMessage = await screen.findByText(/登入成功/i, {}, { timeout: 3000 })
     // const toastSuccess = await screen.findByRole("alert");
@@ -80,7 +80,7 @@ describe("測試LoginPage component", () => {
       const successMes = await screen.findByText(
         /登入成功/i,
         {},
-        { timeout: 5000 }
+        { timeout: 3000 }
       );
       expect(successMes).toBeInTheDocument();
     } catch (error) {
