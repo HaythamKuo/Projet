@@ -5,7 +5,7 @@ const BehaveBtn = styled.button.attrs({ type: "button" })`
   border: ${({ border }) => border || "unset"};
   border-radius: 15px;
 
-  color: ${({ theme, hoverColor }) => theme.colors.backGround};
+  color: ${({ theme }) => theme.colors.backGround};
   z-index: 1;
 
   background: ${({ theme }) => theme.colors.default};

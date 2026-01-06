@@ -38,8 +38,7 @@ function EditProduct() {
 
   const { data, isLoading, isSuccess, isError, error } =
     useFetchSpecificProdQuery(prodid);
-  const [editProd, { isLoading: editting, isError: editErr }] =
-    useEditMyProdMutation();
+  const [editProd, { isLoading: editting }] = useEditMyProdMutation();
 
   const obsFile = useCallback((newImg) => setImgs(newImg), []);
 

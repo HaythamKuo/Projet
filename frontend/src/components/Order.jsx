@@ -48,7 +48,7 @@ function Order() {
   const [sortOrder, setSortOrder] = useState("desc");
   const [orderIdentity, setOrderIdentity] = useState(null);
   const [review, setReview] = useState({});
-  const [submitAdmission, setSubmitAdmission] = useState([]);
+  const [_, setSubmitAdmission] = useState([]);
   const [err, setErr] = useState("");
 
   //監控Modal 並鎖住背景滾動

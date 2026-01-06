@@ -1,9 +1,8 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import { http, HttpResponse } from "msw";
 
-import { handleAuth } from "../mocks/handleAuth";
 import { renderWithProviders } from "../mocks/utils";
 
 import LoginPage from "../routes/LoginPage";
