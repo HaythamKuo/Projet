@@ -1,0 +1,47 @@
+name: Frontend CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "frontend/**"
+
+  pull_request:
+    branches: [main]
+    paths:
+      - "frontend/**"
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+
+    # 🌟 關鍵設定 2：設定預設工作目錄
+    # 告訴 CI：「接下來所有的 run 指令，都在 frontend 資料夾裡面執行」
+    defaults:
+      run:
+        working-directory: ./frontend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          # 注意：因為 package-lock.json 在子資料夾，這裡的 cache 設定要稍微指路
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        # 因為上面設定了 defaults，這裡會自動在 ./frontend 下執行
+        run: npm ci
+
+      - name: Run Lint
+        run: npm run lint
+
+      - name: Run Tests
+        run: npm run test:ci
+
+      - name: Build Project
+        run: npm run build
