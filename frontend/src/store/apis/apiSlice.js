@@ -10,12 +10,21 @@ import { fetchBaseQuery, createApi } from "@reduxjs/toolkit/query/react";
 //   })(...args);
 // };
 
+const getBaseUrl = () => {
+  if (import.meta.env.TEST) {
+    return "http://localhost:5001";
+  }
+  if (import.meta.env.DEV) {
+    return import.meta.env.VITE_SERVER_DEV;
+  }
+
+  return import.meta.env.VITE_SERVER_PRODUCTION;
+};
+
 const usersApi = createApi({
   reducerPath: "userInfo",
   baseQuery: fetchBaseQuery({
-    baseUrl: import.meta.env.DEV
-      ? import.meta.env.VITE_SERVER_DEV
-      : import.meta.env.VITE_SERVER_PRODUCTION,
+    baseUrl: getBaseUrl(),
     credentials: "include",
   }),
   tagTypes: ["User", "Collection"],
