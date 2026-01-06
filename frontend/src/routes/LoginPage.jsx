@@ -111,7 +111,7 @@ function LoginPage() {
             label="電子郵件"
             type="email"
             name="email"
-            placeholder="替代文字"
+            placeholder="請輸入郵件"
             value={enterValue.email}
             onChange={(e) => handleValue("email", e)}
             onBlur={() => handleBlurValue("email")}
@@ -124,7 +124,7 @@ function LoginPage() {
             label="密碼"
             type="password"
             name="password"
-            placeholder="替代文字"
+            placeholder="請輸入密碼"
             value={enterValue.password}
             onChange={(e) => handleValue("password", e)}
             onBlur={() => handleBlurValue("password")}

@@ -6,13 +6,9 @@ import svgr from "vite-plugin-svgr";
 export default defineConfig({
   plugins: [react(), svgr()],
 
-  // server: {
-  //   proxy: {
-  //     "/api": {
-  //       target: "http://localhost:5001",
-  //       changeOrigin: true,
-  //       secure: false,
-  //     },
-  //   },
-  // },
+  test: {
+    globals: true,
+    environment: "jsdom",
+    setupFiles: ["./src/mocks/setupTest.js"],
+  },
 });
