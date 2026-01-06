@@ -23,9 +23,11 @@ describe("測試LoginPage component", () => {
 
     await user.click(submitBtn);
 
-    const successMes = await screen.findByText("登入成功!");
+    // const successMes = await screen.findByText("登入成功!");
+    const toastSuccess = await screen.findByRole("alert");
+    expect(toastSuccess).toHaveTextContent("登入成功");
 
-    expect(successMes).toBeInTheDocument();
+    // expect(successMes).toBeInTheDocument();
   });
 
   it("如果錯誤應該顯示錯誤訊息", async () => {
@@ -48,8 +50,11 @@ describe("測試LoginPage component", () => {
     await user.click(submitBtn);
     // screen.debug();
 
-    const errMes = await screen.findByText("登入失敗");
+    // const errMes = await screen.findByText("登入失敗");
 
-    expect(errMes).toBeInTheDocument();
+    // expect(errMes).toBeInTheDocument();
+
+    const toastFailed = await screen.findByRole("alert");
+    expect(toastFailed).toHaveTextContent("登入失敗");
   });
 });
