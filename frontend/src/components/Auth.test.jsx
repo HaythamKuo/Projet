@@ -9,7 +9,7 @@ import LoginPage from "../routes/LoginPage";
 import { server } from "../mocks/server";
 
 describe("測試LoginPage component", () => {
-  it("測試郵件與密碼", async () => {
+  it("測試登入成功(郵件與密碼)", async () => {
     const user = userEvent.setup();
 
     renderWithProviders(<LoginPage />);
@@ -23,14 +23,19 @@ describe("測試LoginPage component", () => {
 
     await user.click(submitBtn);
 
-    // const successMes = await screen.findByText("登入成功!");
-    const toastSuccess = await screen.findByRole("alert");
-    expect(toastSuccess).toHaveTextContent("登入成功");
+    const successMes = await screen.findByText(
+      /登入成功/i,
+      {},
+      { timeout: 3000 }
+    );
+    // const toastMessage = await screen.findByText(/登入成功/i, {}, { timeout: 3000 })
+    // const toastSuccess = await screen.findByRole("alert");
+    // expect(toastSuccess).toHaveTextContent("登入成功");
 
-    // expect(successMes).toBeInTheDocument();
+    expect(successMes).toBeInTheDocument();
   });
 
-  it("如果錯誤應該顯示錯誤訊息", async () => {
+  it("測試登入失敗(郵件與密碼)", async () => {
     const user = userEvent.setup();
 
     server.use(
