@@ -28,11 +28,11 @@ describe("測試LoginPage component", () => {
     //   {},
     //   { timeout: 3000 }
     // );
-    const successMes = await screen.findByText("登入成功");
-    // const toastSuccess = await screen.findByRole("alert");
-    // expect(toastSuccess).toHaveTextContent("登入成功");
+    const toastSuccess = await screen.findByRole("alert");
+    expect(toastSuccess).toHaveTextContent("登入成功");
 
-    expect(successMes).toBeInTheDocument();
+    // const successMes = await screen.findByText("登入成功");
+    // expect(successMes).toBeInTheDocument();
   });
 
   it("測試登入失敗(郵件與密碼)", async () => {
@@ -55,11 +55,11 @@ describe("測試LoginPage component", () => {
     await user.click(submitBtn);
     // screen.debug();
 
-    const errMes = await screen.findByText("登入失敗");
+    // const errMes = await screen.findByText("登入失敗");
 
-    expect(errMes).toBeInTheDocument();
+    // expect(errMes).toBeInTheDocument();
 
-    // const toastFailed = await screen.findByRole("alert");
-    // expect(toastFailed).toHaveTextContent("登入失敗");
+    const toastFailed = await screen.findByRole("alert");
+    expect(toastFailed).toHaveTextContent("登入失敗");
   });
 });
