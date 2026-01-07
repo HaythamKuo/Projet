@@ -2,14 +2,6 @@ import { fetchBaseQuery, createApi } from "@reduxjs/toolkit/query/react";
 
 // import { pause } from "./prodApiSlice";
 
-// const customBaseQuery = async (...args) => {
-//   await pause(2000);
-//   return fetchBaseQuery({
-//     baseUrl: "http://localhost:5001",
-//     credentials: "include",
-//   })(...args);
-// };
-
 const getBaseUrl = () => {
   if (import.meta.env.TEST) {
     return "http://localhost:5001";
