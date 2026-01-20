@@ -1,5 +1,4 @@
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 const initialSize = {
@@ -14,10 +13,29 @@ export function useProdForm({ initData = {}, validator, mode, mutation }) {
   const [subCategory, setSubCategory] = useState(initData.subCategory || "");
   const [size, setSize] = useState(initData.size || initialSize);
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  // const [isSubmitting, setIsSubmitting] = useState(false);
 
   // 控制圖片上傳元件重置
   const [resetUpload, setResetUpload] = useState(false);
+  console.log(initData);
+
+  useEffect(() => {
+    if (mode === "edit" && initData) {
+      setCategory(initData.mainCategory || "");
+      setSubCategory(initData.subCategory || "");
+      setSize(initData.size || initialSize);
+    }
+
+    if (initData.images && Array.isArray(initData.images)) {
+      const formatterImgs = initData.images.map((item) => ({
+        url: item.url,
+        img: null,
+        isOld: true,
+      }));
+
+      setImgs(formatterImgs);
+    }
+  }, [mode, initData]);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -26,8 +44,8 @@ export function useProdForm({ initData = {}, validator, mode, mutation }) {
 
     let resultData;
 
-    if (mode === "creator") {
-      resultData = validator(rawData, imgs, category, subCategory, size);
+    if (mode === "create") {
+      resultData = validator(rawData, imgs, size, category, subCategory);
     } else {
       const oldImgs = imgs.filter((item) => item.isOld).map((item) => item.url);
       const newImgs = imgs
@@ -48,7 +66,7 @@ export function useProdForm({ initData = {}, validator, mode, mutation }) {
 
     if (!isValid) {
       errs.forEach((e) => toast.error(e));
-      setIsSubmitting(false);
+      // setIsSubmitting(false);
       return;
     }
 
@@ -93,8 +111,6 @@ export function useProdForm({ initData = {}, validator, mode, mutation }) {
       const errorMsg = error?.data?.message || error?.error || "發生錯誤";
       console.error(error);
       toast.error(errorMsg);
-    } finally {
-      setIsSubmitting(false);
     }
   }
 
@@ -116,7 +132,7 @@ export function useProdForm({ initData = {}, validator, mode, mutation }) {
     setSubCategory,
     size,
     setSize,
-    isSubmitting,
+
     resetUpload,
     handleSubmit,
     resetState,

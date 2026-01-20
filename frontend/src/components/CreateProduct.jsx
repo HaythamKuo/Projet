@@ -24,7 +24,7 @@ function CreateProduct() {
   // const [category, setCategory] = useState(null);
   // const [subCategory, setSubCategory] = useState(null);
   // const [size, setSize] = useState({
-  //   S: 0,
+  //   S: 0,ㄗ
   //   M: 0,
   //   L: 0,
   // });
@@ -41,7 +41,6 @@ function CreateProduct() {
     setSize,
     resetUpload,
     handleSubmit,
-    isSubmitting,
   } = useProdForm({
     mode: "create",
     validator: validateForm,
@@ -132,8 +131,14 @@ function CreateProduct() {
         <UploadButton imgs={imgs} setImgs={setImgs} reset={resetUpload} />
 
         <BtnBox>
-          <SubmitBtn type="submit">送出</SubmitBtn>
-          <CancelBtn onClick={() => navigate(-1)} type="button">
+          <SubmitBtn disabled={isLoading} type="submit">
+            送出
+          </SubmitBtn>
+          <CancelBtn
+            onClick={() => navigate(-1)}
+            type="button"
+            disabled={isLoading}
+          >
             取消
           </CancelBtn>
         </BtnBox>

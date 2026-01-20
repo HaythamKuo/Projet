@@ -172,8 +172,6 @@ const UploadButton = ({
           })} */}
 
         {imgs.map((item, index) => {
-          console.log(item);
-
           return (
             <PreviewWrapper key={index}>
               <UploadPreview src={item.url} alt="preview" />
