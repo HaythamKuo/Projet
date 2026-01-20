@@ -14,89 +14,107 @@ import SelectOption from "./SelectOption";
 import ProdSize from "./ProdSize";
 import ProcessLoader from "../styles/UI/ProcessLoader";
 import Breadcrumb from "../styles/UI/Breadcrumb";
+import { useProdForm } from "../hooks/useProdForm";
 
 function CreateProduct() {
   const navigate = useNavigate();
 
-  const [imgs, setImg] = useState([]);
-  const [imgReset, setimgReset] = useState(false);
-  const [category, setCategory] = useState(null);
-  const [subCategory, setSubCategory] = useState(null);
-  const [size, setSize] = useState({
-    S: 0,
-    M: 0,
-    L: 0,
-  });
+  // const [imgs, setImg] = useState([]);
+  // const [imgReset, setimgReset] = useState(false);
+  // const [category, setCategory] = useState(null);
+  // const [subCategory, setSubCategory] = useState(null);
+  // const [size, setSize] = useState({
+  //   S: 0,
+  //   M: 0,
+  //   L: 0,
+  // });
 
   const [createProd, { isLoading }] = useUploadProdsMutation();
+  const {
+    imgs,
+    setImgs,
+    category,
+    setCategory,
+    subCategory,
+    setSubCategory,
+    size,
+    setSize,
+    resetUpload,
+    handleSubmit,
+    isSubmitting,
+  } = useProdForm({
+    mode: "create",
+    validator: validateForm,
+    mutation: createProd,
+  });
 
-  const handleImg = (file) => {
-    const newImgs = file.filter(
-      (item) => !item.isOld && item.img instanceof File
-    );
-    setImg(newImgs);
-  };
+  // const handleImg = (file) => {
+  //   const newImgs = file.filter(
+  //     (item) => !item.isOld && item.img instanceof File
+  //   );
+  //   setImg(newImgs);
+  // };
 
   //setImg(files);
 
-  async function handleForm(e) {
-    e.preventDefault();
+  // async function handleForm(e) {
+  //   e.preventDefault();
 
-    const res = new FormData(e.target);
+  //   const res = new FormData(e.target);
 
-    const { isValid, errs, cleanValue } = validateForm(
-      res,
-      imgs,
-      size,
-      category,
-      subCategory
-    );
+  //   const { isValid, errs, cleanValue } = validateForm(
+  //     res,
+  //     imgs,
+  //     size,
+  //     category,
+  //     subCategory
+  //   );
 
-    if (!isValid) {
-      errs.forEach((e) => toast.error(e));
-      return;
-    }
+  //   if (!isValid) {
+  //     errs.forEach((e) => toast.error(e));
+  //     return;
+  //   }
 
-    const payload = new FormData();
-    payload.append("name", cleanValue.name);
-    payload.append("price", cleanValue.price);
-    payload.append("description", cleanValue.description);
-    payload.append("rate", cleanValue.rate);
-    payload.append("mainCategory", category);
-    payload.append("subCategory", subCategory);
-    payload.append("size", JSON.stringify(cleanValue.cleanStock));
+  //   const payload = new FormData();
+  //   payload.append("name", cleanValue.name);
+  //   payload.append("price", cleanValue.price);
+  //   payload.append("description", cleanValue.description);
+  //   payload.append("rate", cleanValue.rate);
+  //   payload.append("mainCategory", category);
+  //   payload.append("subCategory", subCategory);
+  //   payload.append("size", JSON.stringify(cleanValue.cleanStock));
 
-    if (imgs) {
-      imgs.forEach((img) => payload.append("images", img.img));
-    }
-    //console.log(payload);
+  //   if (imgs) {
+  //     imgs.forEach((img) => payload.append("images", img.img));
+  //   }
+  //   //console.log(payload);
 
-    try {
-      await createProd(payload).unwrap();
+  //   try {
+  //     await createProd(payload).unwrap();
 
-      toast.success("創建成功");
-      e.target.reset();
-      setimgReset(true);
-      setTimeout(() => setimgReset(false), 1000);
-      setImg([]);
-      setCategory("");
-      setSubCategory("");
-      setSize({
-        S: 0,
-        M: 0,
-        L: 0,
-      });
-    } catch (error) {
-      toast.error(error?.data?.message || error?.error);
-      console.log(error);
-    }
-  }
+  //     toast.success("創建成功");
+  //     e.target.reset();
+  //     setimgReset(true);
+  //     setTimeout(() => setimgReset(false), 1000);
+  //     setImg([]);
+  //     setCategory("");
+  //     setSubCategory("");
+  //     setSize({
+  //       S: 0,
+  //       M: 0,
+  //       L: 0,
+  //     });
+  //   } catch (error) {
+  //     toast.error(error?.data?.message || error?.error);
+  //     console.log(error);
+  //   }
+  // }
 
   return (
     <>
       {isLoading && <ProcessLoader />}
 
-      <FormContainer onSubmit={handleForm}>
+      <FormContainer onSubmit={handleSubmit}>
         <Breadcrumb />
         <SplitText text="創建你的娃娃" customStyles="font-size: 3rem;" />
         <FormField label="產品名稱" type="text" name="name" />
@@ -110,7 +128,8 @@ function CreateProduct() {
           setSubCategory={setSubCategory}
         />
         <ProdSize size={size} setSize={setSize} />
-        <UploadButton onFileSelect={handleImg} reset={imgReset} />
+        {/* <UploadButton onFileSelect={handleImg} reset={imgReset} /> */}
+        <UploadButton imgs={imgs} setImgs={setImgs} reset={resetUpload} />
 
         <BtnBox>
           <SubmitBtn type="submit">送出</SubmitBtn>
