@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const initialSize = {
   S: 0,
@@ -13,11 +14,13 @@ export function useProdForm({ initData = {}, validator, mode, mutation }) {
   const [subCategory, setSubCategory] = useState(initData.subCategory || "");
   const [size, setSize] = useState(initData.size || initialSize);
 
+  const navigate = useNavigate();
+
   // const [isSubmitting, setIsSubmitting] = useState(false);
 
   // 控制圖片上傳元件重置
   const [resetUpload, setResetUpload] = useState(false);
-  console.log(initData);
+  console.log("initData: ", initData);
 
   useEffect(() => {
     if (mode === "edit" && initData) {
@@ -27,11 +30,16 @@ export function useProdForm({ initData = {}, validator, mode, mutation }) {
     }
 
     if (initData.images && Array.isArray(initData.images)) {
-      const formatterImgs = initData.images.map((item) => ({
-        url: item.url,
-        img: null,
-        isOld: true,
-      }));
+      const formatterImgs = initData.images.map((item) => {
+        const isObj = typeof item === "object" && item !== null;
+
+        return {
+          url: isObj ? item.url : item,
+          alt: isObj ? item.alt : "",
+          img: null,
+          isOld: true,
+        };
+      });
 
       setImgs(formatterImgs);
     }
@@ -47,7 +55,12 @@ export function useProdForm({ initData = {}, validator, mode, mutation }) {
     if (mode === "create") {
       resultData = validator(rawData, imgs, size, category, subCategory);
     } else {
-      const oldImgs = imgs.filter((item) => item.isOld).map((item) => item.url);
+      const oldImgs = imgs
+        .filter((item) => item.isOld)
+        .map((item) => ({
+          url: encodeURI(item.url),
+          alt: item.alt || "",
+        }));
       const newImgs = imgs
         .filter((item) => !item.isOld && item.img instanceof File)
         .map((item) => item.img);
@@ -91,6 +104,8 @@ export function useProdForm({ initData = {}, validator, mode, mutation }) {
       if (Array.isArray(cleanValue.newImg)) {
         cleanValue.newImg.forEach((img) => payload.append("newImages", img));
       }
+
+      console.log("block,", payload);
     }
 
     // API 請求, 依據 mode 發出不同請求
@@ -106,6 +121,9 @@ export function useProdForm({ initData = {}, validator, mode, mutation }) {
         setImgs([]);
         setResetUpload(true);
         setTimeout(() => setResetUpload(false), 500);
+        // console.log("修正過的: ", payload);
+
+        navigate("/", { replace: true });
       }
     } catch (error) {
       const errorMsg = error?.data?.message || error?.error || "發生錯誤";
@@ -132,7 +150,6 @@ export function useProdForm({ initData = {}, validator, mode, mutation }) {
     setSubCategory,
     size,
     setSize,
-
     resetUpload,
     handleSubmit,
     resetState,

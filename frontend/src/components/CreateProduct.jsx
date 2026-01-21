@@ -19,16 +19,6 @@ import { useProdForm } from "../hooks/useProdForm";
 function CreateProduct() {
   const navigate = useNavigate();
 
-  // const [imgs, setImg] = useState([]);
-  // const [imgReset, setimgReset] = useState(false);
-  // const [category, setCategory] = useState(null);
-  // const [subCategory, setSubCategory] = useState(null);
-  // const [size, setSize] = useState({
-  //   S: 0,ㄗ
-  //   M: 0,
-  //   L: 0,
-  // });
-
   const [createProd, { isLoading }] = useUploadProdsMutation();
   const {
     imgs,
