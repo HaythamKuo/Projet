@@ -78,8 +78,6 @@ export const validateEditForm = (
 
   const { errs, cleanValue } = validateCore(data);
 
-  console.log(oldImg);
-
   const totalImages = (oldImg?.length || 0) + (newImg?.length || 0);
   if (totalImages === 0 || totalImages > 3) {
     errs.push("請至少上傳 1 張圖片，且最多不可超過 3 張");

@@ -16,11 +16,8 @@ export function useProdForm({ initData = {}, validator, mode, mutation }) {
 
   const navigate = useNavigate();
 
-  // const [isSubmitting, setIsSubmitting] = useState(false);
-
   // 控制圖片上傳元件重置
   const [resetUpload, setResetUpload] = useState(false);
-  console.log("initData: ", initData);
 
   useEffect(() => {
     if (mode === "edit" && initData) {
@@ -45,6 +42,8 @@ export function useProdForm({ initData = {}, validator, mode, mutation }) {
     }
   }, [mode, initData]);
 
+  console.log(initData);
+
   async function handleSubmit(e) {
     e.preventDefault();
 
@@ -58,7 +57,7 @@ export function useProdForm({ initData = {}, validator, mode, mutation }) {
       const oldImgs = imgs
         .filter((item) => item.isOld)
         .map((item) => ({
-          url: encodeURI(item.url),
+          url: encodeURI(decodeURI(item.url)),
           alt: item.alt || "",
         }));
       const newImgs = imgs
@@ -104,10 +103,7 @@ export function useProdForm({ initData = {}, validator, mode, mutation }) {
       if (Array.isArray(cleanValue.newImg)) {
         cleanValue.newImg.forEach((img) => payload.append("newImages", img));
       }
-
-      console.log("block,", payload);
     }
-
     // API 請求, 依據 mode 發出不同請求
     try {
       if (mode === "create") {
@@ -121,9 +117,9 @@ export function useProdForm({ initData = {}, validator, mode, mutation }) {
         setImgs([]);
         setResetUpload(true);
         setTimeout(() => setResetUpload(false), 500);
-        // console.log("修正過的: ", payload);
+        toast.success("編輯成功");
 
-        navigate("/", { replace: true });
+        navigate(-1);
       }
     } catch (error) {
       const errorMsg = error?.data?.message || error?.error || "發生錯誤";

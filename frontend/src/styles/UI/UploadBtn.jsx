@@ -59,15 +59,7 @@ const HiddenInput = styled.input`
   display: none;
 `;
 
-const UploadButton = ({
-  // onFileSelect,
-  // reset,
-  // existingImgs,
-  // onResetFinished,
-  imgs = [],
-  setImgs,
-  reset,
-}) => {
+const UploadButton = ({ imgs = [], setImgs, reset }) => {
   const fileInputRef = useRef(null);
 
   // 用來追蹤這個元件產生過的所有 Blob URL，以便稍後清理
@@ -89,6 +81,20 @@ const UploadButton = ({
     fileInputRef.current.click();
   };
 
+  /**
+   * @oldImg => {
+   *  alt:'happy',
+   * img: null,
+   * isOld: true,
+   * url: 'http:....'
+   * }
+   *
+   * @newImg => {
+   *    img: File,
+   * isOld: false,
+   * url:'blob:http....'
+   * }
+   */
   const handleChange = (e) => {
     const files = Array.from(e.target.files);
     if (files.length === 0) return;
