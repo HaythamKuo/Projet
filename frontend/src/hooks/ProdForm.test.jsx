@@ -122,4 +122,84 @@ describe("useProdForm 環境整合", () => {
       expect(result.current.size).toEqual({ S: 5, M: 5, L: 5 });
     });
   });
+
+  describe("表單送出驗證", () => {
+    it.only("驗證(創建新商品)通過應該呼叫 mutation ，成功後會顯示成功訊息", async () => {
+      const mockOfValidator = vi.fn().mockReturnValue({
+        isValid: true,
+        errs: [],
+        cleanValue: {
+          name: "aaa",
+          price: "111",
+          description: "This is a good product",
+          cleanStock: { S: 10, M: 5, L: 0 },
+          rate: "3",
+        },
+      });
+      const mockOfMutation = vi.fn().mockReturnValue({
+        unwrap: () => Promise.resolve({ success: true, id: "new_123" }),
+      });
+
+      const { result } = renderHookWithProviders(() =>
+        useProdForm({
+          mode: "create",
+          validator: mockOfValidator,
+          mutation: mockOfMutation,
+        }),
+      );
+      //在送出前，模擬創建一張圖片
+      const newFile = new File(["(img"], "test.png", { type: "image/png" });
+      act(() => {
+        result.current.setImgs([{ img: newFile, isOld: false }]);
+        result.current.setCategory("Cloth");
+        result.current.setSubCategory("Shirt");
+        result.current.setSize({ S: 10, M: 5, L: 0 });
+      });
+
+      const form = document.createElement("form");
+
+      const input = document.createElement("input");
+
+      function appendInput(name, value) {
+        input.name = name;
+        input.value = value;
+        form.appendChild(input);
+      }
+
+      appendInput("name", "aaa");
+      appendInput("price", "111");
+      appendInput("description", "This is a good product");
+      appendInput("rate", "3");
+
+      const event = {
+        preventDefault: vi.fn(),
+        target: form,
+      };
+
+      await act(async () => {
+        await result.current.handleSubmit(event);
+      });
+
+      expect(mockOfMutation).toHaveBeenCalled();
+
+      const formDataArg = mockOfMutation.mock.calls[0][0];
+
+      expect(formDataArg).toBeInstanceOf(FormData);
+
+      // 驗證dom → valitator → mutation
+      expect(formDataArg.get("name")).toBe("aaa");
+      expect(formDataArg.get("price")).toBe("111");
+      expect(formDataArg.get("description")).toBe("This is a good product");
+      expect(formDataArg.get("rate")).toBe("3");
+
+      //驗證state
+      expect(formDataArg.get("mainCategory")).toBe("Cloth");
+      expect(formDataArg.get("subCategory")).toBe("Shirt");
+      expect(formDataArg.get("size")).toBe(
+        JSON.stringify({ S: 10, M: 5, L: 0 }),
+      );
+
+      expect(formDataArg.get("images")).toBeInstanceOf(File);
+    });
+  });
 });

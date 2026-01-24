@@ -42,7 +42,7 @@ export function useProdForm({ initData = {}, validator, mode, mutation }) {
     }
   }, [mode, initData]);
 
-  console.log(initData);
+  // console.log(initData);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -53,6 +53,8 @@ export function useProdForm({ initData = {}, validator, mode, mutation }) {
 
     if (mode === "create") {
       resultData = validator(rawData, imgs, size, category, subCategory);
+
+      // console.log(resultData);
     } else {
       const oldImgs = imgs
         .filter((item) => item.isOld)
@@ -78,7 +80,6 @@ export function useProdForm({ initData = {}, validator, mode, mutation }) {
 
     if (!isValid) {
       errs.forEach((e) => toast.error(e));
-      // setIsSubmitting(false);
       return;
     }
 
@@ -107,6 +108,8 @@ export function useProdForm({ initData = {}, validator, mode, mutation }) {
     // API 請求, 依據 mode 發出不同請求
     try {
       if (mode === "create") {
+        // console.log(payload);
+
         await mutation(payload).unwrap();
 
         toast.success("創建成功");

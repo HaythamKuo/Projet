@@ -45,24 +45,8 @@ export function renderWithProviders(
     ...renderOptions
   } = {},
 ) {
-  //???
-
-  // function Wrapper({ children }) {
-  //   return (
-  //     <Provider store={store}>
-  //       <ThemeProvider theme={lightTheme}>
-  //         <MemoryRouter>
-  //           {children}
-  //           <ToastContainer />
-  //         </MemoryRouter>
-  //       </ThemeProvider>
-  //     </Provider>
-  //   );
-  // }
-
   const Wrapper = createWrapper(store);
 
-  //???
   return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
 }
 
