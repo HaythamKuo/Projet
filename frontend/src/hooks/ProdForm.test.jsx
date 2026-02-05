@@ -124,7 +124,7 @@ describe("useProdForm 環境整合", () => {
   });
 
   describe("表單送出驗證", () => {
-    it.only("驗證(創建新商品)通過應該呼叫 mutation ，成功後會顯示成功訊息", async () => {
+    it("驗證(創建新商品)通過應該呼叫 mutation ，成功後會顯示成功訊息", async () => {
       const mockOfValidator = vi.fn().mockReturnValue({
         isValid: true,
         errs: [],
@@ -200,6 +200,120 @@ describe("useProdForm 環境整合", () => {
       );
 
       expect(formDataArg.get("images")).toBeInstanceOf(File);
+    });
+
+    it("驗證(編輯商品)通過應該呼叫 mutation ，成功後跳轉上一頁", async () => {
+      const initData = "prod_999";
+
+      const newFile = new File(["(new img content)"], "new.png", {
+        type: "image/png",
+      });
+
+      const mockOfValitator = vi.fn().mockReturnValue({
+        isValid: true,
+        errs: [],
+        cleanValue: {
+          name: "editProd",
+          price: "222",
+          description: "edit",
+          cleanStock: { S: 5, M: 5, L: 5 },
+          oldImg: [{ url: "http://old.com/img.jpg", alt: "old" }],
+          newImg: [newFile],
+        },
+      });
+
+      const mockOfMutation = vi.fn().mockReturnValue({
+        unwrap: () => Promise.resolve({ success: true }),
+      });
+
+      const { result } = renderHookWithProviders(() =>
+        useProdForm({
+          mode: "edit",
+          initData: { _id: initData, name: "oldName" },
+          validator: mockOfValitator,
+          mutation: mockOfMutation,
+        }),
+      );
+
+      // --- Act (執行階段) ---
+
+      //模擬使用者修改 State (例如：保留一張舊圖，新增一張新圖)
+      act(() => {
+        result.current.setImgs([
+          { url: "http://old.com/img.jpg", isOld: true }, // 既有圖片
+          { img: newFile, isOld: false }, // 新上傳圖片
+        ]);
+      });
+
+      // 模擬修改分類
+      result.current.setCategory("Cloth");
+      result.current.setSubCategory("Pants");
+
+      const form = document.createElement("form");
+
+      function appendInput(name, value) {
+        const baseInput = document.createElement("input");
+        baseInput.name = name;
+        baseInput.value = value;
+        form.appendChild(baseInput);
+      }
+
+      // 填入編輯後的值
+      appendInput("name", "editProd");
+      appendInput("price", "222");
+      appendInput("description", "edit desc");
+      appendInput("rate", "5");
+
+      document.body.appendChild(form);
+
+      const event = {
+        preventDefault: vi.fn(),
+        target: form,
+        currentTarget: form,
+      };
+
+      await act(async () => {
+        await result.current.handleSubmit(event);
+      });
+      document.body.removeChild(form);
+
+      // --- Assert (驗證階段) ---
+
+      // 1. 驗證 Validator 是否被呼叫
+      expect(mockOfValitator).toHaveBeenCalled();
+
+      // 2. 驗證 Mutation 是否被呼叫
+      expect(mockOfMutation).toHaveBeenCalled();
+
+      // 3. 深入驗證傳給後端的 FormData 內容
+      const formDataArg = mockOfMutation.mock.calls[0][0];
+      expect(formDataArg).toEqual(
+        expect.objectContaining({
+          id: initData,
+          formData: expect.any(FormData),
+        }),
+      );
+
+      const editData = formDataArg.formData;
+
+      // 基本欄位
+      expect(editData.get("name")).toBe("editProd");
+      expect(editData.get("price")).toBe("222");
+      expect(editData.get("description")).toBe("edit");
+
+      // 新圖
+      expect(editData.get("newImages")).toBeInstanceOf(File);
+      expect(editData.get("newImages")).toBe(newFile);
+
+      // 舊圖
+      const oldImages = JSON.parse(editData.get("oldImages"));
+      expect(oldImages[0].url).toBe("http://old.com/img.jpg");
+
+      // 4. 關鍵驗證：成功後是否跳轉 (Navigate)
+      // -1 代表回上一頁，或者是具體的路徑 '/products'
+      // expect(mockNavigate).toHaveBeenCalled();
+      // 若你的邏輯是回上一頁:
+      // expect(mockNavigate).toHaveBeenCalledWith(-1);
     });
   });
 });
