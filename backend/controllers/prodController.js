@@ -67,7 +67,7 @@ export const uploadProd = asyncHandler(async (req, res) => {
       mainCategory,
       subCategory,
     },
-    { abortEarly: false }
+    { abortEarly: false },
   );
 
   if (categoryErr) {
@@ -200,6 +200,8 @@ export const editMyProd = asyncHandler(async (req, res) => {
     throw new Error("oldImages 格式錯誤，請傳入 JSON 陣列");
   }
 
+  console.log(parseImgs);
+
   let sizeObj;
   try {
     sizeObj = JSON.parse(size);
@@ -209,7 +211,6 @@ export const editMyProd = asyncHandler(async (req, res) => {
   }
 
   const purePrice = +price;
-  //console.log(sizeObj);
 
   const dataToValidate = {
     name,

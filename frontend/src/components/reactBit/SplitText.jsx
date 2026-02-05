@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 const SplitParent = styled.p`
-  text-align: ${(props) => props.textAlign || "center"};
+  text-align: ${(props) => props.$textAlign || "center"};
   overflow: hidden;
   display: inline;
 
@@ -56,7 +56,7 @@ const SplitText = ({
           observer.unobserve(ref.current);
         }
       },
-      { threshold, rootMargin }
+      { threshold, rootMargin },
     );
 
     observer.observe(ref.current);
@@ -82,11 +82,11 @@ const SplitText = ({
         : animationFrom,
       delay: i * delay,
       config: { easing },
-    }))
+    })),
   );
 
   return (
-    <SplitParent ref={ref} textAlign={textAlign} $customStyles={customStyles}>
+    <SplitParent ref={ref} $textAlign={textAlign} $customStyles={customStyles}>
       {words.map((word, wordIndex) => (
         <WordWrapper key={wordIndex}>
           {word.map((letter, letterIndex) => {

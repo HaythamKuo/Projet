@@ -44,6 +44,8 @@ export const validateForm = (formData, img, size, category, subCategory) => {
   //如果有錯誤就推入errs
   const data = { name, price, description, size, category, subCategory };
 
+  // console.log(data);
+
   const { errs, cleanValue } = validateCore(data);
 
   if (isNaN(rate) || rate < 1 || rate > 5) errs.push("星等需在 1 到 5 之間");
@@ -66,7 +68,7 @@ export const validateEditForm = (
   subCategory,
   size,
   oldImg = [],
-  newImg = []
+  newImg = [],
 ) => {
   const name = form.get("name").trim();
   const price = +form.get("price");
@@ -129,11 +131,11 @@ export const validateOrder = (address, items, paymentMethod) => {
 //驗證評論
 export const ValidateReviews = (reviews = []) => {
   const commentHasValue = reviews.some(
-    ([_, { comment }]) => comment?.trim().length > 0
+    ([_, { comment }]) => comment?.trim().length > 0,
   );
 
   const commentHasLength = reviews.every(
-    ([_, { comment }]) => comment?.trim().length <= 20
+    ([_, { comment }]) => comment?.trim().length <= 20,
   );
 
   // return{

@@ -125,7 +125,7 @@ export default function BindAcc({ googleId, lineId }) {
         ) : (
           <BehaveBtn
             border="0"
-            scaleOnClick
+            $scaleOnClick
             disabled={isDirect}
             onClick={() => handleForward("google")}
           >
@@ -148,7 +148,7 @@ export default function BindAcc({ googleId, lineId }) {
         ) : (
           <BehaveBtn
             border="0"
-            scaleOnClick
+            $scaleOnClick
             disabled={isDirect}
             onClick={() => handleForward("line")}
           >

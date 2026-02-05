@@ -44,7 +44,8 @@ const BehaveBtn = styled.button.attrs({ type: "button" })`
   }
 
   &:active {
-    transform: ${({ scaleOnClick }) => (scaleOnClick ? "scale(0.8)" : "none")};
+    transform: ${({ $scaleOnClick }) =>
+      $scaleOnClick ? "scale(0.8)" : "none"};
   }
 
   ${({ custom }) => custom && css(custom)}

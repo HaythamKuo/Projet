@@ -33,7 +33,7 @@ const userSchema = Schema(
       default: ["local"],
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 //userController裡的註冊函式會觸發密碼雜湊

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import styled from "styled-components";
 import { TiDelete } from "react-icons/ti";
 import { imgBasicStyle } from "../theme";
@@ -59,85 +59,84 @@ const HiddenInput = styled.input`
   display: none;
 `;
 
-const UploadButton = ({
-  onFileSelect,
-  reset,
-  existingImgs,
-  onResetFinished,
-}) => {
+const UploadButton = ({ imgs = [], setImgs, reset }) => {
   const fileInputRef = useRef(null);
-  const [preview, setPreview] = useState([]);
 
-  function deleteSpecificImg(url) {
-    const updated = preview.filter((item) =>
-      item.isOld ? item.url.url !== url : item.url !== url
-    );
+  // 用來追蹤這個元件產生過的所有 Blob URL，以便稍後清理
+  const activeUrls = useRef([]);
 
-    setPreview(updated);
-    onFileSelect(updated);
+  function handleDelete(position) {
+    setImgs((pre) => {
+      const target = pre[position];
+
+      if (!target.isOld && target.url) {
+        URL.revokeObjectURL(target.url);
+        activeUrls.current = activeUrls.current.filter((u) => u !== target.url);
+      }
+      return pre.filter((_, index) => index !== position);
+    });
   }
 
   const handleClick = () => {
     fileInputRef.current.click();
   };
 
+  /**
+   * @oldImg => {
+   *  alt:'happy',
+   * img: null,
+   * isOld: true,
+   * url: 'http:....'
+   * }
+   *
+   * @newImg => {
+   *    img: File,
+   * isOld: false,
+   * url:'blob:http....'
+   * }
+   */
   const handleChange = (e) => {
     const files = Array.from(e.target.files);
+    if (files.length === 0) return;
 
-    const updateImgList = [];
-    let loadCount = 0;
+    //處理多張圖片讀取
+    const newImgs = files.map((file) => {
+      const blobUrl = URL.createObjectURL(file);
 
-    files.forEach((img) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        updateImgList.push({
-          img,
-          url: reader.result,
-          isOld: false,
-        });
-        loadCount++;
+      activeUrls.current.push(blobUrl);
 
-        if (loadCount === files.length) {
-          //  預覽用
-          const saveDiverseImgs = [...preview, ...updateImgList];
-
-          setPreview(saveDiverseImgs);
-          // console.log(saveDiverseImgs);
-
-          //傳遞父元件
-          //onFileSelect((prev) => [...prev, ...updateImgList]);
-          //onFileSelect([...preview, ...updateImgList]);
-
-          // const fileOnly = saveDiverseImgs
-          //   .filter((item) => !item.isOld)
-          //   .map((item) => item.img);
-          onFileSelect([...saveDiverseImgs]);
-        }
+      return {
+        img: file, // 原始檔案 (給後端用)
+        url: blobUrl, // Blob URL (給 <img> src 預覽用)
+        isOld: false, // 標記為新圖
       };
-      reader.readAsDataURL(img);
     });
+
+    setImgs((pre) => [...pre, ...newImgs]);
+
+    //清空 input，允許重複選取同一張圖
+    if (fileInputRef.current) {
+      fileInputRef.current.value = null;
+    }
   };
 
-  //為何上傳一張不用useEffect, 多張卻需要？
+  // 清空 blobUrl unmount
+  useEffect(() => {
+    return () => {
+      activeUrls.current.forEach((e) => {
+        URL.revokeObjectURL(e);
+      });
+      activeUrls.current = [];
+    };
+  }, []);
+
+  // --- 重置表單處理 ---
   useEffect(() => {
     if (reset) {
-      setPreview([]);
-      fileInputRef.current.value = null;
-      onResetFinished?.();
+      if (fileInputRef.current) fileInputRef.current.value = null;
+      // 注意：imgs 的清空是由父元件 (Hook) 控制的，這裡不需要 setImgs([])
     }
-  }, [reset, onResetFinished]);
-
-  useEffect(() => {
-    if (existingImgs?.length > 0) {
-      const previewImgs = existingImgs.map((url) => ({
-        url,
-        img: null,
-        isOld: true,
-      }));
-      setPreview(previewImgs);
-      onFileSelect(previewImgs);
-    }
-  }, [existingImgs, onFileSelect]);
+  }, [reset]);
 
   return (
     <UploadWrapper>
@@ -152,7 +151,7 @@ const UploadButton = ({
         onChange={handleChange}
       />
       <ImgContainer>
-        {preview &&
+        {/* {preview &&
           preview.map((img, index) => {
             // <PreviewWrapper key={img.url}>
             //   <UploadPreview src={img.url} alt="圖片預覽" />
@@ -176,10 +175,97 @@ const UploadButton = ({
                 </PreviewWrapper>
               );
             }
-          })}
+          })} */}
+
+        {imgs.map((item, index) => {
+          return (
+            <PreviewWrapper key={index}>
+              <UploadPreview src={item.url} alt="preview" />
+              <DeleteIcon onClick={() => handleDelete(index)} />
+            </PreviewWrapper>
+          );
+        })}
       </ImgContainer>
     </UploadWrapper>
   );
 };
+
+// const UploadButton = ({ imgs = [], setImgs, reset }) => {
+//   const fileInputRef = useRef(null);
+
+//   const handleClick = () => {
+//     fileInputRef.current.click();
+//   };
+
+//   const handleDelete = (targetUrl) => {
+//     // 過濾掉被點擊刪除的圖片
+//     const updatedImgs = imgs.filter((item) => item.url !== targetUrl);
+//     setImgs(updatedImgs);
+//   };
+
+//   const handleChange = (e) => {
+//     const files = Array.from(e.target.files);
+//     if (files.length === 0) return;
+
+//     // 處理多張圖片讀取
+//     const newImagesPromise = files.map((file) => {
+//       return new Promise((resolve) => {
+//         const reader = new FileReader();
+//         reader.onloadend = () => {
+//           resolve({
+//             img: file, // 原始檔案 (用於 FormData)
+//             url: reader.result, // Base64 URL (用於預覽)
+//             isOld: false, // 標記為新圖片
+//           });
+//         };
+//         reader.readAsDataURL(file);
+//       });
+//     });
+
+//     // 等待所有圖片讀取完成後，一次更新 State
+//     Promise.all(newImagesPromise).then((newImgObjects) => {
+//       setImgs((prev) => [...prev, ...newImgObjects]);
+
+//       // 清空 input 讓同一張圖可以再次被選取 (如果使用者刪掉後後悔)
+//       if (fileInputRef.current) {
+//         fileInputRef.current.value = null;
+//       }
+//     });
+//   };
+
+//   // 監聽重置訊號 (僅負責清空 input 元素的 value)
+//   // imgs 的清空已經在 Hook 的 resetState 中透過 setImgs([]) 完成了，這裡不需要再操作 state
+//   useEffect(() => {
+//     if (reset && fileInputRef.current) {
+//       fileInputRef.current.value = null;
+//     }
+//   }, [reset]);
+
+//   return (
+//     <UploadWrapper>
+//       <UploadBtn type="button" onClick={handleClick}>
+//         上傳圖片
+//       </UploadBtn>
+
+//       <HiddenInput
+//         multiple
+//         type="file"
+//         accept="image/*"
+//         ref={fileInputRef}
+//         onChange={handleChange}
+//         style={{ display: "none" }} // 確保隱藏
+//       />
+
+//       <ImgContainer>
+//         {imgs.map((item, index) => (
+//           <PreviewWrapper key={item.url + index}>
+//             <UploadPreview src={item.url} alt="preview" />
+//             <DeleteIcon onClick={() => handleDelete(item.url)} />
+//           </PreviewWrapper>
+//         ))}
+//       </ImgContainer>
+//     </UploadWrapper>
+//   );
+// };
 
 export default UploadButton;
