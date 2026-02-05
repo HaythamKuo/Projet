@@ -36,8 +36,7 @@ function EditProduct() {
   // const [isSubmit, setSubmit] = useState(false);
   // const [imgs, setImgs] = useState([]);
 
-  const { data, isLoading, isSuccess, isError, error } =
-    useFetchSpecificProdQuery(prodid);
+  const { data, isLoading, isError, error } = useFetchSpecificProdQuery(prodid);
   const [editProd, { isLoading: editting }] = useEditMyProdMutation();
 
   const {
